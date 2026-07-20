@@ -27,6 +27,21 @@ def run():
     
     caption = f"Nomi: {video_name.replace('.mp4', '')} 🎬 | To'liq sirlarni bilish uchun profilimdagi botga ulaning! 👇 \n\n#rek #rekka #kino #telegrambot #temurbekdev #trend #uzbekistan #foryou"
     
+    try:
+        import google.generativeai as genai
+        gemini_key = os.getenv("GEMINI_API_KEY")
+        if gemini_key:
+            print("🧠 Gemini AI ishga tushmoqda, ssenariy yozilmoqda...")
+            genai.configure(api_key=gemini_key)
+            model = genai.GenerativeModel("gemini-1.5-flash")
+            prompt = f"Men Instagram Reels uchun '{video_name}' deb nomlangan videoni yuklayapman. Iltimos, menga shu videoga mos, odamlarni o'ziga tortadigan (viral bo'ladigan) qisqa o'zbekcha zo'r matn (caption) va trenddagi heshteglarni yozib ber. Boshqa narsa yozma, faqat caption va heshteglar kerak."
+            response = model.generate_content(prompt)
+            if response.text:
+                caption = response.text.strip()
+                print("✨ Gemini AI matni tayyor!")
+    except Exception as e:
+        print(f"⚠️ Gemini ishlatishda xatolik (shablondan foydalaniladi): {e}")
+    
     print(f"📝 Instagramga joylanmoqda...")
     success = post_to_instagram(url, caption, video_name)
     

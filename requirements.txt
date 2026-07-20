@@ -2,3 +2,4 @@ requests
 python-dotenv
 schedule
 pyngrok
+google-generativeai
