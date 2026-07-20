@@ -1,0 +1,37 @@
+name: Daily Posted Videos Cleanup 🧹
+
+on:
+  schedule:
+    # Har kuni UTC vaqti bilan 00:00 da (O'zbekistonda 05:00) ishlaydi
+    - cron: '0 0 * * *'
+  workflow_dispatch:
+    # Qo'lda ishga tushirish tugmasi
+
+jobs:
+  cleanup:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+      - name: Checkout repository 📥
+        uses: actions/checkout@v4
+
+      - name: Eski videolarni tozalash 🧹
+        run: |
+          git config --local user.email "bot@temurbek.dev"
+          git config --local user.name "AutoReels Cleanup Bot"
+          
+          # posted papkasidagi barcha mp4 fayllarni o'chirish
+          # Agar papka bo'sh bo'lsa yoki mp4 yo'q bo'lsa xato bermasligi uchun 2>/dev/null qo'shilgan
+          rm -f videos/posted/*.mp4 2>/dev/null || true
+          
+          # O'zgarishlar bormi yoki yo'qmi tekshirish
+          if [[ -n "$(git status --porcelain)" ]]; then
+            git add videos/posted/
+            git commit -m "🧹 Bot: Eski joylangan videolar avtomatik tozalandi"
+            git push
+            echo "✅ Eski videolar muvaffaqiyatli tozalandi!"
+          else
+            echo "📁 Tozalanadigan video topilmadi (Papka bo'sh)."
+          fi
