@@ -1,63 +1,15 @@
 <?php
 // ==========================================
-// TELEGRAM "PULT" BOTI - PHP WEBHOOK V2.0
+// TELEGRAM "PULT" BOTI - PHP WEBHOOK V3.0
 // ==========================================
 
-// Sozlamalar
 $TELEGRAM_TOKEN = "8674470670:AAER3Y3EfZ44eFUhxKTpsGX_X_Vg6LvKYOQ";
 $ADMIN_ID = 5701828462;
-$GITHUB_PAT = "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"; // Buni GitHub'dan olasiz
+$GITHUB_PAT = "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";
 $GITHUB_REPO = "temurbek1306/InstagaramAvtoReels";
 
-// Kelayotgan ma'lumotni o'qish
 $update = json_decode(file_get_contents('php://input'), TRUE);
 
-// 1. CALLBACK QUERY (Tugmalar bosilganda)
-if (isset($update['callback_query'])) {
-    $callback_query = $update['callback_query'];
-    $chat_id = $callback_query['message']['chat']['id'];
-    $data = $callback_query['data'];
-    
-    if ($chat_id != $ADMIN_ID) exit;
-    
-    // answerCallbackQuery (Yuklanmoqda animatsiyasini to'xtatish uchun)
-    file_get_contents("https://api.telegram.org/bot" . $TELEGRAM_TOKEN . "/answerCallbackQuery?callback_query_id=" . $callback_query['id']);
-    
-    if (strpos($data, "cmd_") === 0) {
-        $command = str_replace("cmd_", "", $data);
-            
-        if ($command == "force_post") {
-            sendMessage($chat_id, "🚀 <b>Videoni joylash jarayoni boshlandi!</b>\n\nGitHub Actions (Run Workflow) ishga tushirildi. Pending papkadagi navbatdagi video hozir Instagramga joylanadi (Taxminan 1-2 daqiqa kuting).");
-            triggerGitHubAction("telegram_post", array("video_url" => ""));
-        } elseif ($command == "settings") {
-            $keyboard = json_encode([
-                "inline_keyboard" => [
-                    [["text" => "Har 1 soatda", "callback_data" => "cmd_set_time_1"]],
-                    [["text" => "Har 2 soatda", "callback_data" => "cmd_set_time_2"]],
-                    [["text" => "Har 3 soatda", "callback_data" => "cmd_set_time_3"]],
-                    [["text" => "Har 4 soatda", "callback_data" => "cmd_set_time_4"]]
-                ]
-            ]);
-            sendMessage($chat_id, "⚙️ <b>Vaqt Sozlamalari</b>\n\nVideolar har necha soatda avtomatik post qilinishini tanlang:", $keyboard);
-        } elseif (strpos($command, "set_time_") === 0) {
-            $hours = (int) str_replace("set_time_", "", $command);
-            $config_file = 'config.json';
-            $config = ["interval_hours" => 2, "last_run" => 0];
-            if (file_exists($config_file)) {
-                $config = json_decode(file_get_contents($config_file), true);
-            }
-            $config['interval_hours'] = $hours;
-            file_put_contents($config_file, json_encode($config));
-            sendMessage($chat_id, "✅ Vaqt sozlandi! Endi videolar har <b>$hours soatda</b> post qilinadi.");
-        } else {
-            sendMessage($chat_id, "⏳ <b>Bajarilmoqda...</b>\nBot GitHub orqali sizning so'rovingizni amalga oshirmoqda. (1-2 daqiqa vaqt olishi mumkin)");
-            triggerGitHubAction("telegram_command", array("command" => $command));
-        }
-    }
-    exit;
-}
-
-// 2. ODDY XABAR (Matn yoki Video)
 if (isset($update['message'])) {
     $chat_id = $update['message']['chat']['id'];
     
@@ -66,7 +18,7 @@ if (isset($update['message'])) {
         exit;
     }
     
-    // Video kelganda
+    // Video upload
     if (isset($update['message']['video'])) {
         $file_id = $update['message']['video']['file_id'];
         sendMessage($chat_id, "⏳ Video qabul qilindi! GitHub'ga tayyorlayapman...");
@@ -80,55 +32,108 @@ if (isset($update['message'])) {
             } else {
                 sendMessage($chat_id, "❌ GitHub'ga ulanishda xatolik yuz berdi.");
             }
-        } else {
-            sendMessage($chat_id, "❌ Videoni tortib olishda xatolik yuz berdi (Max hajmi 20MB).");
         }
+        exit;
+    }
+    
+    // Text commands
+    $text = isset($update['message']['text']) ? $update['message']['text'] : "";
+    
+    $main_keyboard = json_encode([
+        "keyboard" => [
+            [["text" => "🚀 Hozir Joylash"]],
+            [["text" => "📊 Statistika"], ["text" => "📋 Navbat (Queue)"]],
+            [["text" => "⚙️ Vaqt Sozlamalari"]],
+            [["text" => "🗑 Eski videolarni o'chirish"], ["text" => "🗓️ Kontent Reja"]]
+        ],
+        "resize_keyboard" => true,
+        "one_time_keyboard" => false
+    ]);
+    
+    $settings_keyboard = json_encode([
+        "keyboard" => [
+            [["text" => "Har 1 soatda"], ["text" => "Har 2 soatda"]],
+            [["text" => "Har 3 soatda"], ["text" => "Har 4 soatda"]],
+            [["text" => "🔙 Ortga"]]
+        ],
+        "resize_keyboard" => true,
+        "one_time_keyboard" => false
+    ]);
+
+    if ($text == "/start" || $text == "/menu" || $text == "🔙 Ortga") {
+        setupBotCommands();
+        sendMessage($chat_id, "👋 Salom, Boss! Ultra God Mode (v3.0) aktiv.\n\nPastdagi menyudan kerakli tugmani tanlang:", $main_keyboard);
     } 
-    // Matn kelganda
-    else {
-        $text = isset($update['message']['text']) ? $update['message']['text'] : "";
-        
-        if ($text == "/start" || $text == "/menu") {
-            $keyboard = json_encode([
-                "inline_keyboard" => [
-                    [
-                        ["text" => "🚀 Hozir Joylash (Post)", "callback_data" => "cmd_force_post"]
-                    ],
-                    [
-                        ["text" => "📊 Statistika", "callback_data" => "cmd_stats"],
-                        ["text" => "📋 Navbat (Queue)", "callback_data" => "cmd_list"]
-                    ],
-                    [
-                        ["text" => "⚙️ Vaqt Sozlamalari", "callback_data" => "cmd_settings"]
-                    ],
-                    [
-                        ["text" => "🗑 Eski (Joylangan) videolarni o'chirish", "callback_data" => "cmd_clear"]
-                    ],
-                    [
-                        ["text" => "🗓️ 1 Oylik Kontent Reja", "callback_data" => "cmd_strategy"]
-                    ]
-                ]
-            ]);
-            sendMessage($chat_id, "👋 Salom, Boss! Ultra God Mode (v2.0) aktiv.\n\nQuyidagi tugmalardan birini tanlang yoki menga biror savol bering (AI Brainstorm):", $keyboard);
-        } 
-        elseif (in_array($text, ["/list", "/stats", "/post_now", "/clear"])) {
-            sendMessage($chat_id, "⏳ Buyruq qabul qilindi...");
-            $cmd = str_replace("/", "", $text);
-            if ($cmd == "post_now") {
-                triggerGitHubAction("telegram_post", array("video_url" => ""));
-            } else {
-                triggerGitHubAction("telegram_command", array("command" => $cmd));
+    elseif ($text == "🚀 Hozir Joylash") {
+        sendMessage($chat_id, "🚀 <b>Videoni joylash jarayoni boshlandi!</b>\n\nNavbatdagi (Pending) video hozir tarmoqlarga joylanadi (1-2 daqiqa kuting).");
+        triggerGitHubAction("telegram_post", array("video_url" => ""));
+    }
+    elseif ($text == "📊 Statistika" || $text == "/stats") {
+        sendMessage($chat_id, "⏳ Statistika yig'ilmoqda...");
+        triggerGitHubAction("telegram_command", array("command" => "stats"));
+    }
+    elseif ($text == "📋 Navbat (Queue)" || $text == "/list") {
+        sendMessage($chat_id, "⏳ Navbat tekshirilmoqda...");
+        triggerGitHubAction("telegram_command", array("command" => "list"));
+    }
+    elseif ($text == "🗑 Eski videolarni o'chirish" || $text == "/clear") {
+        sendMessage($chat_id, "⏳ Tozalanmoqda...");
+        triggerGitHubAction("telegram_command", array("command" => "clear"));
+    }
+    elseif ($text == "🗓️ Kontent Reja" || $text == "/strategy") {
+        sendMessage($chat_id, "⏳ AI Tahlil boshlandi! Butun O'zbekiston tarmog'i skaner qilinmoqda...");
+        triggerGitHubAction("telegram_command", array("command" => "strategy"));
+    }
+    elseif ($text == "⚙️ Vaqt Sozlamalari" || $text == "/settings") {
+        sendMessage($chat_id, "⚙️ <b>Vaqt Sozlamalari</b>\n\nVideolar har necha soatda avtomatik post qilinishini tanlang:", $settings_keyboard);
+    }
+    elseif (strpos($text, "Har ") === 0 && strpos($text, " soatda") !== false) {
+        $hours = (int) filter_var($text, FILTER_SANITIZE_NUMBER_INT);
+        if ($hours > 0) {
+            $config_file = 'config.json';
+            $config = ["interval_hours" => 2, "last_run" => 0];
+            if (file_exists($config_file)) {
+                $config = json_decode(file_get_contents($config_file), true);
             }
-        } 
-        elseif ($text != "") {
-            // Brainstorming yoki Link yuklab olish
-            sendMessage($chat_id, "🧠 AI o'ylamoqda... / Link tekshirilmoqda...");
-            triggerGitHubAction("telegram_command", array("command" => "brainstorm", "prompt" => $text));
+            $config['interval_hours'] = $hours;
+            file_put_contents($config_file, json_encode($config));
+            sendMessage($chat_id, "✅ Vaqt sozlandi! Endi videolar har <b>$hours soatda</b> post qilinadi.", $main_keyboard);
         }
+    }
+    elseif ($text != "") {
+        // Brainstorming or invalid
+        sendMessage($chat_id, "🧠 AI o'ylamoqda... / Link tekshirilmoqda...");
+        triggerGitHubAction("telegram_command", array("command" => "brainstorm", "prompt" => $text));
     }
 }
 
-// Yordamchi funksiyalar
+// ==========================
+// YORDAMCHI FUNKSIYALAR
+// ==========================
+
+function setupBotCommands() {
+    global $TELEGRAM_TOKEN;
+    $url = "https://api.telegram.org/bot" . $TELEGRAM_TOKEN . "/setMyCommands";
+    $commands = [
+        ["command" => "start", "description" => "Asosiy menyuni ochish"],
+        ["command" => "stats", "description" => "Hozirgi statistika"],
+        ["command" => "list", "description" => "Navbatdagi videolar"],
+        ["command" => "strategy", "description" => "1 Oylik AI Reja"],
+        ["command" => "settings", "description" => "Vaqt sozlamalari"]
+    ];
+    $data = ['commands' => json_encode($commands)];
+    
+    $options = [
+        'http' => [
+            'header'  => "Content-type: application/x-www-form-urlencoded\r\n",
+            'method'  => 'POST',
+            'content' => http_build_query($data)
+        ]
+    ];
+    $context  = stream_context_create($options);
+    file_get_contents($url, false, $context);
+}
+
 function sendMessage($chat_id, $text, $reply_markup = null) {
     global $TELEGRAM_TOKEN;
     $url = "https://api.telegram.org/bot" . $TELEGRAM_TOKEN . "/sendMessage";
@@ -155,11 +160,7 @@ function sendMessage($chat_id, $text, $reply_markup = null) {
 function getFilePath($file_id) {
     global $TELEGRAM_TOKEN;
     $url = "https://api.telegram.org/bot" . $TELEGRAM_TOKEN . "/getFile?file_id=" . $file_id;
-    $ch = curl_init($url);
-    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-    $result = curl_exec($ch);
-    curl_close($ch);
-    
+    $result = file_get_contents($url);
     if ($result) {
         $json = json_decode($result, true);
         if (isset($json['result']['file_path'])) {
