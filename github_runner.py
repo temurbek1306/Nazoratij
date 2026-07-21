@@ -37,12 +37,15 @@ def run():
     
     import ai_assistant
     km = ai_assistant.KeyManager()
-    gemini_key = km.get_gemini_key()
     
-    if gemini_key:
+    for attempt in range(5):
+        gemini_key = km.get_gemini_key()
+        if not gemini_key:
+            break
+            
         try:
             import google.generativeai as genai
-            print("🧠 Gemini AI ishga tushmoqda...")
+            print(f"🧠 Gemini AI ishga tushmoqda (Urinish {attempt+1})...")
             genai.configure(api_key=gemini_key)
             
             print(f"📤 Video Gemini serveriga yuklanmoqda: {local_video_path}")
@@ -137,11 +140,16 @@ def run():
                 return
                 
         except Exception as e:
-            print(f"\n⚠️ Gemini ishlatishda xatolik yuz berdi (shablondan foydalaniladi): {e}")
+            print(f"\n⚠️ Gemini ishlatishda xatolik yuz berdi: {e}")
+            continue
 
-    # Agar Gemini ishlamay qolsa (exception bo'lsa), eski usulda birdaniga joylab yuboramiz. (Zaxira)
+    # Agar Gemini umuman ishlamay qolsa, eski usulda birdaniga joylab yuboramiz. (Zaxira)
     print(f"📝 Instagramga joylanmoqda (Zaxira rejim)...")
-    success = post_to_instagram(url, caption, video_name)
+    success_ig = post_to_instagram(url, caption, video_name)
+    
+    print(f"📺 YouTubega joylanmoqda (Zaxira rejim)...")
+    import youtube_api
+    success_yt = youtube_api.upload_video_to_youtube(video_name, local_video_path, "Yangi Video!", caption)
 
 if __name__ == "__main__":
     run()
