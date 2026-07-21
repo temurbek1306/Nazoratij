@@ -99,5 +99,21 @@ def run():
     else:
         print("⚠️ YouTube API sirlari topilmadi. Shorts yuklash tashlab o'tildi.")
 
+    # --- TELEGRAM HISOBOT YUBORISH ---
+    tg_token = os.getenv("TELEGRAM_BOT_TOKEN")
+    tg_admin = os.getenv("TELEGRAM_ADMIN_ID")
+    
+    if tg_token and tg_admin:
+        import requests
+        try:
+            tg_msg = f"✅ Boss, video muvaffaqiyatli tarmoqlarga joylandi!\n\n📝 Ssenariy:\n{caption}"
+            requests.post(f"https://api.telegram.org/bot{tg_token}/sendMessage", data={
+                "chat_id": tg_admin,
+                "text": tg_msg
+            })
+            print("📩 Telegramga hisobot yuborildi.")
+        except Exception as e:
+            print(f"⚠️ Telegramga yozishda xatolik: {e}")
+
 if __name__ == "__main__":
     run()

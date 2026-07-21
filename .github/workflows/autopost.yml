@@ -6,6 +6,8 @@ on:
     - cron: '0 */2 * * *'
   workflow_dispatch:
     # Bu orqali GitHub pultidan qo'lda ham ishga tushirish mumkin
+  repository_dispatch:
+    types: [telegram_post]
 
 jobs:
   post-video:
@@ -16,6 +18,11 @@ jobs:
     steps:
       - name: Checkout repository 📥
         uses: actions/checkout@v4
+
+      - name: Download video from Telegram (if webhook) 📥
+        if: github.event_name == 'repository_dispatch' && github.event.client_payload.video_url != ''
+        run: |
+          curl -s -L -o "videos/pending/tg_video_${{ github.run_id }}.mp4" "${{ github.event.client_payload.video_url }}"
 
       - name: Setup Python 🐍
         uses: actions/setup-python@v5
@@ -37,6 +44,8 @@ jobs:
           YOUTUBE_CLIENT_ID: ${{ secrets.YOUTUBE_CLIENT_ID }}
           YOUTUBE_CLIENT_SECRET: ${{ secrets.YOUTUBE_CLIENT_SECRET }}
           YOUTUBE_REFRESH_TOKEN: ${{ secrets.YOUTUBE_REFRESH_TOKEN }}
+          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+          TELEGRAM_ADMIN_ID: ${{ secrets.TELEGRAM_ADMIN_ID }}
         run: |
           python github_runner.py
 
