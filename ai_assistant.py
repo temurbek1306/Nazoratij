@@ -169,21 +169,21 @@ def append_viral_hashtags(caption):
 
 def generate_data_driven_strategy(profile_data, trend_data):
     km = KeyManager()
-    prompt = f"""Sen O'zbekistondagi eng mashhur va kreativ SMM prodyusersan (TikTok va Reels bo'yicha ekspert). Foydalanuvchining kanali IT, Dasturlash, Sun'iy Intellekt va Texnologiyalarga bag'ishlangan (#temurbekdev).
+    prompt = f"""Sen O'zbekistondagi eng mashhur va kreativ SMM prodyusersan (TikTok/Reels bo'yicha millionlik ekspert).
 
-Quyida ikkita ma'lumot beriladi:
-1. FOYDALANUVCHINING O'Z PROFILI FAKTLARI:
+Quyida ma'lumotlar:
+1. FOYDALANUVCHI FAKTLARI:
 {profile_data}
 
-2. GLOBAL INSTAGRAM TRENDLARI:
+2. GLOBAL TRENDLAR:
 {trend_data}
 
 VAZIFA:
-Shu ma'lumotlarga asoslanib kelgusi 30 kun uchun (jami 12-15 ta) 💥 VIRAL VIDEO G'OYALARI jadvalini tuz.
+Shunga asoslanib kelgusi 30 kun uchun 💥 VIRAL VIDEO G'OYALARI jadvalini tuz.
 
 DIQQAT - ENG MUHIM QOIDALAR:
-1. Bu videolar rostdan ham 10 SONIYALIK TikTok/Reels bo'lishi shart. Ssenariydagi hamma gaplar qo'shilib JAMI 20 TA SO'ZDAN oshmasligi qat'iyan talab qilinadi! (Odamlar tez skroll qiladi).
-2. Mavzular dasturchilar uchun emas, 100% ODDIY ODAMLAR uchun (ommabop) bo'lsin: "Zaryadni 2 kunga yetkazish", "Internetni tezlashtirish", "Birovni telefonini tekshirish siri", "Yashirin AI saytlar". Falsafa va dasturlash haqida umuman yozma.
+1. Bu videolar rostdan ham 10 SONIYALIK bo'lishi shart. Ssenariy JAMI 20 TA SO'ZDAN oshmasligi qat'iyan talab qilinadi!
+2. FAKAT TEXNOLOGIYA EMAS! Mavzular butunlay OMMABOP, KULGILI, PSIXOLOGIK yoki hayotiy trendlar bo'lsin. Masalan: "Yolg'onchini ko'zidan bilib olish", "Odamni tez uxlab qolish siri", "Erkaklar va Ayollar o'rtasidagi kulgili farq", "Hech qachon qilinmasligi kerak bo'lgan 3 ta ish". Dasturlashni umuman aralashtirma!
 3. HOOK: 1-soniyada uradigan, qisqa va vahimali bo'lsin. (Masalan: "Zaryadingiz tez tugayaptimi?!", "Bu saytni hech kim bilmaydi!").
 4. [10 Soniyalik Ssenariy] qismi: Faqat 2 ta qadamdan iborat bo'lsin. 1. Muallif bitta jumla gapiradi. 2. Ekranda harakat ko'rsatiladi. Hammasi jami 15-20 so'zdan iborat bo'lsin.
 5. Hech qanday inglizcha qotib qolgan tarjimalar yoki uzun salomlashishlar kerak emas. "Salom do'stlar" degan gapni UCHIRIB TASHLA.
