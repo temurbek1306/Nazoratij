@@ -38,7 +38,7 @@ class InstagramAPI:
         }
         
         # Instagram videoni qayta ishlashi uchun vaqt kerak
-        max_attempts = 30
+        max_attempts = 60
         for i in range(max_attempts):
             response = requests.get(url, params=params)
             data = response.json()
