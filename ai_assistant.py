@@ -182,13 +182,13 @@ VAZIFA:
 Shu ma'lumotlarga asoslanib kelgusi 30 kun uchun (jami 12-15 ta) 💥 VIRAL VIDEO G'OYALARI jadvalini tuz.
 
 DIQQAT - ENG MUHIM QOIDALAR:
-1. Bu videolar 10 SONIYALIK, o'ta dinamik (tezkor) TikTok/Reels formatida bo'lishi shart! "Dasturlash va musiqa", "Dasturlash va san'at" kabi zerikarli falsafiy mavzularni UMUMAN ISHLATMA.
-2. Mavzular hayratlanarli va barchaga tushunarli bo'lsin: "Yashirin AI saytlar", "Telefoningizdagi xavfli sozlama", "Dasturchilar sizdan yashiradigan sirlar", "Shu xatoni qilmang".
-3. HOOK (Qiziqtiruvchi boshlanish) o'ta kuchli, agressiv va 1-soniyada ushlab qoladigan bo'lsin. ("To'xtang, buni aniq bilmasdingiz!", "Shu saytni hoziroq saqlab qo'ying!", "Telefoningizni hoziroq tekshiring!").
-4. [10 Soniyalik Ssenariy] qismida rostdan ham 10 soniyalik tezkor harakatni yoz. Masalan: "Muallif kameraga yuzlanib baqiradi, keyin ekranda yashirin sayt ko'rsatiladi, barmoq bilan ishora qilinadi."
-5. Hech qanday inglizchadan qotib qolgan tarjimalarni ishlatma. Faqat toza, jonli, yoshlar va internet tilida yoz.
+1. Bu videolar rostdan ham 10 SONIYALIK TikTok/Reels bo'lishi shart. Ssenariydagi hamma gaplar qo'shilib JAMI 20 TA SO'ZDAN oshmasligi qat'iyan talab qilinadi! (Odamlar tez skroll qiladi).
+2. Mavzular dasturchilar uchun emas, 100% ODDIY ODAMLAR uchun (ommabop) bo'lsin: "Zaryadni 2 kunga yetkazish", "Internetni tezlashtirish", "Birovni telefonini tekshirish siri", "Yashirin AI saytlar". Falsafa va dasturlash haqida umuman yozma.
+3. HOOK: 1-soniyada uradigan, qisqa va vahimali bo'lsin. (Masalan: "Zaryadingiz tez tugayaptimi?!", "Bu saytni hech kim bilmaydi!").
+4. [10 Soniyalik Ssenariy] qismi: Faqat 2 ta qadamdan iborat bo'lsin. 1. Muallif bitta jumla gapiradi. 2. Ekranda harakat ko'rsatiladi. Hammasi jami 15-20 so'zdan iborat bo'lsin.
+5. Hech qanday inglizcha qotib qolgan tarjimalar yoki uzun salomlashishlar kerak emas. "Salom do'stlar" degan gapni UCHIRIB TASHLA.
 
-Jadval ustunlari: [Hafta/Kun] | [Viral Video Mavzusi] | [Bomba Hook (1-soniya)] | [10 Soniyalik Ssenariy] | [Format]
+Jadval ustunlari: [Hafta/Kun] | [Viral Video Mavzusi] | [Bomba Hook (1-soniya)] | [10s Ssenariy (Max 20 so'z)] | [Format]
 
 Javobing to'g'ridan-to'g'ri jadval bilan boshlansin, keraksiz kirish so'zlari yozma."""
     
