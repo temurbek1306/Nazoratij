@@ -21,27 +21,14 @@ def run():
         
     print(f"🔗 Public URL: {url}")
     
-    # Keling agentimiz kabi sun'iy intellekt matnini ishlatmaymiz yoki 
-    # hozircha o'zingiz yozgan viral shablonni beramiz (chunki AI ulanmagan bo'lishi mumkin)
-    # Agar OpenAI bo'lsa uni ham shu yerda ulash mumkin.
-    
-    caption = "Yana bir ajoyib video! 😂 Sizda ham shunday holatlar bo'lganmi? 👇 \n\nFikringizni izohlarda qoldiring!\n\n#rek #rekka #kino #dasturlash #temurbekdev #trend #uzbekistan #foryou"
-    
-    try:
-        import google.generativeai as genai
-        gemini_key = os.getenv("GEMINI_API_KEY")
-        if gemini_key:
-            print("🧠 Gemini AI ishga tushmoqda, ssenariy yozilmoqda...")
-            genai.configure(api_key=gemini_key)
-            model = genai.GenerativeModel("gemini-flash-latest")
-            prompt = f"Men Instagram Reels uchun '{video_name}' deb nomlangan videoni yuklayapman. Iltimos, menga shu videoga mos, odamlarni o'ziga tortadigan (viral bo'ladigan) qisqa o'zbekcha zo'r matn (caption) va trenddagi heshteglarni yozib ber. Boshqa narsa yozma, faqat caption va heshteglar kerak."
-            response = model.generate_content(prompt)
-            if response.text:
-                caption = response.text.strip()
-                print("✨ Gemini AI matni tayyor!")
-    except Exception as e:
-        print(f"⚠️ Gemini ishlatishda xatolik (shablondan foydalaniladi): {e}")
-    
+    # User requested hardcoded Japanese caption for all videos
+    caption = """今夜、
+@thvはハリウッドで行われた @gracieabrams
+と@dojacatのパフォーマンスを観客席から鑑賞しました。
+ファッションショーにも慣れている
+@bts.bighitofficialのスターは、ランウェイに登場してもおかしくないような装いで登場しました。
+#onepiece#loki#mindcatalyst_snr#bhaichara"""
+
     print(f"📝 Instagramga joylanmoqda...")
     success = post_to_instagram(url, caption, video_name)
     
