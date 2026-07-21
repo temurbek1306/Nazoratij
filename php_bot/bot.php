@@ -35,7 +35,7 @@ if (isset($update['message'])) {
             $video_url = "https://api.telegram.org/file/bot" . $TELEGRAM_TOKEN . "/" . $file_path;
             
             // GitHub Actions'ga buyruq yuborish
-            $github_result = triggerGitHubAction($video_url);
+            $github_result = triggerGitHubAction("telegram_post", array("video_url" => $video_url));
             
             if ($github_result) {
                 sendMessage($chat_id, "🚀 GitHub'ga buyruq berildi! \n\nHozir fonda videongiz Insta va YouTube ga joylanmoqda. Ish tugagach, sizga yakuniy xabar yuboraman.");
@@ -48,9 +48,16 @@ if (isset($update['message'])) {
     } else {
         $text = isset($update['message']['text']) ? $update['message']['text'] : "";
         if ($text == "/start") {
-            sendMessage($chat_id, "👋 Salom, Boss! Men sizning Avto Reels tizimingiz pultiman.\n\nMenga istalgan videoni (Reels/Shorts) tashlang, men uni darhol fon rejimida Instagram va YouTube ga joylayman!");
+            sendMessage($chat_id, "👋 Salom, Boss! Men sizning Avto Reels tizimingiz pultiman.\n\nMenga istalgan videoni (Reels/Shorts) tashlang, men uni darhol fon rejimida Instagram va YouTube ga joylayman!\n\nBoshqaruv:\n/list - Navbatni ko'rish\n/stats - Statistika\n/post_now - Zudlik bilan joylash\n/clear - Navbatni tozalash");
+        } elseif (in_array($text, ["/list", "/stats", "/post_now", "/clear"])) {
+            sendMessage($chat_id, "⏳ Buyruq qabul qilindi. GitHub muloqot qilmoqda (30-40 soniya kutishingiz mumkin)...");
+            $cmd = str_replace("/", "", $text);
+            $github_result = triggerGitHubAction("telegram_command", array("command" => $cmd));
+            if (!$github_result) {
+                sendMessage($chat_id, "❌ GitHub'ga buyruq berishda xatolik yuz berdi.");
+            }
         } else {
-            sendMessage($chat_id, "Iltimos, menga faqat video fayl yuboring.");
+            sendMessage($chat_id, "Iltimos, menga faqat video fayl yuboring yoki menyudagi komandalardan birini tanlang.");
         }
     }
 }
@@ -95,16 +102,14 @@ function getFilePath($file_id) {
 }
 
 // Yordamchi funksiya: GitHub Actions'ni ishga tushirish (Webhook/Dispatch)
-function triggerGitHubAction($video_url) {
+function triggerGitHubAction($event_type, $payload_data) {
     global $GITHUB_PAT, $GITHUB_REPO;
     
     $url = "https://api.github.com/repos/" . $GITHUB_REPO . "/dispatches";
     
     $data = array(
-        "event_type" => "telegram_post",
-        "client_payload" => array(
-            "video_url" => $video_url
-        )
+        "event_type" => $event_type,
+        "client_payload" => $payload_data
     );
     
     $payload = json_encode($data);

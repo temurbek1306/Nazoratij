@@ -69,3 +69,19 @@ class YouTubeAPI:
             return video_id
         else:
             raise Exception("YouTube'ga yuklashda kutilmagan xato yuz berdi.")
+
+    def get_channel_stats(self):
+        """YouTube kanal statistikasini olib beradi"""
+        try:
+            request = self.youtube.channels().list(part="statistics", mine=True)
+            response = request.execute()
+            if "items" in response and len(response["items"]) > 0:
+                stats = response["items"][0]["statistics"]
+                return {
+                    "subscribers": stats.get("subscriberCount", "Noma'lum"),
+                    "views": stats.get("viewCount", "Noma'lum"),
+                    "videos": stats.get("videoCount", "Noma'lum")
+                }
+        except Exception as e:
+            print(f"YouTube Stats API xatosi (Scope muammosi bo'lishi mumkin): {e}")
+        return None
