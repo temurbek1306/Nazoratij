@@ -22,7 +22,7 @@ jobs:
       - name: Download video from Telegram (if webhook) 📥
         if: github.event_name == 'repository_dispatch' && github.event.client_payload.video_url != ''
         run: |
-          curl -s -L -o "videos/pending/tg_video_${{ github.run_id }}.mp4" "${{ github.event.client_payload.video_url }}"
+          curl -s -L -o "videos/pending/00_tg_video_${{ github.run_id }}.mp4" "${{ github.event.client_payload.video_url }}"
 
       - name: Setup Python 🐍
         uses: actions/setup-python@v5
