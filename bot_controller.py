@@ -91,8 +91,21 @@ def run():
     elif command == "stats":
         handle_stats()
     elif command == "post_now":
-        send_telegram_msg("🚀 Zudlik bilan post qilish jarayoni boshlandi! (github_runner ishga tushmoqda...)")
+        send_telegram_msg("🚀 AI'lar jangi boshlanmoqda! (30-40 soniya...)")
         github_runner.run()
+    elif command.startswith("post_a_") or command.startswith("post_b_") or command.startswith("post_c_") or command.startswith("cancel_"):
+        send_telegram_msg("🚀 Tasdiqlandi! Yakuniy post jarayoni boshlandi...")
+        import github_runner_approved
+        github_runner_approved.run()
+    elif command == "strategy":
+        try:
+            import ai_assistant
+            send_telegram_msg("🧠 AI Strategiya o'ylamoqda... (30-40 soniya)")
+            ai_response = ai_assistant.generate_caption_groq("Menga SMM va Dasturlash bo'yicha 1 oylik Reels mavzulari jadvalini tuzib ber. Qisqa va lo'nda bo'lsin. Hech qanday boshqa gap yozma.")
+            if not ai_response: ai_response = "Kechirasiz, Groq ishlamadi."
+            send_telegram_msg("🗓️ <b>30 Kunlik Kontent Rejangiz:</b>\n\n" + ai_response)
+        except Exception as e:
+            send_telegram_msg(f"⚠️ Xatolik: {e}")
     elif command == "brainstorm":
         if prompt.startswith("http"):
             send_telegram_msg("📥 Bu linkka o'xshaydi. Link orqali yuklab olish funksiyasi tez kunda (Keyingi qadamda) qo'shiladi!")

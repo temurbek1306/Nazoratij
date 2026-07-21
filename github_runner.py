@@ -50,73 +50,84 @@ def run():
             else:
                 print("\n✨ Video tayyor. Ssenariy yozilmoqda...")
                 model = genai.GenerativeModel("gemini-1.5-flash")
-                prompt = "Shu videoni diqqat bilan ko'r va eshit. Yuzidagi yozuvlar va audiodagi gaplardan kelib chiqib, Instagram Reels uchun odamlarni o'ziga tortadigan, qiziqarli o'zbekcha izoh (caption) va mos xeshteglar yozib ber. O'zingdan gap qo'shma, faqat videoda nima haqida gap ketgan bo'lsa shunga mos, bahsga chorlaydigan savol bilan tugat. Va albatta #temurbekdev #ituz heshteglarini qo'sh. Boshqa ortiqcha gap yozma."
+                prompt = "Shu videoni diqqat bilan ko'r va eshit. Yuzidagi yozuvlar va audiodagi gaplardan kelib chiqib, avval videoning to'liq ma'nosini (summary) yoz. Keyin esa Instagram Reels uchun odamlarni o'ziga tortadigan, qiziqarli o'zbekcha izoh (caption) yoz. Formati shunday bo'lsin:\n\nSUMMARY: (video haqida ma'lumot)\nCAPTION_A: (sen yozgan zo'r caption)"
                 response = model.generate_content([prompt, video_file])
                 
+                caption_a = caption
+                summary = "Video haqida umumiy ma'lumot yo'q."
+                
                 if response.text:
-                    caption = response.text.strip()
-                    print("✅ Aqlli matn tayyor!")
+                    full_text = response.text.strip()
+                    if "CAPTION_A:" in full_text:
+                        parts = full_text.split("CAPTION_A:")
+                        summary = parts[0].replace("SUMMARY:", "").strip()
+                        caption_a = parts[1].strip()
+                    else:
+                        caption_a = full_text
+                    print("✅ Gemini Matni tayyor!")
                 
                 # Faylni tozalash
                 genai.delete_file(video_file.name)
                 print("🧹 Video Gemini serveridan o'chirib tashlandi.")
                 
+                print("🧠 Groq va OpenRouter ga ulanilmoqda (A/B Testing)...")
+                caption_b = ai_assistant.generate_caption_groq(summary)
+                caption_c = ai_assistant.generate_caption_openrouter(summary)
+                
+                if not caption_b: caption_b = caption_a + "\n\n(Groq ishlamadi, zaxira)"
+                if not caption_c: caption_c = caption_a + "\n\n(OpenRouter ishlamadi, zaxira)"
+                
+                import json
+                # Saqlash
+                data = {
+                    "video_name": video_name,
+                    "caption_a": caption_a,
+                    "caption_b": caption_b,
+                    "caption_c": caption_c
+                }
+                with open(f"videos/pending/{video_name}.json", "w") as f:
+                    json.dump(data, f)
+                    
+                # Telegramga yuborish
+                tg_token = os.getenv("TELEGRAM_BOT_TOKEN")
+                tg_admin = os.getenv("TELEGRAM_ADMIN_ID")
+                if tg_token and tg_admin:
+                    import requests
+                    msg = f"🎬 <b>Video tayyor: {video_name}</b>\n\nAI'lar jangi boshlandi! Qaysi matnni post qilamiz?\n\n"
+                    msg += f"<b>🅰️ Gemini (Kreativ):</b>\n{caption_a}\n\n"
+                    msg += f"<b>🅱️ Groq (SMM Ekspert):</b>\n{caption_b}\n\n"
+                    msg += f"<b>©️ OpenRouter (Faylasuf):</b>\n{caption_c}"
+                    
+                    keyboard = json.dumps({
+                        "inline_keyboard": [
+                            [
+                                {"text": "🅰️ A ni joylash", "callback_data": f"post_a_{video_name}"},
+                                {"text": "🅱️ B ni joylash", "callback_data": f"post_b_{video_name}"}
+                            ],
+                            [
+                                {"text": "©️ C ni joylash", "callback_data": f"post_c_{video_name}"},
+                                {"text": "❌ Bekor qilish", "callback_data": f"cancel_{video_name}"}
+                            ]
+                        ]
+                    })
+                    
+                    requests.post(f"https://api.telegram.org/bot{tg_token}/sendMessage", data={
+                        "chat_id": tg_admin,
+                        "text": msg,
+                        "parse_mode": "HTML",
+                        "reply_markup": keyboard
+                    })
+                    print("📩 Telegramga tasdiq so'rovi yuborildi.")
+                    
+                # To'xtaymiz. Tasdiq kelgach, boshqa fayl orqali joylanadi.
+                return
+                
         except Exception as e:
             print(f"\n⚠️ Gemini ishlatishda xatolik yuz berdi (shablondan foydalaniladi): {e}")
 
-    print(f"📝 Instagramga joylanmoqda...")
+    # Agar Gemini ishlamay qolsa (exception bo'lsa), eski usulda birdaniga joylab yuboramiz. (Zaxira)
+    print(f"📝 Instagramga joylanmoqda (Zaxira rejim)...")
     success = post_to_instagram(url, caption, video_name)
-    
-    if success:
-        print("✅ Video IG ga muvaffaqiyatli yuklandi va 'posted' papkasiga o'tkazildi!")
-    else:
-        print("❌ Videoni IG ga yuklashda xatolik yuz berdi.")
-        
-    # --- YOUTUBE SHORTS YUKLASH ---
-    yt_client_id = os.getenv("YOUTUBE_CLIENT_ID")
-    yt_client_secret = os.getenv("YOUTUBE_CLIENT_SECRET")
-    yt_refresh_token = os.getenv("YOUTUBE_REFRESH_TOKEN")
-    
-    if yt_client_id and yt_client_secret and yt_refresh_token:
-        try:
-            print("\n📺 YouTube Shorts yuklash boshlanmoqda...")
-            from youtube_api import YouTubeAPI
-            yt_api = YouTubeAPI(yt_client_id, yt_client_secret, yt_refresh_token)
-            
-            # Instagram ssenariysining birinchi qatorini sarlavha qilib olamiz
-            title = caption.split('\n')[0][:100] 
-            
-            # local path for youtube upload
-            local_video_path = f"videos/posted/{video_name}" if success else f"videos/pending/{video_name}"
-            
-            if os.path.exists(local_video_path):
-                yt_api.upload_shorts(
-                    video_path=local_video_path,
-                    title=title,
-                    description=caption
-                )
-            else:
-                print(f"❌ YouTube uchun lokal fayl topilmadi: {local_video_path}")
-        except Exception as yt_error:
-            print(f"⚠️ YouTube ga yuklashda xatolik: {yt_error}")
-    else:
-        print("⚠️ YouTube API sirlari topilmadi. Shorts yuklash tashlab o'tildi.")
-
-    # --- TELEGRAM HISOBOT YUBORISH ---
-    tg_token = os.getenv("TELEGRAM_BOT_TOKEN")
-    tg_admin = os.getenv("TELEGRAM_ADMIN_ID")
-    
-    if tg_token and tg_admin:
-        import requests
-        try:
-            tg_msg = f"✅ Boss, video muvaffaqiyatli tarmoqlarga joylandi!\n\n📝 Ssenariy:\n{caption}"
-            requests.post(f"https://api.telegram.org/bot{tg_token}/sendMessage", data={
-                "chat_id": tg_admin,
-                "text": tg_msg
-            })
-            print("📩 Telegramga hisobot yuborildi.")
-        except Exception as e:
-            print(f"⚠️ Telegramga yozishda xatolik: {e}")
 
 if __name__ == "__main__":
     run()

@@ -111,3 +111,40 @@ def brainstorm_idea(prompt):
             continue
             
     return "⚠️ Kechirasiz, barcha AI serverlari (Gemini, Groq, OpenRouter) hozircha band yoki API limitga tushdi."
+
+def generate_caption_groq(summary):
+    km = KeyManager()
+    prompt = f"Sen O'zbekistondagi eng mashhur SMM kopiraytersan. Senga bitta video haqida ma'lumot (video summary) beraman. Menga shundan kelib chiqib Instagram va YouTube Shorts uchun odamlarni o'ziga tortadigan, e'tiborni ushlab qoladigan va oxirida savol bilan tugaydigan zo'r o'zbekcha ssenariy/caption yozib ber. Hech qanday ortiqcha gap yozma, to'g'ridan to'g'ri captionni o'zini ber. #rek #temurbekdev #ituz heshteglarini qo'sh.\n\nVideo ma'lumoti:\n{summary}"
+    
+    for _ in range(3):
+        groq_key = km.get_groq_key()
+        if not groq_key: break
+        try:
+            url = "https://api.groq.com/openai/v1/chat/completions"
+            headers = {"Authorization": f"Bearer {groq_key}", "Content-Type": "application/json"}
+            payload = {"model": "llama3-70b-8192", "messages": [{"role": "user", "content": prompt}]}
+            response = requests.post(url, headers=headers, json=payload, timeout=10)
+            if response.status_code == 200:
+                return response.json()["choices"][0]["message"]["content"].strip()
+        except Exception:
+            continue
+    return None
+
+def generate_caption_openrouter(summary):
+    km = KeyManager()
+    prompt = f"Sen O'zbekistondagi juda kreativ SMM ekpertsan. Senga bitta video haqida ma'lumot (video summary) beraman. Menga shundan kelib chiqib qisqa, odamni o'ylantiradigan, falsafiy yoki qiziqarli yondashuv bilan caption yozib ber. Hech qanday ortiqcha gap yozma, to'g'ridan to'g'ri captionni o'zini ber. #rek #temurbekdev #ituz heshteglarini qo'sh.\n\nVideo ma'lumoti:\n{summary}"
+    
+    for _ in range(3):
+        or_key = km.get_openrouter_key()
+        if not or_key: break
+        try:
+            url = "https://openrouter.ai/api/v1/chat/completions"
+            headers = {"Authorization": f"Bearer {or_key}", "Content-Type": "application/json"}
+            payload = {"model": "meta-llama/llama-3-8b-instruct:free", "messages": [{"role": "user", "content": prompt}]}
+            response = requests.post(url, headers=headers, json=payload, timeout=10)
+            if response.status_code == 200:
+                return response.json()["choices"][0]["message"]["content"].strip()
+        except Exception:
+            continue
+    return None
+

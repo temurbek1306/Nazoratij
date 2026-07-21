@@ -72,6 +72,9 @@ if (isset($update['message'])) {
                     [
                         ["text" => "📋 Navbat (Queue)", "callback_data" => "cmd_list"],
                         ["text" => "🧹 Tozalash", "callback_data" => "cmd_clear"]
+                    ],
+                    [
+                        ["text" => "🗓️ 1 Oylik Kontent Reja", "callback_data" => "cmd_strategy"]
                     ]
                 ]
             ]);
