@@ -182,14 +182,13 @@ VAZIFA:
 Shu ma'lumotlarga asoslanib kelgusi 30 kun uchun (jami 12-15 ta) 💥 VIRAL VIDEO G'OYALARI jadvalini tuz.
 
 DIQQAT - ENG MUHIM QOIDALAR:
-1. Videolar FAQAT dasturchilarga emas, ODDIY ODAMLARGA ham qiziq bo'lishi shart! (Masalan: "Telefoningizdagi sir", "Kelajak kasblari", "Qanday qilib internetdan pul topish mumkin").
-2. Quruq darslar ("Python asoslari", "Ma'shinasozlik", "C++ o'rganamiz") UMUMAN KERAK EMAS! Ularning o'rniga "Sizni dasturlashga kiritmaydigan 3 ta xato", "ChatGPT dan to'g'ri foydalanish siri" kabi ommabop yondashuv kerak.
-3. HOOK (Qiziqtiruvchi boshlanish) juda kuchli, 3-soniyada ushlab qoladigan bo'lsin. ("Bilarmidingiz?", "To'xtang!", "Hayotingizni o'zgartiruvchi sayt" kabi).
-4. Hech qanday inglizchadan to'g'ridan-to'g'ri (g'alati) tarjimalar ishlatma. Toza, jonli, o'zbekcha so'zlashuv tilida yoz!
+1. Bu videolar 10 SONIYALIK, o'ta dinamik (tezkor) TikTok/Reels formatida bo'lishi shart! "Dasturlash va musiqa", "Dasturlash va san'at" kabi zerikarli falsafiy mavzularni UMUMAN ISHLATMA.
+2. Mavzular hayratlanarli va barchaga tushunarli bo'lsin: "Yashirin AI saytlar", "Telefoningizdagi xavfli sozlama", "Dasturchilar sizdan yashiradigan sirlar", "Shu xatoni qilmang".
+3. HOOK (Qiziqtiruvchi boshlanish) o'ta kuchli, agressiv va 1-soniyada ushlab qoladigan bo'lsin. ("To'xtang, buni aniq bilmasdingiz!", "Shu saytni hoziroq saqlab qo'ying!", "Telefoningizni hoziroq tekshiring!").
+4. [10 Soniyalik Ssenariy] qismida rostdan ham 10 soniyalik tezkor harakatni yoz. Masalan: "Muallif kameraga yuzlanib baqiradi, keyin ekranda yashirin sayt ko'rsatiladi, barmoq bilan ishora qilinadi."
+5. Hech qanday inglizchadan qotib qolgan tarjimalarni ishlatma. Faqat toza, jonli, yoshlar va internet tilida yoz.
 
-Jadval ustunlari: [Hafta/Kun] | [Viral Video Mavzusi] | [Bomba Hook (Dastlabki 3 soniya)] | [Qisqacha ssenariy / Prompt] | [Format]
-
-Eslatma: [Qisqacha ssenariy / Prompt] ustunida ushbu videoni qanday suratga olish yoki unda qanday gaplar aytilishi haqida 1-2 ta gaplik kuchli ssenariy promptini yozib ber.
+Jadval ustunlari: [Hafta/Kun] | [Viral Video Mavzusi] | [Bomba Hook (1-soniya)] | [10 Soniyalik Ssenariy] | [Format]
 
 Javobing to'g'ridan-to'g'ri jadval bilan boshlansin, keraksiz kirish so'zlari yozma."""
     
