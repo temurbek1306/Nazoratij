@@ -33,7 +33,7 @@ def run():
         if gemini_key:
             print("🧠 Gemini AI ishga tushmoqda, ssenariy yozilmoqda...")
             genai.configure(api_key=gemini_key)
-            model = genai.GenerativeModel("gemini-1.5-flash")
+            model = genai.GenerativeModel("gemini-1.5-flash-latest")
             prompt = f"Men Instagram Reels uchun '{video_name}' deb nomlangan videoni yuklayapman. Iltimos, menga shu videoga mos, odamlarni o'ziga tortadigan (viral bo'ladigan) qisqa o'zbekcha zo'r matn (caption) va trenddagi heshteglarni yozib ber. Boshqa narsa yozma, faqat caption va heshteglar kerak."
             response = model.generate_content(prompt)
             if response.text:
