@@ -2,6 +2,14 @@ import time
 import os
 from agent_tools import get_pending_video, expose_video_url, post_to_instagram
 from instagram_api import InstagramAPI
+import requests
+
+def send_alert(msg):
+    token = os.getenv("TELEGRAM_BOT_TOKEN")
+    chat_id = os.getenv("TELEGRAM_ADMIN_ID")
+    if token and chat_id:
+        url = f"https://api.telegram.org/bot{token}/sendMessage"
+        requests.post(url, data={"chat_id": chat_id, "text": msg, "parse_mode": "HTML"})
 
 def run():
     print("🚀 GitHub Actions: Avtomatik Video Yuklash boshlandi...")
@@ -9,6 +17,7 @@ def run():
     video_name = get_pending_video()
     if not video_name:
         print("📁 Hozircha yangi videolar yo'q. Dastur to'xtatildi.")
+        send_alert("⚠️ <b>Diqqat! Video qolmadi!</b>\n\nNavbatdagi (Pending) papkada videolar tugadi. Iltimos, tizim ishlashda davom etishi uchun yana yangi videolar yuboring!")
         return
         
     print(f"🎬 Video topildi: {video_name}")
@@ -50,7 +59,7 @@ def run():
             else:
                 print("\n✨ Video tayyor. Ssenariy yozilmoqda...")
                 model = genai.GenerativeModel("gemini-1.5-flash")
-                prompt = "Shu videoni diqqat bilan ko'r va eshit. Yuzidagi yozuvlar va audiodagi gaplardan kelib chiqib, avval videoning to'liq ma'nosini (summary) yoz. Keyin esa Instagram Reels uchun odamlarni o'ziga tortadigan, qiziqarli o'zbekcha izoh (caption) yoz. Formati shunday bo'lsin:\n\nSUMMARY: (video haqida ma'lumot)\nCAPTION_A: (sen yozgan zo'r caption)"
+                prompt = "Shu videoni diqqat bilan ko'r va eshit. Yuzidagi yozuvlar va audiodagi gaplardan kelib chiqib, avval videoning to'liq ma'nosini (summary) yoz. Keyin esa Instagram Reels uchun odamlarni o'ziga tortadigan, qiziqarli o'zbekcha izoh (caption) yoz. DIQQAT: Hech qanday HASHTAG (#) ishlatma! Tizim o'zi qoshadi.\nFormati shunday bo'lsin:\n\nSUMMARY: (video haqida ma'lumot)\nCAPTION_A: (sen yozgan zo'r caption)"
                 response = model.generate_content([prompt, video_file])
                 
                 caption_a = caption
@@ -76,6 +85,11 @@ def run():
                 
                 if not caption_b: caption_b = caption_a + "\n\n(Groq ishlamadi, zaxira)"
                 if not caption_c: caption_c = caption_a + "\n\n(OpenRouter ishlamadi, zaxira)"
+                
+                # Hashtaglarni to'g'ri biriktirish (Data-driven)
+                caption_a = ai_assistant.append_viral_hashtags(caption_a)
+                caption_b = ai_assistant.append_viral_hashtags(caption_b)
+                caption_c = ai_assistant.append_viral_hashtags(caption_c)
                 
                 import json
                 # Saqlash

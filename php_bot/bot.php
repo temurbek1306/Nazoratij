@@ -29,6 +29,26 @@ if (isset($update['callback_query'])) {
         if ($command == "force_post") {
             sendMessage($chat_id, "🚀 <b>Videoni joylash jarayoni boshlandi!</b>\n\nGitHub Actions (Run Workflow) ishga tushirildi. Pending papkadagi navbatdagi video hozir Instagramga joylanadi (Taxminan 1-2 daqiqa kuting).");
             triggerGitHubAction("telegram_post", array("video_url" => ""));
+        } elseif ($command == "settings") {
+            $keyboard = json_encode([
+                "inline_keyboard" => [
+                    [["text" => "Har 1 soatda", "callback_data" => "cmd_set_time_1"]],
+                    [["text" => "Har 2 soatda", "callback_data" => "cmd_set_time_2"]],
+                    [["text" => "Har 3 soatda", "callback_data" => "cmd_set_time_3"]],
+                    [["text" => "Har 4 soatda", "callback_data" => "cmd_set_time_4"]]
+                ]
+            ]);
+            sendMessage($chat_id, "⚙️ <b>Vaqt Sozlamalari</b>\n\nVideolar har necha soatda avtomatik post qilinishini tanlang:", $keyboard);
+        } elseif (strpos($command, "set_time_") === 0) {
+            $hours = (int) str_replace("set_time_", "", $command);
+            $config_file = 'config.json';
+            $config = ["interval_hours" => 2, "last_run" => 0];
+            if (file_exists($config_file)) {
+                $config = json_decode(file_get_contents($config_file), true);
+            }
+            $config['interval_hours'] = $hours;
+            file_put_contents($config_file, json_encode($config));
+            sendMessage($chat_id, "✅ Vaqt sozlandi! Endi videolar har <b>$hours soatda</b> post qilinadi.");
         } else {
             sendMessage($chat_id, "⏳ <b>Bajarilmoqda...</b>\nBot GitHub orqali sizning so'rovingizni amalga oshirmoqda. (1-2 daqiqa vaqt olishi mumkin)");
             triggerGitHubAction("telegram_command", array("command" => $command));
@@ -79,7 +99,12 @@ if (isset($update['message'])) {
                         ["text" => "📋 Navbat (Queue)", "callback_data" => "cmd_list"]
                     ],
                     [
-                        ["text" => "🧹 Tozalash", "callback_data" => "cmd_clear"],
+                        ["text" => "⚙️ Vaqt Sozlamalari", "callback_data" => "cmd_settings"]
+                    ],
+                    [
+                        ["text" => "🗑 Eski (Joylangan) videolarni o'chirish", "callback_data" => "cmd_clear"]
+                    ],
+                    [
                         ["text" => "🗓️ 1 Oylik Kontent Reja", "callback_data" => "cmd_strategy"]
                     ]
                 ]
