@@ -24,9 +24,15 @@ if (isset($update['callback_query'])) {
     file_get_contents("https://api.telegram.org/bot" . $TELEGRAM_TOKEN . "/answerCallbackQuery?callback_query_id=" . $callback_query['id']);
     
     if (strpos($data, "cmd_") === 0) {
-        $cmd = str_replace("cmd_", "", $data);
-        sendMessage($chat_id, "⏳ Buyruq qabul qilindi. GitHub muloqot qilmoqda...");
-        triggerGitHubAction("telegram_command", array("command" => $cmd));
+        $command = str_replace("cmd_", "", $data);
+            
+        if ($command == "force_post") {
+            sendMessage($chat_id, "🚀 <b>Videoni joylash jarayoni boshlandi!</b>\n\nGitHub Actions (Run Workflow) ishga tushirildi. Pending papkadagi navbatdagi video hozir Instagramga joylanadi (Taxminan 1-2 daqiqa kuting).");
+            triggerGitHubAction("telegram_post", array("video_url" => ""));
+        } else {
+            sendMessage($chat_id, "⏳ <b>Bajarilmoqda...</b>\nBot GitHub orqali sizning so'rovingizni amalga oshirmoqda. (1-2 daqiqa vaqt olishi mumkin)");
+            triggerGitHubAction("telegram_command", array("command" => $command));
+        }
     }
     exit;
 }
@@ -66,14 +72,14 @@ if (isset($update['message'])) {
             $keyboard = json_encode([
                 "inline_keyboard" => [
                     [
+                        ["text" => "🚀 Hozir Joylash (Post)", "callback_data" => "cmd_force_post"]
+                    ],
+                    [
                         ["text" => "📊 Statistika", "callback_data" => "cmd_stats"],
-                        ["text" => "🚀 Zudlik bilan Post", "callback_data" => "cmd_post_now"]
+                        ["text" => "📋 Navbat (Queue)", "callback_data" => "cmd_list"]
                     ],
                     [
-                        ["text" => "📋 Navbat (Queue)", "callback_data" => "cmd_list"],
-                        ["text" => "🧹 Tozalash", "callback_data" => "cmd_clear"]
-                    ],
-                    [
+                        ["text" => "🧹 Tozalash", "callback_data" => "cmd_clear"],
                         ["text" => "🗓️ 1 Oylik Kontent Reja", "callback_data" => "cmd_strategy"]
                     ]
                 ]
@@ -83,7 +89,11 @@ if (isset($update['message'])) {
         elseif (in_array($text, ["/list", "/stats", "/post_now", "/clear"])) {
             sendMessage($chat_id, "⏳ Buyruq qabul qilindi...");
             $cmd = str_replace("/", "", $text);
-            triggerGitHubAction("telegram_command", array("command" => $cmd));
+            if ($cmd == "post_now") {
+                triggerGitHubAction("telegram_post", array("video_url" => ""));
+            } else {
+                triggerGitHubAction("telegram_command", array("command" => $cmd));
+            }
         } 
         elseif ($text != "") {
             // Brainstorming yoki Link yuklab olish
