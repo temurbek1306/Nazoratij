@@ -17,6 +17,7 @@ def send_telegram_msg(text):
             print(f"Telegram xatosi: {e}")
 
 def handle_list():
+    os.makedirs("videos/pending", exist_ok=True)
     files = [f for f in os.listdir("videos/pending") if f.endswith(('.mp4', '.mov'))]
     if not files:
         send_telegram_msg("📭 Navbatda hech qanday video yo'q.")
@@ -39,6 +40,9 @@ def handle_clear():
     send_telegram_msg(f"🧹 <b>Navbat tozalandi!</b>\n\n{count} ta fayl o'chirib tashlandi.")
 
 def handle_stats():
+    os.makedirs("videos/posted", exist_ok=True)
+    os.makedirs("videos/pending", exist_ok=True)
+    
     # Local stats
     posted_files = [f for f in os.listdir("videos/posted") if f.endswith(('.mp4', '.mov'))]
     pending_files = [f for f in os.listdir("videos/pending") if f.endswith(('.mp4', '.mov'))]
