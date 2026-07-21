@@ -62,7 +62,21 @@ def run():
             else:
                 print("\n✨ Video tayyor. Ssenariy yozilmoqda...")
                 model = genai.GenerativeModel("gemini-1.5-flash")
-                prompt = "Shu videoni diqqat bilan ko'r va eshit. Yuzidagi yozuvlar va audiodagi gaplardan kelib chiqib, avval videoning to'liq ma'nosini (summary) yoz. Keyin esa Instagram Reels uchun odamlarni o'ziga tortadigan, qiziqarli o'zbekcha izoh (caption) yoz. DIQQAT: Hech qanday HASHTAG (#) ishlatma! Tizim o'zi qoshadi.\nFormati shunday bo'lsin:\n\nSUMMARY: (video haqida ma'lumot)\nCAPTION_A: (sen yozgan zo'r caption)"
+                prompt = """Sen O'zbekistondagi eng mashhur SMM va Video tahlilchisan! Shu videoni IPI-IDAN IGASIGACHA, har bir detalini (yuz harakatlari, emotsiyalar, ekrandagi yozuvlar, kiyimlar, ovoz) diqqat bilan ko'r va tahlil qil.
+1. Kadrda nima bo'lyapti o'zi? (To'liq voqea)
+2. Ekranda qanday so'zlar/yozuvlar bor?
+3. Ovozda nima deyilmoqda?
+
+Shularni tahlil qilib, batafsil SUMMARY yoz. 
+Keyin Instagram Reels uchun videoning AYNAN SHU voqeasiga 100% bog'langan, hazil aralash yoki kreativ O'ZBEKCHA CAPTION (post matni) yoz.
+QOIDALAR: 
+- Caption aynan videodagi holat bilan bog'lanishi SHART! Umumiy, zerikarli gaplarni (masalan: "Hayotda shunaqa", "Bugun ajoyib video") umuman yozma.
+- Matn qisqa, odamni tortadigan va qiziqarli savol bilan tugasin.
+- Hashtag umuman ishlatma.
+
+Formati:
+SUMMARY: (videoni chuqur tahlili)
+CAPTION_A: (videoga to'liq mos yozilgan caption)"""
                 response = model.generate_content([prompt, video_file])
                 
                 caption_a = caption

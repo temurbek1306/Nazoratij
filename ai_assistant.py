@@ -114,7 +114,7 @@ def brainstorm_idea(prompt):
 
 def generate_caption_groq(summary):
     km = KeyManager()
-    prompt = f"Sen O'zbekistondagi eng mashhur SMM kopiraytersan. Senga bitta video haqida ma'lumot (video summary) beraman. Shundan kelib chiqib Instagram va YouTube Shorts uchun odamlarni o'ziga tortadigan, e'tiborni ushlab qoladigan va oxirida savol bilan tugaydigan zo'r o'zbekcha ssenariy/caption yozib ber. DIQQAT: Hech qanday HASHTAG (#) ishlatma! Buni tizim o'zi qoshadi. Faqat toza matn yoz.\n\nVideo ma'lumoti:\n{summary}"
+    prompt = f"Sen O'zbekistondagi kreativ SMM ekpertsan. Quyida videoning chuqur tahlili (summary) berilgan. Buni diqqat bilan o'qi: \n\n{summary}\n\nVAZIFA: Aynan shu voqea, harakat va yozuvlarga 100% mos keladigan, videodan uzilib qolmagan Instagram post matnini (caption) yoz! Umumiy, hamma videoga tushadigan shablon va zerikarli gaplarni YOZMA. Kulgili, kinoyali yoki kreativ yondashuv qil. Oxirida bitta qiziq savol qo'sh. DIQQAT: Hech qanday HASHTAG (#) ishlatma! Faqat toza matn yoz."
     
     for _ in range(3):
         groq_key = km.get_groq_key()
@@ -132,7 +132,7 @@ def generate_caption_groq(summary):
 
 def generate_caption_openrouter(summary):
     km = KeyManager()
-    prompt = f"Sen O'zbekistondagi juda kreativ SMM ekpertsan. Senga bitta video haqida ma'lumot (video summary) beraman. Qisqa, odamni o'ylantiradigan, falsafiy yoki qiziqarli yondashuv bilan caption yozib ber. DIQQAT: Hech qanday HASHTAG (#) ishlatma! Tizim o'zi qo'shadi. Faqat toza matn yoz.\n\nVideo ma'lumoti:\n{summary}"
+    prompt = f"Sen O'zbekistondagi eng zo'r Reels muallifisan. Quyida videoning tahlili: \n\n{summary}\n\nVAZIFA: Ushbu videodagi har bir detal, yuz ifodasi yoki yozuvlarga moslab, o'quvchini qiziqtirib qo'yadigan qisqacha izoh (caption) yoz. Mutlaqo shablon, rasmiy va zerikarli gaplardan qoch. Qisqa, o'ylantiradigan yoki kuldiradigan fikr yoz. Hashtag umuman ishlatma! Faqat toza matn yoz."
     
     for _ in range(3):
         or_key = km.get_openrouter_key()
