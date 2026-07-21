@@ -79,7 +79,7 @@ def brainstorm_idea(prompt):
                 "Content-Type": "application/json"
             }
             payload = {
-                "model": "llama3-70b-8192", 
+                "model": "llama-3.3-70b-versatile", 
                 "messages": [{"role": "user", "content": full_prompt}]
             }
             response = requests.post(url, headers=headers, json=payload, timeout=10)
@@ -101,7 +101,7 @@ def brainstorm_idea(prompt):
                 "Content-Type": "application/json"
             }
             payload = {
-                "model": "meta-llama/llama-3-8b-instruct:free", 
+                "model": "google/gemma-4-31b-it:free", 
                 "messages": [{"role": "user", "content": full_prompt}]
             }
             response = requests.post(url, headers=headers, json=payload, timeout=10)
@@ -122,7 +122,7 @@ def generate_caption_groq(summary):
         try:
             url = "https://api.groq.com/openai/v1/chat/completions"
             headers = {"Authorization": f"Bearer {groq_key}", "Content-Type": "application/json"}
-            payload = {"model": "llama3-70b-8192", "messages": [{"role": "user", "content": prompt}]}
+            payload = {"model": "llama-3.3-70b-versatile", "messages": [{"role": "user", "content": prompt}]}
             response = requests.post(url, headers=headers, json=payload, timeout=10)
             if response.status_code == 200:
                 return response.json()["choices"][0]["message"]["content"].strip()
@@ -140,7 +140,7 @@ def generate_caption_openrouter(summary):
         try:
             url = "https://openrouter.ai/api/v1/chat/completions"
             headers = {"Authorization": f"Bearer {or_key}", "Content-Type": "application/json"}
-            payload = {"model": "meta-llama/llama-3-8b-instruct:free", "messages": [{"role": "user", "content": prompt}]}
+            payload = {"model": "google/gemma-4-31b-it:free", "messages": [{"role": "user", "content": prompt}]}
             response = requests.post(url, headers=headers, json=payload, timeout=10)
             if response.status_code == 200:
                 return response.json()["choices"][0]["message"]["content"].strip()
