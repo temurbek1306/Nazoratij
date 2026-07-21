@@ -100,10 +100,33 @@ def run():
     elif command == "strategy":
         try:
             import ai_assistant
-            send_telegram_msg("🧠 AI Strategiya o'ylamoqda... (30-40 soniya)")
-            ai_response = ai_assistant.generate_caption_groq("Menga SMM va Dasturlash bo'yicha 1 oylik Reels mavzulari jadvalini tuzib ber. Qisqa va lo'nda bo'lsin. Hech qanday boshqa gap yozma.")
+            import requests
+            send_telegram_msg("🧠 AI Profilingizni analiz qilmoqda... (Kuting)")
+            
+            ig_token = os.getenv("IG_ACCESS_TOKEN")
+            ig_account_id = os.getenv("IG_ACCOUNT_ID")
+            
+            profile_data = "Ayni paytda Instagram hisobi ulanmagan yoki postlar yo'q. Shuning uchun umumiy trendlarga asoslan!"
+            if ig_token and ig_account_id:
+                try:
+                    url = f"https://graph.facebook.com/v18.0/{ig_account_id}/media?fields=caption,like_count,comments_count,media_type&limit=15&access_token={ig_token}"
+                    res = requests.get(url).json()
+                    if "data" in res and len(res["data"]) > 0:
+                        posts = res["data"]
+                        sorted_posts = sorted(posts, key=lambda x: x.get('like_count', 0), reverse=True)
+                        top_posts = sorted_posts[:3]
+                        profile_data = "Foydalanuvchining Instagramdagi eng omadli (Top 3) postlari haqida faktik ma'lumotlar:\n"
+                        for i, p in enumerate(top_posts):
+                            cpt = p.get('caption', 'Sarlavha yoq')[:150].replace('\n', ' ')
+                            lks = p.get('like_count', 0)
+                            cms = p.get('comments_count', 0)
+                            profile_data += f"{i+1}-post. Layklar: {lks}, Kommentlar: {cms}. Sarlavhasi: '{cpt}'\n"
+                except Exception as e:
+                    print("IG Data fetch error:", e)
+            
+            ai_response = ai_assistant.generate_data_driven_strategy(profile_data)
             if not ai_response: ai_response = "Kechirasiz, Groq ishlamadi."
-            send_telegram_msg("🗓️ <b>30 Kunlik Kontent Rejangiz:</b>\n\n" + ai_response)
+            send_telegram_msg("📊 <b>Analiz Yakunlandi! 30 Kunlik Kontent Rejangiz:</b>\n\n" + ai_response)
         except Exception as e:
             send_telegram_msg(f"⚠️ Xatolik: {e}")
     elif command == "brainstorm":

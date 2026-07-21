@@ -114,7 +114,7 @@ def brainstorm_idea(prompt):
 
 def generate_caption_groq(summary):
     km = KeyManager()
-    prompt = f"Sen O'zbekistondagi eng mashhur SMM kopiraytersan. Senga bitta video haqida ma'lumot (video summary) beraman. Menga shundan kelib chiqib Instagram va YouTube Shorts uchun odamlarni o'ziga tortadigan, e'tiborni ushlab qoladigan va oxirida savol bilan tugaydigan zo'r o'zbekcha ssenariy/caption yozib ber. Hech qanday ortiqcha gap yozma, to'g'ridan to'g'ri captionni o'zini ber. #rek #temurbekdev #ituz heshteglarini qo'sh.\n\nVideo ma'lumoti:\n{summary}"
+    prompt = f"Sen O'zbekistondagi eng mashhur SMM kopiraytersan. Senga bitta video haqida ma'lumot (video summary) beraman. Shundan kelib chiqib Instagram va YouTube Shorts uchun odamlarni o'ziga tortadigan, e'tiborni ushlab qoladigan va oxirida savol bilan tugaydigan zo'r o'zbekcha ssenariy/caption yozib ber. DIQQAT: Hech qanday HASHTAG (#) ishlatma! Buni tizim o'zi qoshadi. Faqat toza matn yoz.\n\nVideo ma'lumoti:\n{summary}"
     
     for _ in range(3):
         groq_key = km.get_groq_key()
@@ -132,7 +132,7 @@ def generate_caption_groq(summary):
 
 def generate_caption_openrouter(summary):
     km = KeyManager()
-    prompt = f"Sen O'zbekistondagi juda kreativ SMM ekpertsan. Senga bitta video haqida ma'lumot (video summary) beraman. Menga shundan kelib chiqib qisqa, odamni o'ylantiradigan, falsafiy yoki qiziqarli yondashuv bilan caption yozib ber. Hech qanday ortiqcha gap yozma, to'g'ridan to'g'ri captionni o'zini ber. #rek #temurbekdev #ituz heshteglarini qo'sh.\n\nVideo ma'lumoti:\n{summary}"
+    prompt = f"Sen O'zbekistondagi juda kreativ SMM ekpertsan. Senga bitta video haqida ma'lumot (video summary) beraman. Qisqa, odamni o'ylantiradigan, falsafiy yoki qiziqarli yondashuv bilan caption yozib ber. DIQQAT: Hech qanday HASHTAG (#) ishlatma! Tizim o'zi qo'shadi. Faqat toza matn yoz.\n\nVideo ma'lumoti:\n{summary}"
     
     for _ in range(3):
         or_key = km.get_openrouter_key()
@@ -142,6 +142,44 @@ def generate_caption_openrouter(summary):
             headers = {"Authorization": f"Bearer {or_key}", "Content-Type": "application/json"}
             payload = {"model": "google/gemma-4-31b-it:free", "messages": [{"role": "user", "content": prompt}]}
             response = requests.post(url, headers=headers, json=payload, timeout=10)
+            if response.status_code == 200:
+                return response.json()["choices"][0]["message"]["content"].strip()
+        except Exception:
+            continue
+    return None
+
+import random
+
+def append_viral_hashtags(caption):
+    # O'zbekistondagi eng kuchli blogerlar va IT sohasidagilar ishlatadigan viral hashteglar
+    general_viral = ["#rek", "#rekka", "#uzbekistan", "#toshkent", "#trend", "#qiziqarli", "#uzbek", "#foydali"]
+    niche_tech = ["#dasturlash", "#dasturchi", "#ituz", "#biznes", "#rivojlanish", "#motivatsiya", "#smm"]
+    ai_tags = ["#sunniyintellekt", "#aiuz", "#ai"]
+    
+    # Aralashtirib tanlab olish: 3 ta umumiy, 2 ta tech, 1 ta AI
+    selected_tags = random.sample(general_viral, 3) + random.sample(niche_tech, 2) + random.sample(ai_tags, 1)
+    
+    # Har doim mualliflik hashtegi
+    selected_tags.append("#temurbekdev")
+    
+    # Matn ichida agar hashtaglar qolib ketgan bo'lsa (AI baribir yozib qo'ygan bo'lsa) tozalaymiz
+    clean_caption = "\n".join([line for line in caption.split("\n") if not line.strip().startswith("#")])
+    
+    return clean_caption.strip() + "\n\n" + " ".join(selected_tags)
+
+def generate_data_driven_strategy(profile_data):
+    km = KeyManager()
+    prompt = f"Sen eng kuchli SMM strateg va prodyusersan. Senga mijozning Instagram profilingdagi eng mashhur (top) postlari haqida faktik ma'lumotlarni (Data) yuboraman. Sen bu ma'lumotlarni analiz qilib, uning auditoriyasi aynan nimalarni (qaysi mavzuni) yaxshi ko'rishini aniqla va shunga mos kelgusi 30 kun uchun (haftasiga 3 ta videodan, jami 12-15 ta idea) qisqa va aniq jadval tuzib ber.\n\nFaktik ma'lumotlar:\n{profile_data}\n\nJavobing to'g'ridan to'g'ri jadval bilan boshlansin, keraksiz kirish so'zlari yozma."
+    
+    for _ in range(3):
+        groq_key = km.get_groq_key()
+        if not groq_key: break
+        try:
+            import requests
+            url = "https://api.groq.com/openai/v1/chat/completions"
+            headers = {"Authorization": f"Bearer {groq_key}", "Content-Type": "application/json"}
+            payload = {"model": "llama-3.3-70b-versatile", "messages": [{"role": "user", "content": prompt}]}
+            response = requests.post(url, headers=headers, json=payload, timeout=15)
             if response.status_code == 200:
                 return response.json()["choices"][0]["message"]["content"].strip()
         except Exception:
