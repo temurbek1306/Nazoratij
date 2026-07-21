@@ -46,10 +46,39 @@ def run():
     success = post_to_instagram(url, caption, video_name)
     
     if success:
-        print("✅ Video muvaffaqiyatli yuklandi va 'posted' papkasiga o'tkazildi!")
+        print("✅ Video IG ga muvaffaqiyatli yuklandi va 'posted' papkasiga o'tkazildi!")
     else:
-        print("❌ Videoni yuklashda xatolik yuz berdi.")
-        # Agar xato bo'lsa, workflow failure berishi uchun exit(1) qilish mumkin, lekin kerak emas, oddiygina yopiladi.
+        print("❌ Videoni IG ga yuklashda xatolik yuz berdi.")
+        
+    # --- YOUTUBE SHORTS YUKLASH ---
+    yt_client_id = os.getenv("YOUTUBE_CLIENT_ID")
+    yt_client_secret = os.getenv("YOUTUBE_CLIENT_SECRET")
+    yt_refresh_token = os.getenv("YOUTUBE_REFRESH_TOKEN")
+    
+    if yt_client_id and yt_client_secret and yt_refresh_token:
+        try:
+            print("\n📺 YouTube Shorts yuklash boshlanmoqda...")
+            from youtube_api import YouTubeAPI
+            yt_api = YouTubeAPI(yt_client_id, yt_client_secret, yt_refresh_token)
+            
+            # Instagram ssenariysining birinchi qatorini sarlavha qilib olamiz
+            title = caption.split('\n')[0][:100] 
+            
+            # local path for youtube upload
+            local_video_path = f"videos/posted/{video_name}" if success else f"videos/pending/{video_name}"
+            
+            if os.path.exists(local_video_path):
+                yt_api.upload_shorts(
+                    video_path=local_video_path,
+                    title=title,
+                    description=caption
+                )
+            else:
+                print(f"❌ YouTube uchun lokal fayl topilmadi: {local_video_path}")
+        except Exception as yt_error:
+            print(f"⚠️ YouTube ga yuklashda xatolik: {yt_error}")
+    else:
+        print("⚠️ YouTube API sirlari topilmadi. Shorts yuklash tashlab o'tildi.")
 
 if __name__ == "__main__":
     run()
