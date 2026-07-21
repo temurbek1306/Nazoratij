@@ -68,6 +68,15 @@ if (isset($update['message'])) {
             }
             exit;
         }
+        elseif (strpos($data, "post_a_") === 0 || strpos($data, "post_b_") === 0 || strpos($data, "post_c_") === 0 || strpos($data, "cancel_") === 0) {
+            // A, B, C matnlari tanlanganda yoki Bekor qilinganda
+            triggerGitHubAction("telegram_command", array("command" => $data));
+            
+            // Takror bosilmasligi uchun tugmalarni o'chirib tashlash
+            $url = "https://api.telegram.org/bot" . $TELEGRAM_TOKEN . "/editMessageReplyMarkup";
+            file_get_contents($url . "?chat_id=$chat_id&message_id=$message_id&reply_markup=" . json_encode(["inline_keyboard" => []]));
+            exit;
+        }
     }
     
     // Text commands
