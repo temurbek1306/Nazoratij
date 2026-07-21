@@ -106,7 +106,9 @@ def run():
             ig_token = os.getenv("IG_ACCESS_TOKEN")
             ig_account_id = os.getenv("IG_ACCOUNT_ID")
             
-            profile_data = "Ayni paytda Instagram hisobi ulanmagan yoki postlar yo'q. Shuning uchun umumiy trendlarga asoslan!"
+            profile_data = "Ayni paytda Instagram hisobi ulanmagan yoki postlar yo'q."
+            trend_data = "Ayni paytda trendlarni o'qib bo'lmadi."
+            
             if ig_token and ig_account_id:
                 try:
                     url = f"https://graph.facebook.com/v18.0/{ig_account_id}/media?fields=caption,like_count,comments_count,media_type&limit=15&access_token={ig_token}"
@@ -115,16 +117,33 @@ def run():
                         posts = res["data"]
                         sorted_posts = sorted(posts, key=lambda x: x.get('like_count', 0), reverse=True)
                         top_posts = sorted_posts[:3]
-                        profile_data = "Foydalanuvchining Instagramdagi eng omadli (Top 3) postlari haqida faktik ma'lumotlar:\n"
+                        profile_data = "Foydalanuvchining Instagramdagi eng omadli (Top 3) postlari:\n"
                         for i, p in enumerate(top_posts):
                             cpt = p.get('caption', 'Sarlavha yoq')[:150].replace('\n', ' ')
                             lks = p.get('like_count', 0)
                             cms = p.get('comments_count', 0)
                             profile_data += f"{i+1}-post. Layklar: {lks}, Kommentlar: {cms}. Sarlavhasi: '{cpt}'\n"
                 except Exception as e:
-                    print("IG Data fetch error:", e)
+                    print("IG Profile fetch error:", e)
+                    
+                try:
+                    trend_data = "Butun Instagramdagi ayni damdagi (IT va AI bo'yicha) eng ommabop begona postlar (Trendlar):\n"
+                    for hashtag in ["dasturlash", "sunniyintellekt"]:
+                        h_url = f"https://graph.facebook.com/v18.0/ig_hashtag_search?user_id={ig_account_id}&q={hashtag}&access_token={ig_token}"
+                        h_res = requests.get(h_url).json()
+                        if "data" in h_res and len(h_res["data"]) > 0:
+                            h_id = h_res["data"][0]["id"]
+                            top_url = f"https://graph.facebook.com/v18.0/{h_id}/top_media?user_id={ig_account_id}&fields=caption,like_count&limit=5&access_token={ig_token}"
+                            top_res = requests.get(top_url).json()
+                            if "data" in top_res:
+                                for idx, p in enumerate(top_res["data"]):
+                                    cpt = p.get('caption', 'Sarlavha yoq')[:150].replace('\n', ' ')
+                                    lks = p.get('like_count', 0)
+                                    trend_data += f"- #{hashtag} bo'yicha Top-{idx+1}: Layklar: {lks}, Sarlavhasi: '{cpt}'\n"
+                except Exception as e:
+                    print("IG Trend fetch error:", e)
             
-            ai_response = ai_assistant.generate_data_driven_strategy(profile_data)
+            ai_response = ai_assistant.generate_data_driven_strategy(profile_data, trend_data)
             if not ai_response: ai_response = "Kechirasiz, Groq ishlamadi."
             send_telegram_msg("📊 <b>Analiz Yakunlandi! 30 Kunlik Kontent Rejangiz:</b>\n\n" + ai_response)
         except Exception as e:

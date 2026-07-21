@@ -167,16 +167,20 @@ def append_viral_hashtags(caption):
     
     return clean_caption.strip() + "\n\n" + " ".join(selected_tags)
 
-def generate_data_driven_strategy(profile_data):
+def generate_data_driven_strategy(profile_data, trend_data):
     km = KeyManager()
     prompt = f"""Sen eng kuchli SMM strateg va prodyusersan. Foydalanuvchining kanali IT, Dasturlash, Sun'iy Intellekt va Texnologiyalarga bag'ishlangan (#temurbekdev). 
-Senga uning Instagram profilidagi faktik ma'lumotlarni (Data) yuboraman. Agar ma'lumotlar mavjud bo'lsa, ularni analiz qilib, auditoriyaga nima yoqayotganini top. Agar ma'lumot yo'q bo'lsa, faqatgina DASTURLASH va IT sohasidagi eng so'nggi trendlarga asoslan!
 
-Kelgusi 30 kun uchun (haftasiga 3 ta videodan, jami 12-15 ta tayyor video g'oyasi (hooklar bilan)) qisqa va aniq jadval tuz.
-Jadval ustunlari: [Hafta/Kun] | [Video Mavzusi (Sarlavha)] | [Hook (Qiziqtiruvchi boshlanish)] | [Format (Kamera/Skrinkast)]
-
-Faktik ma'lumotlar:
+Quyida ikkita ma'lumot beriladi:
+1. FOYDALANUVCHINING O'Z PROFILI FAKTLARI (Uning hozirgi auditoriyasiga nima yoqadi):
 {profile_data}
+
+2. GLOBAL INSTAGRAM TRENDLARI (Butun O'zbekistondagi boshqa eng kuchli IT/AI blogerlarning hozirgi kunda millionlab layk yig'ayotgan videolari va mavzulari):
+{trend_data}
+
+Vazifang: Ikkala ma'lumotni ham (o'zining eski postlari va tashqaridagi raqobatchi trendlarni) analiz qilib, shunga mos kelgusi 30 kun uchun (haftasiga 3 ta videodan, jami 12-15 ta tayyor video g'oyasi (hooklar bilan)) qisqa va aniq jadval tuz.
+
+Jadval ustunlari: [Hafta/Kun] | [Video Mavzusi (Sarlavha)] | [Hook (Qiziqtiruvchi boshlanish)] | [Format (Kamera/Skrinkast)]
 
 DIQQAT: Jadval faqat Dasturlash, IT va Texnologiya haqida bo'lishi shart! Boshqa (moda, sport) mavzular qo'shma. Javobing to'g'ridan-to'g'ri jadval bilan boshlansin."""
     
