@@ -24,7 +24,7 @@ class YouTubeAPI:
         )
         
         if not credentials.valid:
-            if credentials.expired and credentials.refresh_token:
+            if credentials.refresh_token:
                 credentials.refresh(Request())
             else:
                 raise Exception("API kalitlar noto'g'ri. YouTube'ga ulanib bo'lmadi.")
