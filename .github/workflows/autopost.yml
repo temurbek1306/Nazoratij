@@ -4,9 +4,33 @@ on:
   workflow_dispatch:
     # Bu orqali GitHub pultidan qo'lda ham ishga tushirish mumkin
   repository_dispatch:
-    types: [telegram_post, telegram_command]
+    types: [telegram_post, telegram_command, telegram_queue]
 
 jobs:
+  queue-video:
+    if: github.event_name == 'repository_dispatch' && github.event.action == 'telegram_queue'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+      - name: Checkout repository 📥
+        uses: actions/checkout@v4
+
+      - name: Download video to queue 📥
+        run: |
+          curl -s -L -o "videos/pending/00_tg_video_${{ github.run_id }}.mp4" "${{ github.event.client_payload.video_url }}"
+
+      - name: Commit and Push changes 💾
+        run: |
+          git config --local user.email "bot@temurbek.dev"
+          git config --local user.name "AutoReels Bot"
+          if [[ -n "$(git status --porcelain)" ]]; then
+            git add videos/
+            git commit -m "🤖 Bot: Video navbatga (pending) saqlandi"
+            git push
+          fi
+
   post-video:
     if: github.event_name != 'repository_dispatch' || github.event.action == 'telegram_post'
     runs-on: ubuntu-latest

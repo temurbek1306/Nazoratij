@@ -21,19 +21,53 @@ if (isset($update['message'])) {
     // Video upload
     if (isset($update['message']['video'])) {
         $file_id = $update['message']['video']['file_id'];
-        sendMessage($chat_id, "⏳ Video qabul qilindi! GitHub'ga tayyorlayapman...");
         $file_path = getFilePath($file_id);
         
         if ($file_path) {
             $video_url = "https://api.telegram.org/file/bot" . $TELEGRAM_TOKEN . "/" . $file_path;
-            $github_result = triggerGitHubAction("telegram_post", array("video_url" => $video_url));
-            if ($github_result) {
-                sendMessage($chat_id, "🚀 GitHub'ga buyruq berildi! Fonda IG/YT ga joylanmoqda.");
-            } else {
-                sendMessage($chat_id, "❌ GitHub'ga ulanishda xatolik yuz berdi.");
-            }
+            
+            // Fayl manzilini vaqtincha saqlab qo'yamiz (Tugma bosilganda o'qish uchun)
+            file_put_contents("last_video.txt", $video_url);
+            
+            $keyboard = json_encode([
+                "inline_keyboard" => [
+                    [
+                        ["text" => "📥 Navbatga qo'shish", "callback_data" => "act_queue"],
+                        ["text" => "🚀 Hozir joylash", "callback_data" => "act_postnow"]
+                    ]
+                ]
+            ]);
+            sendMessage($chat_id, "🎬 Video qabul qilindi!\n\nNima qilamiz? Hozirning o'zida post qilaymi yoki navbatga qo'shaymi?", $keyboard);
         }
         exit;
+    }
+    
+    // Tugma (Callback) bosilganda
+    if (isset($update['callback_query'])) {
+        $chat_id = $update['callback_query']['message']['chat']['id'];
+        $data = $update['callback_query']['data'];
+        $message_id = $update['callback_query']['message']['message_id'];
+        
+        if ($data == "act_queue" || $data == "act_postnow") {
+            if (file_exists("last_video.txt")) {
+                $video_url = file_get_contents("last_video.txt");
+                
+                if ($data == "act_queue") {
+                    sendMessage($chat_id, "📥 Video faqat navbatga (Queue) qo'shildi! Vaqti kelganda avtomatik joylanadi.");
+                    triggerGitHubAction("telegram_queue", array("video_url" => $video_url));
+                } else {
+                    sendMessage($chat_id, "🚀 Video hozir joylash uchun tayyorlanmoqda...");
+                    triggerGitHubAction("telegram_post", array("video_url" => $video_url));
+                }
+                
+                // Takror bosilmasligi uchun tugmalarni o'chirib tashlash
+                $url = "https://api.telegram.org/bot" . $TELEGRAM_TOKEN . "/editMessageReplyMarkup";
+                file_get_contents($url . "?chat_id=$chat_id&message_id=$message_id&reply_markup=" . json_encode(["inline_keyboard" => []]));
+            } else {
+                sendMessage($chat_id, "❌ Video manzili topilmadi. Qaytadan yuboring.");
+            }
+            exit;
+        }
     }
     
     // Text commands
