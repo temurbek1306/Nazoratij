@@ -81,6 +81,7 @@ jobs:
       - name: Install dependencies 📦
         run: |
           python -m pip install --upgrade pip
+          pip install -r requirements.txt
           pip install requests google-api-python-client google-auth-httplib2 google-auth-oauthlib
           
       - name: Run Telegram Command 🤖
