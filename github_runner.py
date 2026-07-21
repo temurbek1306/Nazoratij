@@ -25,8 +25,7 @@ def run():
     # hozircha o'zingiz yozgan viral shablonni beramiz (chunki AI ulanmagan bo'lishi mumkin)
     # Agar OpenAI bo'lsa uni ham shu yerda ulash mumkin.
     
-    clean_title = video_name.replace('.mp4', '').replace('_', ' ')
-    caption = f"{clean_title} 😂👇\n\nFikringizni izohlarda qoldiring!\n\n#rek #rekka #kino #dasturlash #temurbekdev #trend #uzbekistan #foryou"
+    caption = "Yana bir ajoyib video! 😂 Sizda ham shunday holatlar bo'lganmi? 👇 \n\nFikringizni izohlarda qoldiring!\n\n#rek #rekka #kino #dasturlash #temurbekdev #trend #uzbekistan #foryou"
     
     try:
         import google.generativeai as genai
