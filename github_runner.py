@@ -148,8 +148,17 @@ def run():
     success_ig = post_to_instagram(url, caption, video_name)
     
     print(f"📺 YouTubega joylanmoqda (Zaxira rejim)...")
-    import youtube_api
-    success_yt = youtube_api.upload_video_to_youtube(video_name, local_video_path, "Yangi Video!", caption)
+    from youtube_api import YouTubeAPI
+    yt_client_id = os.getenv("YOUTUBE_CLIENT_ID")
+    yt_client_secret = os.getenv("YOUTUBE_CLIENT_SECRET")
+    yt_refresh_token = os.getenv("YOUTUBE_REFRESH_TOKEN")
+    
+    if yt_client_id and yt_client_secret and yt_refresh_token:
+        try:
+            yt_api = YouTubeAPI(yt_client_id, yt_client_secret, yt_refresh_token)
+            yt_api.upload_shorts(local_video_path, "Yangi Video!", caption)
+        except Exception as e:
+            print(f"⚠️ YouTube zaxira yuklashda xatolik: {e}")
 
 if __name__ == "__main__":
     run()
