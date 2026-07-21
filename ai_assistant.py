@@ -169,8 +169,32 @@ def append_viral_hashtags(caption):
 
 def generate_data_driven_strategy(profile_data):
     km = KeyManager()
-    prompt = f"Sen eng kuchli SMM strateg va prodyusersan. Senga mijozning Instagram profilingdagi eng mashhur (top) postlari haqida faktik ma'lumotlarni (Data) yuboraman. Sen bu ma'lumotlarni analiz qilib, uning auditoriyasi aynan nimalarni (qaysi mavzuni) yaxshi ko'rishini aniqla va shunga mos kelgusi 30 kun uchun (haftasiga 3 ta videodan, jami 12-15 ta idea) qisqa va aniq jadval tuzib ber.\n\nFaktik ma'lumotlar:\n{profile_data}\n\nJavobing to'g'ridan to'g'ri jadval bilan boshlansin, keraksiz kirish so'zlari yozma."
+    prompt = f"""Sen eng kuchli SMM strateg va prodyusersan. Foydalanuvchining kanali IT, Dasturlash, Sun'iy Intellekt va Texnologiyalarga bag'ishlangan (#temurbekdev). 
+Senga uning Instagram profilidagi faktik ma'lumotlarni (Data) yuboraman. Agar ma'lumotlar mavjud bo'lsa, ularni analiz qilib, auditoriyaga nima yoqayotganini top. Agar ma'lumot yo'q bo'lsa, faqatgina DASTURLASH va IT sohasidagi eng so'nggi trendlarga asoslan!
+
+Kelgusi 30 kun uchun (haftasiga 3 ta videodan, jami 12-15 ta tayyor video g'oyasi (hooklar bilan)) qisqa va aniq jadval tuz.
+Jadval ustunlari: [Hafta/Kun] | [Video Mavzusi (Sarlavha)] | [Hook (Qiziqtiruvchi boshlanish)] | [Format (Kamera/Skrinkast)]
+
+Faktik ma'lumotlar:
+{profile_data}
+
+DIQQAT: Jadval faqat Dasturlash, IT va Texnologiya haqida bo'lishi shart! Boshqa (moda, sport) mavzular qo'shma. Javobing to'g'ridan-to'g'ri jadval bilan boshlansin."""
     
+    # 1. Gemini orqali urinish (Foydalanuvchi talabi)
+    for _ in range(3):
+        gemini_key = km.get_gemini_key()
+        if not gemini_key: break
+        try:
+            import google.generativeai as genai
+            genai.configure(api_key=gemini_key)
+            model = genai.GenerativeModel("gemini-1.5-flash")
+            response = model.generate_content(prompt)
+            if response.text:
+                return response.text.strip()
+        except Exception:
+            continue
+            
+    # 2. Zaxira sifatida Groq
     for _ in range(3):
         groq_key = km.get_groq_key()
         if not groq_key: break
