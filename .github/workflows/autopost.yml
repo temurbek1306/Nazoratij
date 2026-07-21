@@ -2,8 +2,8 @@ name: Instagram Auto Reels Bot 🤖
 
 on:
   schedule:
-    # Har 2 soatda ishlaydi
-    - cron: '0 */2 * * *'
+    # Har 10 daqiqada ishlaydi
+    - cron: '*/10 * * * *'
   workflow_dispatch:
     # Bu orqali GitHub pultidan qo'lda ham ishga tushirish mumkin
 
