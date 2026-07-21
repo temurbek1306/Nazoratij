@@ -42,6 +42,7 @@ jobs:
           IG_ACCOUNT_ID: ${{ secrets.IG_ACCOUNT_ID }}
           NGROK_AUTHTOKEN: ${{ secrets.NGROK_AUTHTOKEN }}
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+          AI_KEYS_JSON: ${{ secrets.AI_KEYS_JSON }}
           YOUTUBE_CLIENT_ID: ${{ secrets.YOUTUBE_CLIENT_ID }}
           YOUTUBE_CLIENT_SECRET: ${{ secrets.YOUTUBE_CLIENT_SECRET }}
           YOUTUBE_REFRESH_TOKEN: ${{ secrets.YOUTUBE_REFRESH_TOKEN }}
@@ -91,7 +92,9 @@ jobs:
           YOUTUBE_CLIENT_ID: ${{ secrets.YOUTUBE_CLIENT_ID }}
           YOUTUBE_CLIENT_SECRET: ${{ secrets.YOUTUBE_CLIENT_SECRET }}
           YOUTUBE_REFRESH_TOKEN: ${{ secrets.YOUTUBE_REFRESH_TOKEN }}
+          AI_KEYS_JSON: ${{ secrets.AI_KEYS_JSON }}
           TELEGRAM_COMMAND: ${{ github.event.client_payload.command }}
+          TELEGRAM_PROMPT: ${{ github.event.client_payload.prompt }}
         run: |
           python bot_controller.py
           

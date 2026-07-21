@@ -26,7 +26,10 @@ def run():
     # Standart xeshteglar bilan zaxira (fallback) caption
     caption = "Yana bir ajoyib video! 😂 Sizda ham shunday holatlar bo'lganmi? 👇 \n\nFikringizni izohlarda qoldiring!\n\n#rek #rekka #kino #dasturlash #temurbekdev #trend #uzbekistan #foryou"
     
-    gemini_key = os.getenv("GEMINI_API_KEY")
+    import ai_assistant
+    km = ai_assistant.KeyManager()
+    gemini_key = km.get_gemini_key()
+    
     if gemini_key:
         try:
             import google.generativeai as genai

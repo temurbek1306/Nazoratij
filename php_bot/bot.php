@@ -1,75 +1,108 @@
 <?php
 // ==========================================
-// TELEGRAM "PULT" BOTI - PHP WEBHOOK
+// TELEGRAM "PULT" BOTI - PHP WEBHOOK V2.0
 // ==========================================
 
 // Sozlamalar
 $TELEGRAM_TOKEN = "8674470670:AAER3Y3EfZ44eFUhxKTpsGX_X_Vg6LvKYOQ";
 $ADMIN_ID = 5701828462;
-$GITHUB_PAT = "SIZNING_GITHUB_PAT_TOKENINGIZ"; // Buni GitHub'dan olasiz
+$GITHUB_PAT = "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"; // Buni GitHub'dan olasiz
 $GITHUB_REPO = "temurbek1306/InstagaramAvtoReels";
 
 // Kelayotgan ma'lumotni o'qish
 $update = json_decode(file_get_contents('php://input'), TRUE);
 
+// 1. CALLBACK QUERY (Tugmalar bosilganda)
+if (isset($update['callback_query'])) {
+    $callback_query = $update['callback_query'];
+    $chat_id = $callback_query['message']['chat']['id'];
+    $data = $callback_query['data'];
+    
+    if ($chat_id != $ADMIN_ID) exit;
+    
+    // answerCallbackQuery (Yuklanmoqda animatsiyasini to'xtatish uchun)
+    file_get_contents("https://api.telegram.org/bot" . $TELEGRAM_TOKEN . "/answerCallbackQuery?callback_query_id=" . $callback_query['id']);
+    
+    if (strpos($data, "cmd_") === 0) {
+        $cmd = str_replace("cmd_", "", $data);
+        sendMessage($chat_id, "⏳ Buyruq qabul qilindi. GitHub muloqot qilmoqda...");
+        triggerGitHubAction("telegram_command", array("command" => $cmd));
+    }
+    exit;
+}
+
+// 2. ODDY XABAR (Matn yoki Video)
 if (isset($update['message'])) {
     $chat_id = $update['message']['chat']['id'];
-    $message_id = $update['message']['message_id'];
     
-    // XAVFSIZLIK: Faqatgina ADMIN (Siz) uchun ishlashi kerak
     if ($chat_id != $ADMIN_ID) {
         sendMessage($chat_id, "⛔️ Kechirasiz, siz ushbu botdan foydalanish huquqiga ega emassiz.");
         exit;
     }
     
-    // Video kelganini tekshirish
+    // Video kelganda
     if (isset($update['message']['video'])) {
         $file_id = $update['message']['video']['file_id'];
-        
-        sendMessage($chat_id, "⏳ Video qabul qilindi! Yozishib olib, GitHub'ga tayyorlayapman...");
-        
-        // Telegram API orqali fayl manzilini olish
+        sendMessage($chat_id, "⏳ Video qabul qilindi! GitHub'ga tayyorlayapman...");
         $file_path = getFilePath($file_id);
         
         if ($file_path) {
             $video_url = "https://api.telegram.org/file/bot" . $TELEGRAM_TOKEN . "/" . $file_path;
-            
-            // GitHub Actions'ga buyruq yuborish
             $github_result = triggerGitHubAction("telegram_post", array("video_url" => $video_url));
-            
             if ($github_result) {
-                sendMessage($chat_id, "🚀 GitHub'ga buyruq berildi! \n\nHozir fonda videongiz Insta va YouTube ga joylanmoqda. Ish tugagach, sizga yakuniy xabar yuboraman.");
+                sendMessage($chat_id, "🚀 GitHub'ga buyruq berildi! Fonda IG/YT ga joylanmoqda.");
             } else {
-                sendMessage($chat_id, "❌ GitHub'ga ulanishda xatolik yuz berdi. GITHUB_PAT yoki REPO nomini tekshiring.");
+                sendMessage($chat_id, "❌ GitHub'ga ulanishda xatolik yuz berdi.");
             }
         } else {
-            sendMessage($chat_id, "❌ Videoni tortib olishda xatolik yuz berdi (Fayl hajmi 20MB dan oshmasligi kerak).");
+            sendMessage($chat_id, "❌ Videoni tortib olishda xatolik yuz berdi (Max hajmi 20MB).");
         }
-    } else {
+    } 
+    // Matn kelganda
+    else {
         $text = isset($update['message']['text']) ? $update['message']['text'] : "";
-        if ($text == "/start") {
-            sendMessage($chat_id, "👋 Salom, Boss! Men sizning Avto Reels tizimingiz pultiman.\n\nMenga istalgan videoni (Reels/Shorts) tashlang, men uni darhol fon rejimida Instagram va YouTube ga joylayman!\n\nBoshqaruv:\n/list - Navbatni ko'rish\n/stats - Statistika\n/post_now - Zudlik bilan joylash\n/clear - Navbatni tozalash");
-        } elseif (in_array($text, ["/list", "/stats", "/post_now", "/clear"])) {
-            sendMessage($chat_id, "⏳ Buyruq qabul qilindi. GitHub muloqot qilmoqda (30-40 soniya kutishingiz mumkin)...");
+        
+        if ($text == "/start" || $text == "/menu") {
+            $keyboard = json_encode([
+                "inline_keyboard" => [
+                    [
+                        ["text" => "📊 Statistika", "callback_data" => "cmd_stats"],
+                        ["text" => "🚀 Zudlik bilan Post", "callback_data" => "cmd_post_now"]
+                    ],
+                    [
+                        ["text" => "📋 Navbat (Queue)", "callback_data" => "cmd_list"],
+                        ["text" => "🧹 Tozalash", "callback_data" => "cmd_clear"]
+                    ]
+                ]
+            ]);
+            sendMessage($chat_id, "👋 Salom, Boss! Ultra God Mode (v2.0) aktiv.\n\nQuyidagi tugmalardan birini tanlang yoki menga biror savol bering (AI Brainstorm):", $keyboard);
+        } 
+        elseif (in_array($text, ["/list", "/stats", "/post_now", "/clear"])) {
+            sendMessage($chat_id, "⏳ Buyruq qabul qilindi...");
             $cmd = str_replace("/", "", $text);
-            $github_result = triggerGitHubAction("telegram_command", array("command" => $cmd));
-            if (!$github_result) {
-                sendMessage($chat_id, "❌ GitHub'ga buyruq berishda xatolik yuz berdi.");
-            }
-        } else {
-            sendMessage($chat_id, "Iltimos, menga faqat video fayl yuboring yoki menyudagi komandalardan birini tanlang.");
+            triggerGitHubAction("telegram_command", array("command" => $cmd));
+        } 
+        elseif ($text != "") {
+            // Brainstorming yoki Link yuklab olish
+            sendMessage($chat_id, "🧠 AI o'ylamoqda... / Link tekshirilmoqda...");
+            triggerGitHubAction("telegram_command", array("command" => "brainstorm", "prompt" => $text));
         }
     }
 }
 
-// Yordamchi funksiya: Telegramga xabar yozish
-function sendMessage($chat_id, $text) {
+// Yordamchi funksiyalar
+function sendMessage($chat_id, $text, $reply_markup = null) {
     global $TELEGRAM_TOKEN;
     $url = "https://api.telegram.org/bot" . $TELEGRAM_TOKEN . "/sendMessage";
     $data = array(
         'chat_id' => $chat_id,
-        'text' => $text
+        'text' => $text,
+        'parse_mode' => 'HTML'
     );
+    if ($reply_markup) {
+        $data['reply_markup'] = $reply_markup;
+    }
+    
     $options = array(
         'http' => array(
             'header'  => "Content-type: application/x-www-form-urlencoded\r\n",
@@ -81,12 +114,9 @@ function sendMessage($chat_id, $text) {
     file_get_contents($url, false, $context);
 }
 
-// Yordamchi funksiya: Faylning haqiqiy yuklab olish linkini olish
 function getFilePath($file_id) {
     global $TELEGRAM_TOKEN;
     $url = "https://api.telegram.org/bot" . $TELEGRAM_TOKEN . "/getFile?file_id=" . $file_id;
-    
-    // curl orqali olish (xavfsizroq)
     $ch = curl_init($url);
     curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
     $result = curl_exec($ch);
@@ -101,18 +131,13 @@ function getFilePath($file_id) {
     return false;
 }
 
-// Yordamchi funksiya: GitHub Actions'ni ishga tushirish (Webhook/Dispatch)
 function triggerGitHubAction($event_type, $payload_data) {
     global $GITHUB_PAT, $GITHUB_REPO;
-    
     $url = "https://api.github.com/repos/" . $GITHUB_REPO . "/dispatches";
-    
     $data = array(
         "event_type" => $event_type,
         "client_payload" => $payload_data
     );
-    
-    $payload = json_encode($data);
     
     $ch = curl_init($url);
     curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
@@ -123,8 +148,7 @@ function triggerGitHubAction($event_type, $payload_data) {
         'Content-Type: application/json'
     ));
     curl_setopt($ch, CURLOPT_POST, true);
-    curl_setopt($ch, CURLOPT_POSTFIELDS, $payload);
-    
+    curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($data));
     $response = curl_exec($ch);
     $httpcode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
     curl_close($ch);

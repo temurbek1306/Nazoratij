@@ -76,6 +76,7 @@ def handle_stats():
 
 def run():
     command = os.getenv("TELEGRAM_COMMAND", "").lower().strip()
+    prompt = os.getenv("TELEGRAM_PROMPT", "").strip()
     
     if not command:
         print("Hech qanday komanda berilmadi.")
@@ -92,6 +93,16 @@ def run():
     elif command == "post_now":
         send_telegram_msg("🚀 Zudlik bilan post qilish jarayoni boshlandi! (github_runner ishga tushmoqda...)")
         github_runner.run()
+    elif command == "brainstorm":
+        if prompt.startswith("http"):
+            send_telegram_msg("📥 Bu linkka o'xshaydi. Link orqali yuklab olish funksiyasi tez kunda (Keyingi qadamda) qo'shiladi!")
+        else:
+            try:
+                import ai_assistant
+                ai_response = ai_assistant.brainstorm_idea(prompt)
+                send_telegram_msg(ai_response)
+            except Exception as e:
+                send_telegram_msg(f"⚠️ AI yordamchisida xatolik: {e}")
     else:
         send_telegram_msg("❓ Noma'lum komanda.")
 
