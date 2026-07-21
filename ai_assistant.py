@@ -187,7 +187,9 @@ DIQQAT - ENG MUHIM QOIDALAR:
 3. HOOK (Qiziqtiruvchi boshlanish) juda kuchli, 3-soniyada ushlab qoladigan bo'lsin. ("Bilarmidingiz?", "To'xtang!", "Hayotingizni o'zgartiruvchi sayt" kabi).
 4. Hech qanday inglizchadan to'g'ridan-to'g'ri (g'alati) tarjimalar ishlatma. Toza, jonli, o'zbekcha so'zlashuv tilida yoz!
 
-Jadval ustunlari: [Hafta/Kun] | [Viral Video Mavzusi] | [Bomba Hook (Dastlabki 3 soniya)] | [Format (Kamera/Skrinkast)]
+Jadval ustunlari: [Hafta/Kun] | [Viral Video Mavzusi] | [Bomba Hook (Dastlabki 3 soniya)] | [Qisqacha ssenariy / Prompt] | [Format]
+
+Eslatma: [Qisqacha ssenariy / Prompt] ustunida ushbu videoni qanday suratga olish yoki unda qanday gaplar aytilishi haqida 1-2 ta gaplik kuchli ssenariy promptini yozib ber.
 
 Javobing to'g'ridan-to'g'ri jadval bilan boshlansin, keraksiz kirish so'zlari yozma."""
     
