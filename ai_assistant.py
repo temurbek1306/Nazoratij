@@ -169,20 +169,27 @@ def append_viral_hashtags(caption):
 
 def generate_data_driven_strategy(profile_data, trend_data):
     km = KeyManager()
-    prompt = f"""Sen eng kuchli SMM strateg va prodyusersan. Foydalanuvchining kanali IT, Dasturlash, Sun'iy Intellekt va Texnologiyalarga bag'ishlangan (#temurbekdev). 
+    prompt = f"""Sen O'zbekistondagi eng mashhur va kreativ SMM prodyusersan (TikTok va Reels bo'yicha ekspert). Foydalanuvchining kanali IT, Dasturlash, Sun'iy Intellekt va Texnologiyalarga bag'ishlangan (#temurbekdev).
 
 Quyida ikkita ma'lumot beriladi:
-1. FOYDALANUVCHINING O'Z PROFILI FAKTLARI (Uning hozirgi auditoriyasiga nima yoqadi):
+1. FOYDALANUVCHINING O'Z PROFILI FAKTLARI:
 {profile_data}
 
-2. GLOBAL INSTAGRAM TRENDLARI (Butun O'zbekistondagi boshqa eng kuchli IT/AI blogerlarning hozirgi kunda millionlab layk yig'ayotgan videolari va mavzulari):
+2. GLOBAL INSTAGRAM TRENDLARI:
 {trend_data}
 
-Vazifang: Ikkala ma'lumotni ham (o'zining eski postlari va tashqaridagi raqobatchi trendlarni) analiz qilib, shunga mos kelgusi 30 kun uchun (haftasiga 3 ta videodan, jami 12-15 ta tayyor video g'oyasi (hooklar bilan)) qisqa va aniq jadval tuz.
+VAZIFA:
+Shu ma'lumotlarga asoslanib kelgusi 30 kun uchun (jami 12-15 ta) 💥 VIRAL VIDEO G'OYALARI jadvalini tuz.
 
-Jadval ustunlari: [Hafta/Kun] | [Video Mavzusi (Sarlavha)] | [Hook (Qiziqtiruvchi boshlanish)] | [Format (Kamera/Skrinkast)]
+DIQQAT - ENG MUHIM QOIDALAR:
+1. Videolar FAQAT dasturchilarga emas, ODDIY ODAMLARGA ham qiziq bo'lishi shart! (Masalan: "Telefoningizdagi sir", "Kelajak kasblari", "Qanday qilib internetdan pul topish mumkin").
+2. Quruq darslar ("Python asoslari", "Ma'shinasozlik", "C++ o'rganamiz") UMUMAN KERAK EMAS! Ularning o'rniga "Sizni dasturlashga kiritmaydigan 3 ta xato", "ChatGPT dan to'g'ri foydalanish siri" kabi ommabop yondashuv kerak.
+3. HOOK (Qiziqtiruvchi boshlanish) juda kuchli, 3-soniyada ushlab qoladigan bo'lsin. ("Bilarmidingiz?", "To'xtang!", "Hayotingizni o'zgartiruvchi sayt" kabi).
+4. Hech qanday inglizchadan to'g'ridan-to'g'ri (g'alati) tarjimalar ishlatma. Toza, jonli, o'zbekcha so'zlashuv tilida yoz!
 
-DIQQAT: Jadval faqat Dasturlash, IT va Texnologiya haqida bo'lishi shart! Boshqa (moda, sport) mavzular qo'shma. Javobing to'g'ridan-to'g'ri jadval bilan boshlansin."""
+Jadval ustunlari: [Hafta/Kun] | [Viral Video Mavzusi] | [Bomba Hook (Dastlabki 3 soniya)] | [Format (Kamera/Skrinkast)]
+
+Javobing to'g'ridan-to'g'ri jadval bilan boshlansin, keraksiz kirish so'zlari yozma."""
     
     # 1. Gemini orqali urinish (Foydalanuvchi talabi)
     for _ in range(3):
