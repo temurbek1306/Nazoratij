@@ -19,8 +19,18 @@ if (isset($update['message'])) {
     }
     
     // Video upload
-    if (isset($update['message']['video'])) {
-        $file_id = $update['message']['video']['file_id'];
+    if (isset($update['message']['video']) || isset($update['message']['document'])) {
+        $video_obj = isset($update['message']['video']) ? $update['message']['video'] : $update['message']['document'];
+        
+        $file_size = isset($video_obj['file_size']) ? $video_obj['file_size'] : 0;
+        
+        // Telegram Bot API orqali faqat 20MB gacha bo'lgan fayllarni yuklab olish mumkin
+        if ($file_size > 20000000) {
+            sendMessage($chat_id, "❌ <b>Xatolik! Video hajmi juda katta.</b>\n\nTelegram Bot API faqat <b>20 MB</b> gacha bo'lgan fayllarni qabul qila oladi. Siz yuborgan video esa 20 MB dan oshib ketgan. Iltimos, kichikroq video yuboring yoki siqilgan holda jo'nating.");
+            exit;
+        }
+        
+        $file_id = $video_obj['file_id'];
         $file_path = getFilePath($file_id);
         
         if ($file_path) {
@@ -38,6 +48,8 @@ if (isset($update['message'])) {
                 ]
             ]);
             sendMessage($chat_id, "🎬 Video qabul qilindi!\n\nIzohni kim yozadi?", $keyboard);
+        } else {
+            sendMessage($chat_id, "❌ Videoni qabul qilishda xatolik yuz berdi (Fayl hajmi juda katta bo'lishi mumkin).");
         }
         exit;
     }
