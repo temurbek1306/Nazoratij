@@ -7,6 +7,21 @@ $CONFIG_FILE = 'config.json';
 $GITHUB_PAT = "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"; // O'zgartirish shart emas (hozircha)
 $GITHUB_REPO = "temurbek1306/InstagaramAvtoReels";
 
+// 🧹 ESKI FAYLLARNI TOZALASH (Server xotirasini asrash)
+// Har safar cron ishlaganda uploads papkasini tekshirib 24 soatdan oshganlarini o'chiradi
+$upload_dir = __DIR__ . '/uploads';
+if (is_dir($upload_dir)) {
+    $files = glob($upload_dir . '/*');
+    $now = time();
+    foreach ($files as $f) {
+        if (is_file($f) && basename($f) != '.htaccess') {
+            if ($now - filemtime($f) >= 86400) { 
+                unlink($f);
+            }
+        }
+    }
+}
+
 // Default settings
 
 $config = [
