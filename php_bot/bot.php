@@ -141,6 +141,7 @@ if (isset($update['message'])) {
     
     $main_keyboard = json_encode([
         "keyboard" => [
+            [["text" => "☁️ Web-App orqali yuklash"]],
             [["text" => "➕ Yangi Video Qo'shish"], ["text" => "🚀 Hozir Joylash"]],
             [["text" => "📊 Statistika"], ["text" => "📋 Navbat (Queue)"]],
             [["text" => "⚙️ Vaqt Sozlamalari"]],
@@ -164,6 +165,19 @@ if (isset($update['message'])) {
         setupBotCommands();
         sendMessage($chat_id, "👋 Salom, Boss! Ultra God Mode (v3.0) aktiv.\n\nPastdagi menyudan kerakli tugmani tanlang:", $main_keyboard);
     } 
+    elseif ($text == "☁️ Web-App orqali yuklash" || $text == "/upload") {
+        $bot_url = "https://" . $_SERVER['HTTP_HOST'] . dirname($_SERVER['REQUEST_URI']);
+        $webapp_url = rtrim($bot_url, '/') . "/upload.html";
+        
+        $webapp_keyboard = json_encode([
+            "inline_keyboard" => [
+                [
+                    ["text" => "🌐 Katta Videoni Yuklash", "web_app" => ["url" => $webapp_url]]
+                ]
+            ]
+        ]);
+        sendMessage($chat_id, "☁️ <b>Maxsus Web-App ga xush kelibsiz!</b>\n\nTelegramning 20MB limitidan qochish uchun, pastdagi tugmani bosing va videoni to'g'ridan-to'g'ri serverga yuklang.", $webapp_keyboard);
+    }
     elseif ($text == "➕ Yangi Video Qo'shish") {
         sendMessage($chat_id, "📥 <b>Yangi video qo'shish</b>\n\nVideoni shunchaki Telegram botga yuboring (fayl yoki galereya orqali). Qolganini o'zim hal qilaman!");
     }
