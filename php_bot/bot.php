@@ -142,14 +142,10 @@ if (isset($update['message'])) {
         $main_keyboard_temp = json_encode([
             "keyboard" => [
                 [["text" => "☁️ Web-App orqali yuklash"]],
-                [["text" => "➕ Yangi Video Qo'shish"]],
-                [["text" => "🚀 Hozir Joylash"]],
-                [["text" => "🔖 Doimiy Hashteglar"]],
-                [["text" => "📋 Navbat (Queue)"]],
-                [["text" => "⚙️ Vaqt Sozlamalari"]],
-                [["text" => "📊 Statistika"]],
-                [["text" => "🗓️ Kontent Reja"]],
-                [["text" => "🗑 Eski videolarni o'chirish"]]
+                [["text" => "➕ Yangi Video Qo'shish"], ["text" => "🚀 Hozir Joylash"]],
+                [["text" => "🔖 Doimiy Hashteglar"], ["text" => "📋 Navbat (Queue)"]],
+                [["text" => "⚙️ Vaqt Sozlamalari"], ["text" => "📊 Statistika"]],
+                [["text" => "🗓️ Kontent Reja"], ["text" => "🗑 Eski videolarni o'chirish"]]
             ],
             "resize_keyboard" => true,
             "one_time_keyboard" => false
@@ -162,14 +158,10 @@ if (isset($update['message'])) {
     $main_keyboard = json_encode([
         "keyboard" => [
             [["text" => "☁️ Web-App orqali yuklash"]],
-            [["text" => "➕ Yangi Video Qo'shish"]],
-            [["text" => "🚀 Hozir Joylash"]],
-            [["text" => "🔖 Doimiy Hashteglar"]],
-            [["text" => "📋 Navbat (Queue)"]],
-            [["text" => "⚙️ Vaqt Sozlamalari"]],
-            [["text" => "📊 Statistika"]],
-            [["text" => "🗓️ Kontent Reja"]],
-            [["text" => "🗑 Eski videolarni o'chirish"]]
+            [["text" => "➕ Yangi Video Qo'shish"], ["text" => "🚀 Hozir Joylash"]],
+            [["text" => "🔖 Doimiy Hashteglar"], ["text" => "📋 Navbat (Queue)"]],
+            [["text" => "⚙️ Vaqt Sozlamalari"], ["text" => "📊 Statistika"]],
+            [["text" => "🗓️ Kontent Reja"], ["text" => "🗑 Eski videolarni o'chirish"]]
         ],
         "resize_keyboard" => true,
         "one_time_keyboard" => false
