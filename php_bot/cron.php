@@ -8,6 +8,7 @@ $GITHUB_PAT = "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"; // O'zgartirish shart 
 $GITHUB_REPO = "temurbek1306/InstagaramAvtoReels";
 
 // Default settings
+
 $config = [
     "interval_hours" => 2,
     "last_run" => 0
