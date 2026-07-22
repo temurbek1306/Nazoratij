@@ -21,6 +21,9 @@ jobs:
         run: |
           curl -s -L -o "videos/pending/raw_video_${{ github.run_id }}.mp4" "${{ github.event.client_payload.video_url }}"
           
+      - name: Install FFmpeg 🎬
+        run: sudo apt-get update && sudo apt-get install -y ffmpeg
+
       - name: Compress Video (Lossless Optimization) 🎬
         run: |
           ffmpeg -i "videos/pending/raw_video_${{ github.run_id }}.mp4" -vcodec libx264 -crf 26 -preset fast -c:a aac -b:a 128k "videos/pending/00_tg_video_${{ github.run_id }}.mp4"
@@ -57,6 +60,10 @@ jobs:
         if: github.event_name == 'repository_dispatch' && github.event.client_payload.video_url != ''
         run: |
           curl -s -L -o "videos/pending/raw_video_${{ github.run_id }}.mp4" "${{ github.event.client_payload.video_url }}"
+
+      - name: Install FFmpeg 🎬
+        if: github.event_name == 'repository_dispatch' && github.event.client_payload.video_url != ''
+        run: sudo apt-get update && sudo apt-get install -y ffmpeg
 
       - name: Compress Video (Lossless Optimization) 🎬
         if: github.event_name == 'repository_dispatch' && github.event.client_payload.video_url != ''
