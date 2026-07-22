@@ -172,14 +172,15 @@ def handle_stats():
     send_telegram_msg(final_msg)
 
 def run():
-    command = os.getenv("TELEGRAM_COMMAND", "").lower().strip()
+    command_raw = os.getenv("TELEGRAM_COMMAND", "").strip()
+    command = command_raw.lower()
     prompt = os.getenv("TELEGRAM_PROMPT", "").strip()
     
     if not command:
         print("Hech qanday komanda berilmadi.")
         return
         
-    print(f"Qabul qilingan komanda: {command}")
+    print(f"Qabul qilingan komanda: {command_raw}")
     
     if command == "list":
         handle_list()
@@ -464,7 +465,7 @@ def run():
             except Exception as e:
                 send_telegram_msg("⚠️ Xatolik yuz berdi: " + str(e))
     elif command.startswith("del_"):
-        video_name_prefix = command.split("_", 1)[1]
+        video_name_prefix = command_raw.split("_", 1)[1]
         # Barcha pending videolarni qidiramiz
         files = [f for f in os.listdir("videos/pending") if f.startswith(video_name_prefix) and f.endswith(('.mp4', '.mov'))]
         if files:
