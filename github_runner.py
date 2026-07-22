@@ -32,8 +32,8 @@ def run():
     
     local_video_path = f"videos/pending/{video_name}"
     
-    # Standart xeshteglar bilan zaxira (fallback) caption
-    caption = "Yana bir ajoyib video! 😂 Sizda ham shunday holatlar bo'lganmi? 👇 \n\nFikringizni izohlarda qoldiring!\n\n#rek #rekka #kino #dasturlash #temurbekdev #trend #uzbekistan #foryou"
+    # Standart zaxira (fallback) caption (SMM qoidalari bo'yicha)
+    caption = "Buni oxirigacha ko'ring! 😅 Hayotda hammamiz bilan kamida bir marta shunaqasi bo'lgan, to'g'rimi? 👇\n\nSiz-chi, bunday vaziyatda nima qilgan bo'lardingiz? Fikrlar kutyapman!"
     
     import ai_assistant
     km = ai_assistant.KeyManager()
@@ -159,7 +159,13 @@ CAPTION_A: (videoga to'liq mos yozilgan caption)"""
 
     # Agar Gemini umuman ishlamay qolsa, eski usulda birdaniga joylab yuboramiz. (Zaxira)
     print(f"📝 Instagramga joylanmoqda (Zaxira rejim)...")
-    success_ig = post_to_instagram(url, caption, video_name)
+    
+    try:
+        final_fallback_caption = ai_assistant.append_viral_hashtags(caption)
+    except:
+        final_fallback_caption = caption + "\n\n#rek #trend #uzbekistan #foryou #temurbekdev"
+        
+    success_ig = post_to_instagram(url, final_fallback_caption, video_name)
     
     print(f"📺 YouTubega joylanmoqda (Zaxira rejim)...")
     from youtube_api import YouTubeAPI
@@ -173,7 +179,7 @@ CAPTION_A: (videoga to'liq mos yozilgan caption)"""
             final_video_path = f"videos/posted/{video_name}" if success_ig else f"videos/pending/{video_name}"
             
             if os.path.exists(final_video_path):
-                yt_api.upload_shorts(final_video_path, "Yangi Video!", caption)
+                yt_api.upload_shorts(final_video_path, "Kulgili Holat! 😂", final_fallback_caption)
             else:
                 print(f"❌ YouTube uchun fayl topilmadi: {final_video_path}")
         except Exception as e:
