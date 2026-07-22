@@ -32,12 +32,12 @@ if (isset($update['message'])) {
             $keyboard = json_encode([
                 "inline_keyboard" => [
                     [
-                        ["text" => "📥 Navbatga qo'shish", "callback_data" => "act_queue"],
-                        ["text" => "🚀 Hozir joylash", "callback_data" => "act_postnow"]
+                        ["text" => "🤖 AI O'zi yozsin", "callback_data" => "video_ai"],
+                        ["text" => "✍️ O'zim yozaman", "callback_data" => "video_manual"]
                     ]
                 ]
             ]);
-            sendMessage($chat_id, "🎬 Video qabul qilindi!\n\nNima qilamiz? Hozirning o'zida post qilaymi yoki navbatga qo'shaymi?", $keyboard);
+            sendMessage($chat_id, "🎬 Video qabul qilindi!\n\nIzohni kim yozadi?", $keyboard);
         }
         exit;
     }
@@ -48,16 +48,44 @@ if (isset($update['message'])) {
         $data = $update['callback_query']['data'];
         $message_id = $update['callback_query']['message']['message_id'];
         
-        if ($data == "act_queue" || $data == "act_postnow") {
+        if ($data == "video_ai") {
+            $keyboard = json_encode([
+                "inline_keyboard" => [
+                    [
+                        ["text" => "📥 Navbatga qo'shish", "callback_data" => "act_queue_ai"],
+                        ["text" => "🚀 Hozir joylash", "callback_data" => "act_postnow_ai"]
+                    ]
+                ]
+            ]);
+            sendMessage($chat_id, "🤖 AI yozishga tayyor!\n\nVideoni hozir joylaymi yoki navbatga qo'shaymi?", $keyboard);
+            $url = "https://api.telegram.org/bot" . $TELEGRAM_TOKEN . "/editMessageReplyMarkup";
+            file_get_contents($url . "?chat_id=$chat_id&message_id=$message_id&reply_markup=" . json_encode(["inline_keyboard" => []]));
+            exit;
+        }
+        
+        if ($data == "video_manual") {
+            file_put_contents("state.txt", "waiting_for_caption");
+            sendMessage($chat_id, "✍️ Iltimos, video uchun izohni (caption) jo'nating.\n\n*(Keyingi xabaringiz to'g'ridan-to'g'ri izoh sifatida qabul qilinadi)*");
+            $url = "https://api.telegram.org/bot" . $TELEGRAM_TOKEN . "/editMessageReplyMarkup";
+            file_get_contents($url . "?chat_id=$chat_id&message_id=$message_id&reply_markup=" . json_encode(["inline_keyboard" => []]));
+            exit;
+        }
+        
+        if (strpos($data, "act_queue_") === 0 || strpos($data, "act_postnow_") === 0) {
             if (file_exists("last_video.txt")) {
                 $video_url = file_get_contents("last_video.txt");
+                $caption = "";
                 
-                if ($data == "act_queue") {
-                    sendMessage($chat_id, "📥 Video faqat navbatga (Queue) qo'shildi! Vaqti kelganda avtomatik joylanadi.");
-                    triggerGitHubAction("telegram_queue", array("video_url" => $video_url));
+                if (strpos($data, "_manual") !== false && file_exists("last_caption.txt")) {
+                    $caption = file_get_contents("last_caption.txt");
+                }
+                
+                if (strpos($data, "act_queue") === 0) {
+                    sendMessage($chat_id, "📥 Video navbatga qo'shildi! Vaqti kelganda joylanadi.");
+                    triggerGitHubAction("telegram_queue", array("video_url" => $video_url, "caption" => $caption));
                 } else {
                     sendMessage($chat_id, "🚀 Video hozir joylash uchun tayyorlanmoqda...");
-                    triggerGitHubAction("telegram_post", array("video_url" => $video_url));
+                    triggerGitHubAction("telegram_post", array("video_url" => $video_url, "caption" => $caption));
                 }
                 
                 // Takror bosilmasligi uchun tugmalarni o'chirib tashlash
@@ -81,6 +109,23 @@ if (isset($update['message'])) {
     
     // Text commands
     $text = isset($update['message']['text']) ? $update['message']['text'] : "";
+    
+    // Qo'lda yozilgan izohni qabul qilish qismi
+    if (file_exists("state.txt") && file_get_contents("state.txt") == "waiting_for_caption" && $text != "") {
+        file_put_contents("last_caption.txt", $text);
+        file_put_contents("state.txt", "none");
+        
+        $keyboard = json_encode([
+            "inline_keyboard" => [
+                [
+                    ["text" => "📥 Navbatga qo'shish", "callback_data" => "act_queue_manual"],
+                    ["text" => "🚀 Hozir joylash", "callback_data" => "act_postnow_manual"]
+                ]
+            ]
+        ]);
+        sendMessage($chat_id, "✅ Ajoyib izoh qabul qilindi!\n\nEndi videoni hozir joylaymi yoki navbatga qo'shaymi?", $keyboard);
+        exit;
+    }
     
     $main_keyboard = json_encode([
         "keyboard" => [

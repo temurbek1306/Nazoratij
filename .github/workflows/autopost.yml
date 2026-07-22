@@ -20,6 +20,13 @@ jobs:
       - name: Download video to queue 📥
         run: |
           curl -s -L -o "videos/pending/00_tg_video_${{ github.run_id }}.mp4" "${{ github.event.client_payload.video_url }}"
+          
+      - name: Save Manual Caption 📝
+        if: github.event.client_payload.caption != ''
+        run: |
+          cat << 'EOF' > "videos/pending/00_tg_video_${{ github.run_id }}.txt"
+          ${{ github.event.client_payload.caption }}
+          EOF
 
       - name: Commit and Push changes 💾
         run: |
@@ -45,6 +52,13 @@ jobs:
         if: github.event_name == 'repository_dispatch' && github.event.client_payload.video_url != ''
         run: |
           curl -s -L -o "videos/pending/00_tg_video_${{ github.run_id }}.mp4" "${{ github.event.client_payload.video_url }}"
+
+      - name: Save Manual Caption 📝
+        if: github.event_name == 'repository_dispatch' && github.event.client_payload.caption != ''
+        run: |
+          cat << 'EOF' > "videos/pending/00_tg_video_${{ github.run_id }}.txt"
+          ${{ github.event.client_payload.caption }}
+          EOF
 
       - name: Setup Python 🐍
         uses: actions/setup-python@v5
