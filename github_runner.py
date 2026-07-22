@@ -64,9 +64,9 @@ def run():
         ig_media_id = post_to_instagram(url, manual_caption, video_name)
         
         try:
-            first_comment = ai_assistant.generate_first_comment(manual_caption)
+            first_comment = ai_assistant.get_standard_comment(manual_caption)
         except:
-            first_comment = "Videodagi holat kimga tanish? 😂 Fikringizni yozib qoldiring 👇"
+            first_comment = "👇 Fikringizni izohlarda yozib qoldiring!"
             
         if ig_media_id:
             from agent_tools import post_ig_comment
@@ -99,7 +99,7 @@ def run():
     
     
     # Standart zaxira (fallback) caption (SMM qoidalari bo'yicha)
-    caption = "Buni oxirigacha ko'ring! 😅 Hayotda hammamiz bilan kamida bir marta shunaqasi bo'lgan, to'g'rimi? 👇\n\nSiz-chi, bunday vaziyatda nima qilgan bo'lardingiz? Fikrlar kutyapman!"
+    caption = "Ajoyib video! 🎬\n\nSiz nima deysiz? Fikringizni izohlarda yozib qoldiring! 👇"
     
     import ai_assistant
     km = ai_assistant.KeyManager()
@@ -241,7 +241,11 @@ CAPTION_A: (videoga to'liq mos yozilgan caption)"""
         
     ig_media_id = post_to_instagram(url, final_fallback_caption, video_name)
     
-    first_comment = "Videodagi holat kimga tanish? 😂 Fikringizni yozib qoldiring 👇"
+    try:
+        first_comment = ai_assistant.get_standard_comment(final_fallback_caption)
+    except:
+        first_comment = "👇 Fikringizni izohlarda yozib qoldiring!"
+        
     if ig_media_id:
         from agent_tools import post_ig_comment
         post_ig_comment(ig_media_id, first_comment)

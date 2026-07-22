@@ -34,7 +34,11 @@ def run():
         print(f"📝 Instagramga joylanmoqda...")
         ig_media_id = post_to_instagram(url, caption, video_name)
         
-        first_comment = "Videodagi holat kimga tanish? 😂 Fikringizni yozib qoldiring 👇"
+        import ai_assistant
+        try:
+            first_comment = ai_assistant.get_standard_comment(caption)
+        except:
+            first_comment = "👇 Fikringizni izohlarda yozib qoldiring!"
         
         if ig_media_id:
             print("✅ Video IG ga muvaffaqiyatli yuklandi va 'posted' papkasiga o'tkazildi!")

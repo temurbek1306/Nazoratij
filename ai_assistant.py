@@ -316,3 +316,10 @@ Javobing to'g'ridan-to'g'ri jadval bilan boshlansin, keraksiz kirish so'zlari yo
             continue
     return None
 
+
+
+def get_standard_comment(caption):
+    lower_text = str(caption).lower()
+    if 'kino kodi' in lower_text or 'kod:' in lower_text or 'kodi:' in lower_text or 'kino:' in lower_text:
+        return '🎬 Kino kodini botdan bilib oling: @TemurbekDevbot'
+    return '👇 Fikringizni izohlarda yozib qoldiring!'
