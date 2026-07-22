@@ -44,7 +44,7 @@ def post_to_instagram(video_url: str, caption: str, filename: str) -> bool:
         if is_ready:
             media_id = api.publish_reel(container_id)
             if media_id:
-                manager.mark_as_posted(filename)
+                # We do NOT mark as posted here because YouTube still needs the file!
                 return media_id
         return None
     except Exception as e:

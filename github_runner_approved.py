@@ -57,7 +57,7 @@ def run():
                 from youtube_api import YouTubeAPI
                 yt_api = YouTubeAPI(yt_client_id, yt_client_secret, yt_refresh_token)
                 title = caption.split('\n')[0][:100] 
-                local_video_path = f"videos/posted/{video_name}" if ig_media_id else f"videos/pending/{video_name}"
+                local_video_path = f"videos/pending/{video_name}"
                 
                 if os.path.exists(local_video_path):
                     yt_video_id = yt_api.upload_shorts(video_path=local_video_path, title=title, description=caption)
@@ -83,8 +83,12 @@ def run():
             except Exception as e:
                 pass
                 
-        # JSON faylni tozalash
-        os.remove(json_path)
+        # JSON va Video fayllarni tozalash (Musur qolmasligi uchun)
+        if os.path.exists(json_path):
+            os.remove(json_path)
+            
+        from video_manager import VideoManager
+        VideoManager().mark_as_posted(video_name)
 
     elif command.startswith("cancel_"):
         video_name = command.split("_", 1)[1]
@@ -101,6 +105,7 @@ def run():
                     "chat_id": tg_admin,
                     "text": f"❌ {video_name} bekor qilindi. U hali ham navbatda turibdi, qaytadan /post_now qilib yuborishingiz mumkin."
                 })
+                print("📩 Telegramga hisobot yuborildi.")
             except Exception:
                 pass
 

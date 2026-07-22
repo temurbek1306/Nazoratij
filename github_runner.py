@@ -76,7 +76,7 @@ def run():
         if yt_client_id and yt_client_secret and yt_refresh_token:
             try:
                 yt_api = YouTubeAPI(yt_client_id, yt_client_secret, yt_refresh_token)
-                final_video_path = f"videos/posted/{video_name}" if ig_media_id else f"videos/pending/{video_name}"
+                final_video_path = f"videos/pending/{video_name}"
                 if os.path.exists(final_video_path):
                     yt_video_id = yt_api.upload_shorts(final_video_path, manual_caption.split('\n')[0][:100], manual_caption)
                     if yt_video_id:
@@ -88,6 +88,9 @@ def run():
                 
         send_alert(f"✅ Boss, video MUVAFFAQIYATLI joylandi (Qo'lda yozilgan izoh bilan)!\n\nVideo: {video_name}")
         os.remove(txt_file)
+        
+        from video_manager import VideoManager
+        VideoManager().mark_as_posted(video_name)
         return
     
     
@@ -248,7 +251,7 @@ CAPTION_A: (videoga to'liq mos yozilgan caption)"""
     if yt_client_id and yt_client_secret and yt_refresh_token:
         try:
             yt_api = YouTubeAPI(yt_client_id, yt_client_secret, yt_refresh_token)
-            final_video_path = f"videos/posted/{video_name}" if ig_media_id else f"videos/pending/{video_name}"
+            final_video_path = f"videos/pending/{video_name}"
             
             if os.path.exists(final_video_path):
                 yt_video_id = yt_api.upload_shorts(final_video_path, "Kulgili Holat! 😂", final_fallback_caption)
@@ -258,6 +261,10 @@ CAPTION_A: (videoga to'liq mos yozilgan caption)"""
                 print(f"❌ YouTube uchun fayl topilmadi: {final_video_path}")
         except Exception as e:
             print(f"⚠️ YouTube zaxira yuklashda xatolik: {e}")
+            
+    # Delete the video from pending since everything is done
+    from video_manager import VideoManager
+    VideoManager().mark_as_posted(video_name)
 
 if __name__ == "__main__":
     run()
