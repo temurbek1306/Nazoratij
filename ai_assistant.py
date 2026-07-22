@@ -187,6 +187,25 @@ Vazifang:
             if response.text:
                 return response.text
         except Exception as e:
+            print(f"[AI Stats Error Gemini]: {e}")
+            continue
+            
+    # Zaxira: Groq orqali
+    for _ in range(3):
+        groq_key = km.get_groq_key()
+        if not groq_key: break
+        try:
+            import requests
+            url = "https://api.groq.com/openai/v1/chat/completions"
+            headers = {"Authorization": f"Bearer {groq_key}", "Content-Type": "application/json"}
+            payload = {"model": "llama-3.3-70b-versatile", "messages": [{"role": "user", "content": prompt}]}
+            response = requests.post(url, headers=headers, json=payload, timeout=10)
+            if response.status_code == 200:
+                data = response.json()
+                if "choices" in data and len(data["choices"]) > 0:
+                    return data["choices"][0]["message"]["content"].strip()
+        except Exception as e:
+            print(f"[AI Stats Error Groq]: {e}")
             continue
             
     return "⚠️ AI tahlilini olishda xatolik yuz berdi. (Server band yoki limit tugagan)"
