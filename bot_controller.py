@@ -19,6 +19,7 @@ def send_telegram_msg(text):
 def handle_list():
     os.makedirs("videos/pending", exist_ok=True)
     files = [f for f in os.listdir("videos/pending") if f.endswith(('.mp4', '.mov'))]
+    files.sort() # Ensure they are shown in processing order (alphabetical == chronological for github run_ids)
     if not files:
         send_telegram_msg("📭 Navbatda hech qanday video yo'q.")
         return
