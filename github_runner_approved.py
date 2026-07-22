@@ -32,10 +32,17 @@ def run():
             return
             
         print(f"📝 Instagramga joylanmoqda...")
-        success = post_to_instagram(url, caption, video_name)
+        ig_media_id = post_to_instagram(url, caption, video_name)
         
-        if success:
+        first_comment = "Videodagi holat kimga tanish? 😂 Fikringizni yozib qoldiring 👇"
+        
+        if ig_media_id:
             print("✅ Video IG ga muvaffaqiyatli yuklandi va 'posted' papkasiga o'tkazildi!")
+            
+            # --- IG AUTO-COMMENT ---
+            from agent_tools import post_ig_comment
+            post_ig_comment(ig_media_id, first_comment)
+            
         else:
             print("❌ Videoni IG ga yuklashda xatolik yuz berdi.")
             
@@ -50,10 +57,13 @@ def run():
                 from youtube_api import YouTubeAPI
                 yt_api = YouTubeAPI(yt_client_id, yt_client_secret, yt_refresh_token)
                 title = caption.split('\n')[0][:100] 
-                local_video_path = f"videos/posted/{video_name}" if success else f"videos/pending/{video_name}"
+                local_video_path = f"videos/posted/{video_name}" if ig_media_id else f"videos/pending/{video_name}"
                 
                 if os.path.exists(local_video_path):
-                    yt_api.upload_shorts(video_path=local_video_path, title=title, description=caption)
+                    yt_video_id = yt_api.upload_shorts(video_path=local_video_path, title=title, description=caption)
+                    if yt_video_id:
+                        # --- YOUTUBE AUTO-COMMENT ---
+                        yt_api.post_comment(yt_video_id, first_comment)
                 else:
                     print(f"❌ YouTube uchun lokal fayl topilmadi: {local_video_path}")
             except Exception as yt_error:

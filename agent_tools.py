@@ -42,11 +42,11 @@ def post_to_instagram(video_url: str, caption: str, filename: str) -> bool:
         
         is_ready = api.check_status(container_id)
         if is_ready:
-            success = api.publish_reel(container_id)
-            if success:
+            media_id = api.publish_reel(container_id)
+            if media_id:
                 manager.mark_as_posted(filename)
-                return True
-        return False
+                return media_id
+        return None
     except Exception as e:
         print(f"[Tools] Xatolik yuz berdi: {str(e)}")
         return False
@@ -54,3 +54,15 @@ def post_to_instagram(video_url: str, caption: str, filename: str) -> bool:
         if server:
             server.stop()
             server = None
+
+def post_ig_comment(media_id: str, message: str) -> bool:
+    """Instagram videoga izoh qoldiradi"""
+    if not IG_ACCESS_TOKEN or not IG_ACCOUNT_ID:
+        return False
+        
+    try:
+        api = InstagramAPI(access_token=IG_ACCESS_TOKEN, account_id=IG_ACCOUNT_ID)
+        return api.post_comment(media_id, message)
+    except Exception as e:
+        print(f"[Tools] Izoh qoldirishda xatolik: {str(e)}")
+        return False

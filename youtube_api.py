@@ -85,3 +85,27 @@ class YouTubeAPI:
         except Exception as e:
             print(f"YouTube Stats API xatosi (Scope muammosi bo'lishi mumkin): {e}")
         return None
+
+    def post_comment(self, video_id: str, comment_text: str):
+        """YouTube Shorts videoga izoh yozish"""
+        try:
+            body = {
+                "snippet": {
+                    "videoId": video_id,
+                    "topLevelComment": {
+                        "snippet": {
+                            "textOriginal": comment_text
+                        }
+                    }
+                }
+            }
+            request = self.youtube.commentThreads().insert(
+                part="snippet",
+                body=body
+            )
+            response = request.execute()
+            print(f"💬 YouTube izoh qoldirildi!")
+            return True
+        except Exception as e:
+            print(f"⚠️ YouTube izoh qoldirishda xatolik (Balki scope yetishmas): {e}")
+            return False

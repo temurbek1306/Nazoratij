@@ -165,7 +165,12 @@ CAPTION_A: (videoga to'liq mos yozilgan caption)"""
     except:
         final_fallback_caption = caption + "\n\n#rek #trend #uzbekistan #foryou #temurbekdev"
         
-    success_ig = post_to_instagram(url, final_fallback_caption, video_name)
+    ig_media_id = post_to_instagram(url, final_fallback_caption, video_name)
+    
+    first_comment = "Videodagi holat kimga tanish? 😂 Fikringizni yozib qoldiring 👇"
+    if ig_media_id:
+        from agent_tools import post_ig_comment
+        post_ig_comment(ig_media_id, first_comment)
     
     print(f"📺 YouTubega joylanmoqda (Zaxira rejim)...")
     from youtube_api import YouTubeAPI
@@ -176,10 +181,12 @@ CAPTION_A: (videoga to'liq mos yozilgan caption)"""
     if yt_client_id and yt_client_secret and yt_refresh_token:
         try:
             yt_api = YouTubeAPI(yt_client_id, yt_client_secret, yt_refresh_token)
-            final_video_path = f"videos/posted/{video_name}" if success_ig else f"videos/pending/{video_name}"
+            final_video_path = f"videos/posted/{video_name}" if ig_media_id else f"videos/pending/{video_name}"
             
             if os.path.exists(final_video_path):
-                yt_api.upload_shorts(final_video_path, "Kulgili Holat! 😂", final_fallback_caption)
+                yt_video_id = yt_api.upload_shorts(final_video_path, "Kulgili Holat! 😂", final_fallback_caption)
+                if yt_video_id:
+                    yt_api.post_comment(yt_video_id, first_comment)
             else:
                 print(f"❌ YouTube uchun fayl topilmadi: {final_video_path}")
         except Exception as e:

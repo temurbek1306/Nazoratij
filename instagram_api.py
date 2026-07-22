@@ -69,7 +69,25 @@ class InstagramAPI:
         
         if "id" in data:
             print(f"[API] MUVAFFAQIYATLI! Reel ID: {data['id']}")
-            return True
+            return data['id']  # ID ni qaytarish (oldin True qaytarardi)
         else:
             print(f"[API] E'lon qilishda xatolik: {data}")
+            return None
+
+    def post_comment(self, media_id: str, message: str) -> bool:
+        """Tayyor bo'lgan videoga izoh yozish"""
+        url = f"{self.base_url}/{media_id}/comments"
+        payload = {
+            "message": message,
+            "access_token": self.access_token
+        }
+        print(f"[API] Izoh yozilmoqda...")
+        response = requests.post(url, data=payload)
+        data = response.json()
+        
+        if "id" in data:
+            print(f"[API] Izoh Muvaffaqiyatli qoldirildi!")
+            return True
+        else:
+            print(f"[API] Izoh yozishda xatolik: {data}")
             return False
