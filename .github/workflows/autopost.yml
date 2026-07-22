@@ -133,6 +133,7 @@ jobs:
           TELEGRAM_COMMAND: ${{ github.event.client_payload.command }}
           TELEGRAM_PROMPT: ${{ github.event.client_payload.prompt }}
           TELEGRAM_INTERVAL: ${{ github.event.client_payload.interval }}
+          TELEGRAM_LAST_RUN: ${{ github.event.client_payload.last_run }}
         run: |
           python bot_controller.py
           

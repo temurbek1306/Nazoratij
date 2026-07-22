@@ -26,14 +26,29 @@ def handle_list():
         return
     
     interval_hours = int(os.getenv("TELEGRAM_INTERVAL", "2"))
+    last_run_timestamp = float(os.getenv("TELEGRAM_LAST_RUN", "0"))
     
     msg = f"📋 <b>Oddiy navbatdagi videolar ({len(files)} ta):</b>\n\n"
-    # GitHub Actions UTC da ishlaydi, O'zbekiston vaqti (UTC+5) uchun 5 soat qo'shamiz
-    now = datetime.datetime.utcnow() + datetime.timedelta(hours=5)
-    for i, f in enumerate(files, 1):
-        estimated_time = now + datetime.timedelta(hours=interval_hours * i)
+    
+    # Calculate base time. If last_run is 0 or too old, the next post is practically 'now' + interval.
+    # But wait, cron.php posts if current_time >= last_run + interval.
+    # So the *next* post will be at max(current_time, last_run + interval).
+    # Then subsequent posts add interval.
+    # Since we need to show Uzbekistan time (UTC+5), we will convert everything to UTC+5.
+    now_utc = datetime.datetime.utcnow()
+    current_time_ts = now_utc.timestamp()
+    
+    interval_seconds = interval_hours * 3600
+    next_post_ts = last_run_timestamp + interval_seconds
+    if next_post_ts < current_time_ts:
+        # If interval already passed, it will post on the next cron run (which is essentially 'now')
+        next_post_ts = current_time_ts
+        
+    for i, f in enumerate(files, 0):
+        estimated_ts = next_post_ts + (i * interval_seconds)
+        estimated_time = datetime.datetime.utcfromtimestamp(estimated_ts) + datetime.timedelta(hours=5)
         time_str = estimated_time.strftime("%d.%m.%Y %H:%M")
-        msg += f"{i}. {f} <i>(~{time_str} da)</i>\n"
+        msg += f"{i+1}. {f} <i>(~{time_str} da)</i>\n"
     
     send_telegram_msg(msg)
 

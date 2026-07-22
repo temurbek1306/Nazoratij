@@ -229,12 +229,18 @@ if (isset($update['message'])) {
         
         $config_file = 'config.json';
         $interval = 2;
+        $last_run = 0;
         if (file_exists($config_file)) {
             $config = json_decode(file_get_contents($config_file), true);
             $interval = isset($config['interval_hours']) ? $config['interval_hours'] : 2;
+            $last_run = isset($config['last_run']) ? $config['last_run'] : 0;
         }
         
-        triggerGitHubAction("telegram_command", array("command" => "list", "interval" => $interval));
+        triggerGitHubAction("telegram_command", array(
+            "command" => "list", 
+            "interval" => $interval,
+            "last_run" => $last_run
+        ));
     }
     elseif ($text == "🗑 Eski videolarni o'chirish" || $text == "/clear") {
         sendMessage($chat_id, "⏳ Tozalanmoqda...");
