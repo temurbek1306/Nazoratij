@@ -265,6 +265,8 @@ CAPTION_A: (videoga to'liq mos yozilgan caption)"""
     # Delete the video from pending since everything is done
     from video_manager import VideoManager
     VideoManager().mark_as_posted(video_name)
+    
+    send_alert(f"✅ <b>Yangi video tarmoqlarga joylandi!</b>\n\nNomi: <code>{video_name}</code>\n\n<i>Platformalar: Instagram, YouTube Shorts (agar ulanish bo'lsa)</i>")
 
 if __name__ == "__main__":
     run()
