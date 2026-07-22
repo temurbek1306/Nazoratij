@@ -63,36 +63,89 @@ def handle_clear():
     send_telegram_msg(f"🧹 <b>Navbat tozalandi!</b>\n\n{count} ta fayl o'chirib tashlandi.")
 
 def handle_stats():
-    os.makedirs("videos/pending", exist_ok=True)
+    send_telegram_msg("⏳ Statistika yig'ilmoqda va AI tahlil qilmoqda... (Biroz kuting)")
     
-    # Local stats
+    os.makedirs("videos/pending", exist_ok=True)
     pending_files = [f for f in os.listdir("videos/pending") if f.endswith(('.mp4', '.mov'))]
     
-    msg = "📊 <b>AvtoReels Statistikasi</b>\n\n"
-    msg += f"⏳ Kutilayotgan videolar: <b>{len(pending_files)}</b> ta\n\n"
+    yt_stats = None
+    ig_stats = None
     
     # YouTube stats
     yt_client_id = os.getenv("YOUTUBE_CLIENT_ID")
     yt_client_secret = os.getenv("YOUTUBE_CLIENT_SECRET")
     yt_refresh_token = os.getenv("YOUTUBE_REFRESH_TOKEN")
-    
     if yt_client_id and yt_client_secret and yt_refresh_token:
         try:
             from youtube_api import YouTubeAPI
             yt_api = YouTubeAPI(yt_client_id, yt_client_secret, yt_refresh_token)
             yt_stats = yt_api.get_channel_stats()
+        except: pass
             
-            if yt_stats:
-                msg += "📺 <b>YouTube Kanalingiz:</b>\n"
-                msg += f"👥 Obunachilar: <b>{yt_stats['subscribers']}</b>\n"
-                msg += f"👁 Prosmotrlar jami: <b>{yt_stats['views']}</b>\n"
-                msg += f"🎥 Videolar jami: <b>{yt_stats['videos']}</b>\n"
-            else:
-                msg += "⚠️ <i>YouTube statistikasini olish imkonsiz (Ruxsat/Scope cheklangan bo'lishi mumkin)</i>"
-        except Exception as e:
-            msg += f"⚠️ <i>YouTube ma'lumotlarini olishda xatolik yuz berdi.</i>"
-            
-    send_telegram_msg(msg)
+    # IG stats
+    ig_token = os.getenv("IG_ACCESS_TOKEN")
+    ig_account_id = os.getenv("IG_ACCOUNT_ID")
+    if ig_token and ig_account_id:
+        try:
+            from instagram_api import InstagramAPI
+            ig_api = InstagramAPI(ig_token, ig_account_id)
+            ig_stats = ig_api.get_profile_stats()
+        except: pass
+
+    # History Logic
+    import json
+    from datetime import datetime, timedelta
+    
+    history_file = "stats_history.json"
+    history = {}
+    if os.path.exists(history_file):
+        try:
+            with open(history_file, "r") as f:
+                history = json.load(f)
+        except: pass
+        
+    today_str = datetime.now().strftime("%Y-%m-%d")
+    yesterday_str = (datetime.now() - timedelta(days=1)).strftime("%Y-%m-%d")
+    last_week_str = (datetime.now() - timedelta(days=7)).strftime("%Y-%m-%d")
+    last_month_str = (datetime.now() - timedelta(days=30)).strftime("%Y-%m-%d")
+    
+    current_data = {"yt": yt_stats or {}, "ig": ig_stats or {}}
+    history[today_str] = current_data
+    
+    with open(history_file, "w") as f:
+        json.dump(history, f, indent=2)
+        
+    def get_closest_past_data(target_date_str):
+        if target_date_str in history: return history[target_date_str]
+        target_date = datetime.strptime(target_date_str, "%Y-%m-%d")
+        closest_date = None
+        min_diff = 9999
+        for k in history:
+            try:
+                dt = datetime.strptime(k, "%Y-%m-%d")
+                diff = abs((target_date - dt).days)
+                if diff < min_diff and dt < datetime.now():
+                    min_diff = diff
+                    closest_date = k
+            except: pass
+        if closest_date and min_diff <= 3:
+            return history[closest_date]
+        return None
+
+    stats_payload = {
+        "current": current_data,
+        "yesterday": get_closest_past_data(yesterday_str),
+        "last_week": get_closest_past_data(last_week_str),
+        "last_month": get_closest_past_data(last_month_str)
+    }
+    
+    from ai_assistant import generate_stats_analysis
+    ai_report = generate_stats_analysis(stats_payload)
+    
+    final_msg = f"⏳ <b>Kutilayotgan videolar (Navbatda): {len(pending_files)} ta</b>\n\n"
+    final_msg += ai_report
+    
+    send_telegram_msg(final_msg)
 
 def run():
     command = os.getenv("TELEGRAM_COMMAND", "").lower().strip()

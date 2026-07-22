@@ -91,3 +91,22 @@ class InstagramAPI:
         else:
             print(f"[API] Izoh yozishda xatolik: {data}")
             return False
+
+    def get_profile_stats(self):
+        """Kanal statistikasini (Followers, Media count) olib beradi"""
+        url = f"{self.base_url}/{self.account_id}?fields=followers_count,media_count,name&access_token={self.access_token}"
+        try:
+            response = requests.get(url)
+            data = response.json()
+            if "followers_count" in data:
+                return {
+                    "followers": data.get("followers_count", 0),
+                    "media": data.get("media_count", 0),
+                    "name": data.get("name", "Unknown")
+                }
+            else:
+                print(f"[API] Statistika olishda xato: {data}")
+                return None
+        except Exception as e:
+            print(f"[API] Statistika API xatosi: {e}")
+            return None

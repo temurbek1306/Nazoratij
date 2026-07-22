@@ -143,12 +143,53 @@ def generate_caption_openrouter(summary):
             payload = {"model": "google/gemma-4-31b-it:free", "messages": [{"role": "user", "content": prompt}]}
             response = requests.post(url, headers=headers, json=payload, timeout=10)
             if response.status_code == 200:
-                return response.json()["choices"][0]["message"]["content"].strip()
+                data = response.json()
+                if "choices" in data and len(data["choices"]) > 0:
+                    return data["choices"][0]["message"]["content"].strip()
         except Exception:
             continue
     return None
 
-import random
+def generate_stats_analysis(stats_data: dict) -> str:
+    """
+    Statistika ma'lumotlarini qabul qilib, Gemini orqali tahlil yozib beradi.
+    stats_data format:
+    {
+        "current": {"yt": {...}, "ig": {...}},
+        "yesterday": {"yt": {...}, "ig": {...}},
+        "last_week": {"yt": {...}, "ig": {...}},
+        "last_month": {"yt": {...}, "ig": {...}}
+    }
+    """
+    import json
+    km = KeyManager()
+    
+    prompt = f"""Sen O'zbekistondagi eng zo'r SMM va YouTube mutaxassisisan.
+Mijozingning YouTube va Instagram kanallari bo'yicha quyidagi statistika keldi:
+{json.dumps(stats_data, indent=2)}
+
+Vazifang:
+1. Kechagi kunga, o'tgan haftaga va o'tgan oyga (mavjud ma'lumotlarga qarab) nisbatan qanchalik o'sish (yoki tushish) bo'lganini hisoblab, chiroyli qilib tushuntir.
+2. Ikkala tarmoqni (YouTube va Instagram) alohida tahlil qil. Quruq raqamlar emas, inson o'qiydigan chiroyli tilda yoz.
+3. Mijozga motivatsiya ber va kelajak uchun bitta foydali, kreativ SMM maslahat qoldir.
+4. Javobingni chiroyli emojilar bilan, sof O'zbek tilida (kirill yozuvidan qochib, lotinda) yoz.
+5. Juda uzun emas, o'qishga qulay qilib (bold, list) yoz.
+"""
+    
+    for _ in range(3):
+        gemini_key = km.get_gemini_key()
+        if not gemini_key: break
+        try:
+            import google.generativeai as genai
+            genai.configure(api_key=gemini_key)
+            model = genai.GenerativeModel("gemini-1.5-flash")
+            response = model.generate_content(prompt)
+            if response.text:
+                return response.text
+        except Exception as e:
+            continue
+            
+    return "⚠️ AI tahlilini olishda xatolik yuz berdi. (Server band yoki limit tugagan)"
 
 def append_viral_hashtags(caption):
     """
