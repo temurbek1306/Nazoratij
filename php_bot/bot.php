@@ -218,8 +218,13 @@ if (isset($update['message'])) {
         sendMessage($chat_id, $msg);
     }
     elseif ($text == "🚀 Hozir Joylash") {
-        sendMessage($chat_id, "🚀 <b>Videoni joylash jarayoni boshlandi!</b>\n\nNavbatdagi (Pending) video hozir tarmoqlarga joylanadi (1-2 daqiqa kuting).");
-        triggerGitHubAction("telegram_post", array("video_url" => ""));
+        $keyboard = json_encode([
+            "inline_keyboard" => [
+                [["text" => "✅ Ha, Hozir joylash", "callback_data" => "confirm_postnow"]],
+                [["text" => "❌ Yo'q, bekor qilish", "callback_data" => "confirm_cancel"]]
+            ]
+        ]);
+        sendMessage($chat_id, "⚠️ <b>Diqqat!</b>\n\nRostdan ham navbatdagi videoni hoziroq tarmoqlarga joylamoqchimisiz?", $keyboard);
     }
     elseif ($text == "📊 Statistika" || $text == "/stats") {
         sendMessage($chat_id, "⏳ Statistika yig'ilmoqda...");
@@ -269,8 +274,13 @@ if (isset($update['message'])) {
         ));
     }
     elseif ($text == "🗑 Eski videolarni o'chirish" || $text == "/clear") {
-        sendMessage($chat_id, "⏳ Tozalanmoqda...");
-        triggerGitHubAction("telegram_command", array("command" => "clear"));
+        $keyboard = json_encode([
+            "inline_keyboard" => [
+                [["text" => "⚠️ Ha, Hammasini o'chirish", "callback_data" => "confirm_clear"]],
+                [["text" => "❌ Yo'q, bekor qilish", "callback_data" => "confirm_cancel"]]
+            ]
+        ]);
+        sendMessage($chat_id, "⚠️ <b>Diqqat! Xavfli amaliyot!</b>\n\nRostdan ham barcha eski va joylangan videolarni serverdan o'chirib yubormoqchimisiz?", $keyboard);
     }
     elseif ($text == "🗓️ Kontent Reja" || $text == "/strategy") {
         sendMessage($chat_id, "⏳ AI Tahlil boshlandi! Butun O'zbekiston tarmog'i skaner qilinmoqda...");
@@ -420,6 +430,25 @@ if (isset($update['callback_query'])) {
         }
         $url = "https://api.telegram.org/bot" . $TELEGRAM_TOKEN . "/answerCallbackQuery";
         file_get_contents($url . "?callback_query_id=" . $update['callback_query']['id'] . "&text=" . urlencode("Topilmadi!"));
+        exit;
+    }
+    elseif ($data == "confirm_postnow") {
+        sendMessage($chat_id, "🚀 <b>Videoni joylash jarayoni boshlandi!</b>\n\nNavbatdagi (Pending) video hozir tarmoqlarga joylanadi (1-2 daqiqa kuting).");
+        triggerGitHubAction("telegram_post", array("video_url" => ""));
+        $url = "https://api.telegram.org/bot" . $TELEGRAM_TOKEN . "/editMessageReplyMarkup";
+        file_get_contents($url . "?chat_id=$chat_id&message_id=$message_id&reply_markup=" . json_encode(["inline_keyboard" => []]));
+        exit;
+    }
+    elseif ($data == "confirm_clear") {
+        sendMessage($chat_id, "⏳ Tozalanmoqda...");
+        triggerGitHubAction("telegram_command", array("command" => "clear"));
+        $url = "https://api.telegram.org/bot" . $TELEGRAM_TOKEN . "/editMessageReplyMarkup";
+        file_get_contents($url . "?chat_id=$chat_id&message_id=$message_id&reply_markup=" . json_encode(["inline_keyboard" => []]));
+        exit;
+    }
+    elseif ($data == "confirm_cancel") {
+        $url = "https://api.telegram.org/bot" . $TELEGRAM_TOKEN . "/editMessageText";
+        file_get_contents($url . "?chat_id=$chat_id&message_id=$message_id&text=" . urlencode("❌ Amaliyot bekor qilindi."));
         exit;
     }
 }
