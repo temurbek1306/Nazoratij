@@ -14,6 +14,11 @@ def send_alert(msg):
 def run():
     print("🚀 GitHub Actions: Avtomatik Video Yuklash boshlandi...")
     
+    global_tags = ""
+    if os.path.exists("viral_tags.txt"):
+        with open("viral_tags.txt", "r", encoding="utf-8") as f:
+            global_tags = f.read().strip()
+            
     video_name = get_pending_video()
     if not video_name:
         print("📁 Hozircha yangi videolar yo'q. Dastur to'xtatildi.")
@@ -47,6 +52,9 @@ def run():
         except Exception as e:
             print(f"⚠️ Heshteg qo'shishda xatolik: {e}")
             manual_caption += "\n\n#rek #trend #uzbekistan #foryou #temurbekdev"
+            
+        if global_tags:
+            manual_caption += "\n\n" + global_tags
             
         print(f"📝 Instagramga joylanmoqda (Qo'lda yozilgan)...")
         ig_media_id = post_to_instagram(url, manual_caption, video_name)
@@ -159,6 +167,11 @@ CAPTION_A: (videoga to'liq mos yozilgan caption)"""
                 caption_b = ai_assistant.append_viral_hashtags(caption_b)
                 caption_c = ai_assistant.append_viral_hashtags(caption_c)
                 
+                if global_tags:
+                    caption_a += "\n\n" + global_tags
+                    caption_b += "\n\n" + global_tags
+                    caption_c += "\n\n" + global_tags
+                
                 import json
                 # Saqlash
                 data = {
@@ -215,6 +228,9 @@ CAPTION_A: (videoga to'liq mos yozilgan caption)"""
         final_fallback_caption = ai_assistant.append_viral_hashtags(caption)
     except:
         final_fallback_caption = caption + "\n\n#rek #trend #uzbekistan #foryou #temurbekdev"
+        
+    if global_tags:
+        final_fallback_caption += "\n\n" + global_tags
         
     ig_media_id = post_to_instagram(url, final_fallback_caption, video_name)
     

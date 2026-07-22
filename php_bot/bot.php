@@ -135,12 +135,34 @@ if (isset($update['message'])) {
         exit;
     }
     
+    // Doimiy hashteglarni qabul qilish
+    if (file_exists("state.txt") && file_get_contents("state.txt") == "waiting_for_global_tags" && $text != "") {
+        file_put_contents("state.txt", "none");
+        sendMessage($chat_id, "⏳ GitHub serveriga yozilmoqda...");
+        updateGitHubFile($GITHUB_REPO, "viral_tags.txt", $text, $GITHUB_PAT);
+        
+        $main_keyboard_temp = json_encode([
+            "keyboard" => [
+                [["text" => "☁️ Web-App orqali yuklash"]],
+                [["text" => "➕ Yangi Video Qo'shish"], ["text" => "🚀 Hozir Joylash"]],
+                [["text" => "🔖 Doimiy Hashteglar"], ["text" => "📋 Navbat (Queue)"]],
+                [["text" => "⚙️ Vaqt Sozlamalari"], ["text" => "📊 Statistika"]],
+                [["text" => "🗑 Eski videolarni o'chirish"], ["text" => "🗓️ Kontent Reja"]]
+            ],
+            "resize_keyboard" => true,
+            "one_time_keyboard" => false
+        ]);
+        
+        sendMessage($chat_id, "✅ Muvaffaqiyatli saqlandi! Endi har bir videoning tagiga ushbu matn/hashteg avtomatik qo'shiladi.", $main_keyboard_temp);
+        exit;
+    }
+    
     $main_keyboard = json_encode([
         "keyboard" => [
             [["text" => "☁️ Web-App orqali yuklash"]],
             [["text" => "➕ Yangi Video Qo'shish"], ["text" => "🚀 Hozir Joylash"]],
-            [["text" => "📊 Statistika"], ["text" => "📋 Navbat (Queue)"]],
-            [["text" => "⚙️ Vaqt Sozlamalari"]],
+            [["text" => "🔖 Doimiy Hashteglar"], ["text" => "📋 Navbat (Queue)"]],
+            [["text" => "⚙️ Vaqt Sozlamalari"], ["text" => "📊 Statistika"]],
             [["text" => "🗑 Eski videolarni o'chirish"], ["text" => "🗓️ Kontent Reja"]]
         ],
         "resize_keyboard" => true,
@@ -176,6 +198,11 @@ if (isset($update['message'])) {
     }
     elseif ($text == "➕ Yangi Video Qo'shish") {
         sendMessage($chat_id, "📥 <b>Yangi video qo'shish</b>\n\nVideoni shunchaki Telegram botga yuboring (fayl yoki galereya orqali). Qolganini o'zim hal qilaman!");
+    }
+    elseif ($text == "🔖 Doimiy Hashteglar") {
+        file_put_contents("state.txt", "waiting_for_global_tags");
+        $msg = "🔖 <b>Doimiy Matn/Hashteglar</b>\n\nBu yerda yozgan har qanday matningiz (masalan, Yaponcha yozuv yoki hashteglar) har bir poistingiz oxiriga avtomatik qistiriladi.\n\n👇 <i>Yangi doimiy matnni yuboring:</i>";
+        sendMessage($chat_id, $msg);
     }
     elseif ($text == "🚀 Hozir Joylash") {
         sendMessage($chat_id, "🚀 <b>Videoni joylash jarayoni boshlandi!</b>\n\nNavbatdagi (Pending) video hozir tarmoqlarga joylanadi (1-2 daqiqa kuting).");
@@ -392,9 +419,35 @@ function triggerGitHubAction($event_type, $payload_data) {
     curl_setopt($ch, CURLOPT_POST, true);
     curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($data));
     $response = curl_exec($ch);
-    $httpcode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+    curl_close($ch);
+    return json_decode($response, TRUE);
+}
+
+function updateGitHubFile($repo, $path, $content, $token) {
+    $url = "https://api.github.com/repos/$repo/contents/$path";
+    
+    // 1. Get current SHA
+    $ch = curl_init($url);
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+    curl_setopt($ch, CURLOPT_HTTPHEADER, ['User-Agent: PHP-Bot', "Authorization: Bearer $token"]);
+    $res = curl_exec($ch);
+    $data = json_decode($res, true);
+    $sha = isset($data['sha']) ? $data['sha'] : null;
     curl_close($ch);
     
-    return ($httpcode >= 200 && $httpcode < 300);
+    // 2. Put new content
+    $put_data = [
+        "message" => "Update viral tags via bot",
+        "content" => base64_encode($content)
+    ];
+    if ($sha) $put_data["sha"] = $sha;
+    
+    $ch2 = curl_init($url);
+    curl_setopt($ch2, CURLOPT_RETURNTRANSFER, true);
+    curl_setopt($ch2, CURLOPT_CUSTOMREQUEST, "PUT");
+    curl_setopt($ch2, CURLOPT_POSTFIELDS, json_encode($put_data));
+    curl_setopt($ch2, CURLOPT_HTTPHEADER, ['User-Agent: PHP-Bot', "Authorization: Bearer $token", 'Content-Type: application/json']);
+    curl_exec($ch2);
+    curl_close($ch2);
 }
 ?>
