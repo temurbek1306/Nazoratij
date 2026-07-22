@@ -19,15 +19,7 @@ jobs:
 
       - name: Download video to queue 📥
         run: |
-          curl -s -L -o "videos/pending/raw_video_${{ github.run_id }}.mp4" "${{ github.event.client_payload.video_url }}"
-          
-      - name: Install FFmpeg 🎬
-        run: sudo apt-get update && sudo apt-get install -y ffmpeg
-
-      - name: Compress Video (Lossless Optimization) 🎬
-        run: |
-          ffmpeg -i "videos/pending/raw_video_${{ github.run_id }}.mp4" -vcodec libx264 -crf 26 -preset fast -c:a aac -b:a 128k "videos/pending/00_tg_video_${{ github.run_id }}.mp4"
-          rm "videos/pending/raw_video_${{ github.run_id }}.mp4"
+          curl -s -L -o "videos/pending/00_tg_video_${{ github.run_id }}.mp4" "${{ github.event.client_payload.video_url }}"
           
       - name: Save Manual Caption 📝
         if: github.event.client_payload.caption != ''
@@ -59,17 +51,7 @@ jobs:
       - name: Download video from Telegram (if webhook) 📥
         if: github.event_name == 'repository_dispatch' && github.event.client_payload.video_url != ''
         run: |
-          curl -s -L -o "videos/pending/raw_video_${{ github.run_id }}.mp4" "${{ github.event.client_payload.video_url }}"
-
-      - name: Install FFmpeg 🎬
-        if: github.event_name == 'repository_dispatch' && github.event.client_payload.video_url != ''
-        run: sudo apt-get update && sudo apt-get install -y ffmpeg
-
-      - name: Compress Video (Lossless Optimization) 🎬
-        if: github.event_name == 'repository_dispatch' && github.event.client_payload.video_url != ''
-        run: |
-          ffmpeg -i "videos/pending/raw_video_${{ github.run_id }}.mp4" -vcodec libx264 -crf 26 -preset fast -c:a aac -b:a 128k "videos/pending/00_tg_video_${{ github.run_id }}.mp4"
-          rm "videos/pending/raw_video_${{ github.run_id }}.mp4"
+          curl -s -L -o "videos/pending/00_tg_video_${{ github.run_id }}.mp4" "${{ github.event.client_payload.video_url }}"
 
       - name: Save Manual Caption 📝
         if: github.event_name == 'repository_dispatch' && github.event.client_payload.caption != ''
