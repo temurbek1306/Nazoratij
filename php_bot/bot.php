@@ -52,13 +52,10 @@ if (isset($update['message'])) {
                 file_put_contents("state.txt", "waiting_for_video_name");
                 $keyboard = json_encode([
                     "inline_keyboard" => [
-                        [
-                            ["text" => "🤖 AI O'zi yozsin", "callback_data" => "video_ai"],
-                            ["text" => "✍️ O'zim yozaman", "callback_data" => "video_manual"]
-                        ]
+                        [["text" => "⏭ Nom bermasdan o'tkazib yuborish", "callback_data" => "skip_naming"]]
                     ]
                 ]);
-                sendMessage($chat_id, "🎬 Video qabul qilindi!\n\n✏️ Iltimos, bu videoga ixtiyoriy qisqa nom bering (keyingi yuborgan matningiz nom sifatida qabul qilinadi).\n\nYoki nom berishni xohlamasangiz, izohni kim yozishini tanlang:", $keyboard);
+                sendMessage($chat_id, "🎬 Video qabul qilindi!\n\n✏️ Iltimos, bu videoga ixtiyoriy qisqa nom bering (keyingi yuborgan matningiz nom sifatida qabul qilinadi).", $keyboard);
             } else {
                 $keyboard = json_encode([
                     "inline_keyboard" => [
@@ -358,6 +355,22 @@ if (isset($update['callback_query'])) {
     
     $data = $update['callback_query']['data'];
     $message_id = $update['callback_query']['message']['message_id'];
+    
+    if ($data == "skip_naming") {
+        file_put_contents("state.txt", "none");
+        $keyboard = json_encode([
+            "inline_keyboard" => [
+                [
+                    ["text" => "🤖 AI O'zi yozsin", "callback_data" => "video_ai"],
+                    ["text" => "✍️ O'zim yozaman", "callback_data" => "video_manual"]
+                ]
+            ]
+        ]);
+        sendMessage($chat_id, "✅ Faylga avtomatik nom beriladi.\n\nEndi, izohni (caption) kim yozadi?", $keyboard);
+        $url = "https://api.telegram.org/bot" . $TELEGRAM_TOKEN . "/editMessageReplyMarkup";
+        file_get_contents($url . "?chat_id=$chat_id&message_id=$message_id&reply_markup=" . json_encode(["inline_keyboard" => []]));
+        exit;
+    }
     
     if ($data == "video_ai") {
         file_put_contents("state.txt", "none");
