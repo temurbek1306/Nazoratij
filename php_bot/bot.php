@@ -48,15 +48,28 @@ if (isset($update['message'])) {
             // Fayl manzilini vaqtincha saqlab qo'yamiz (Tugma bosilganda o'qish uchun)
             file_put_contents("last_video.txt", $video_url);
             
-            $keyboard = json_encode([
-                "inline_keyboard" => [
-                    [
-                        ["text" => "🤖 AI O'zi yozsin", "callback_data" => "video_ai"],
-                        ["text" => "✍️ O'zim yozaman", "callback_data" => "video_manual"]
+            if ($video_name_custom == "") {
+                file_put_contents("state.txt", "waiting_for_video_name");
+                $keyboard = json_encode([
+                    "inline_keyboard" => [
+                        [
+                            ["text" => "🤖 AI O'zi yozsin", "callback_data" => "video_ai"],
+                            ["text" => "✍️ O'zim yozaman", "callback_data" => "video_manual"]
+                        ]
                     ]
-                ]
-            ]);
-            sendMessage($chat_id, "🎬 Video qabul qilindi!\n\nIzohni kim yozadi?", $keyboard);
+                ]);
+                sendMessage($chat_id, "🎬 Video qabul qilindi!\n\n✏️ Iltimos, bu videoga ixtiyoriy qisqa nom bering (keyingi yuborgan matningiz nom sifatida qabul qilinadi).\n\nYoki nom berishni xohlamasangiz, izohni kim yozishini tanlang:", $keyboard);
+            } else {
+                $keyboard = json_encode([
+                    "inline_keyboard" => [
+                        [
+                            ["text" => "🤖 AI O'zi yozsin", "callback_data" => "video_ai"],
+                            ["text" => "✍️ O'zim yozaman", "callback_data" => "video_manual"]
+                        ]
+                    ]
+                ]);
+                sendMessage($chat_id, "🎬 Video qabul qilindi! Nomi: <b>$video_name_custom</b>\n\nIzohni kim yozadi?", $keyboard);
+            }
         } else {
             sendMessage($chat_id, "❌ Videoni qabul qilishda xatolik yuz berdi (Fayl hajmi juda katta bo'lishi mumkin).");
         }
@@ -65,6 +78,29 @@ if (isset($update['message'])) {
     
     // Text commands
     $text = isset($update['message']['text']) ? $update['message']['text'] : "";
+    
+    // Videoga nom berish qismi
+    if (file_exists("state.txt") && file_get_contents("state.txt") == "waiting_for_video_name" && $text != "") {
+        if (strpos($text, "/") !== 0 && !in_array($text, ["☁️ Web-App orqali yuklash", "➕ Yangi Video Qo'shish", "🔖 Doimiy Hashteglar", "🚀 Hozir Joylash", "📊 Statistika", "📋 Navbat (Queue)", "🗑 Eski videolarni o'chirish", "🗓️ Kontent Reja", "⚙️ Vaqt Sozlamalari", "🔙 Ortga"])) {
+            $video_name_custom = preg_replace('/[^A-Za-z0-9_]/', '_', $text);
+            $video_name_custom = substr($video_name_custom, 0, 40);
+            $video_name_custom = trim($video_name_custom, "_");
+            
+            file_put_contents("last_custom_name.txt", $video_name_custom);
+            file_put_contents("state.txt", "none");
+            
+            $keyboard = json_encode([
+                "inline_keyboard" => [
+                    [
+                        ["text" => "🤖 AI O'zi yozsin", "callback_data" => "video_ai"],
+                        ["text" => "✍️ O'zim yozaman", "callback_data" => "video_manual"]
+                    ]
+                ]
+            ]);
+            sendMessage($chat_id, "✅ Videoga <b>$video_name_custom</b> deb nom berildi!\n\nEndi izohni kim yozadi?", $keyboard);
+            exit;
+        }
+    }
     
     // Qo'lda yozilgan izohni qabul qilish qismi
     if (file_exists("state.txt") && file_get_contents("state.txt") == "waiting_for_caption" && $text != "") {
@@ -324,6 +360,7 @@ if (isset($update['callback_query'])) {
     $message_id = $update['callback_query']['message']['message_id'];
     
     if ($data == "video_ai") {
+        file_put_contents("state.txt", "none");
         $keyboard = json_encode([
             "inline_keyboard" => [
                 [["text" => "📥 Navbat", "callback_data" => "act_queue_ai"]],
