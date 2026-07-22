@@ -66,7 +66,8 @@ foreach ($scheduled_videos as $index => $sv) {
             "event_type" => "telegram_post",
             "client_payload" => array(
                 "video_url" => $sv['video_url'],
-                "caption" => $sv['caption']
+                "caption" => $sv['caption'],
+                "custom_name" => isset($sv['custom_name']) ? $sv['custom_name'] : ""
             )
         );
         

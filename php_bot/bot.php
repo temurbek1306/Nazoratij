@@ -36,6 +36,15 @@ if (isset($update['message'])) {
         if ($file_path) {
             $video_url = "https://api.telegram.org/file/bot" . $TELEGRAM_TOKEN . "/" . $file_path;
             
+            // Videoni nomi sifatida caption ni olish (agar mavjud bo'lsa)
+            $video_name_custom = "";
+            if (isset($update['message']['caption'])) {
+                $video_name_custom = preg_replace('/[^A-Za-z0-9_]/', '_', $update['message']['caption']);
+                $video_name_custom = substr($video_name_custom, 0, 40);
+                $video_name_custom = trim($video_name_custom, "_");
+            }
+            file_put_contents("last_custom_name.txt", $video_name_custom);
+            
             // Fayl manzilini vaqtincha saqlab qo'yamiz (Tugma bosilganda o'qish uchun)
             file_put_contents("last_video.txt", $video_url);
             
@@ -110,6 +119,11 @@ if (isset($update['message'])) {
                 $caption = file_get_contents("last_caption.txt");
             }
             
+            $custom_name = "";
+            if (file_exists("last_custom_name.txt")) {
+                $custom_name = file_get_contents("last_custom_name.txt");
+            }
+            
             $scheduled_file = "scheduled.json";
             $scheduled_list = [];
             if (file_exists($scheduled_file)) {
@@ -119,6 +133,7 @@ if (isset($update['message'])) {
             $scheduled_list[] = [
                 "video_url" => $video_url,
                 "caption" => $caption,
+                "custom_name" => $custom_name,
                 "post_time" => $timestamp
             ];
             
@@ -345,12 +360,17 @@ if (isset($update['callback_query'])) {
                 $caption = file_get_contents("last_caption.txt");
             }
             
+            $custom_name = "";
+            if (file_exists("last_custom_name.txt")) {
+                $custom_name = file_get_contents("last_custom_name.txt");
+            }
+            
             if (strpos($data, "act_queue") === 0) {
                 sendMessage($chat_id, "📥 Video navbatga qo'shildi! Vaqti kelganda joylanadi.");
-                triggerGitHubAction("telegram_queue", array("video_url" => $video_url, "caption" => $caption));
+                triggerGitHubAction("telegram_queue", array("video_url" => $video_url, "caption" => $caption, "custom_name" => $custom_name));
             } else {
                 sendMessage($chat_id, "🚀 Video hozir joylash uchun tayyorlanmoqda...");
-                triggerGitHubAction("telegram_post", array("video_url" => $video_url, "caption" => $caption));
+                triggerGitHubAction("telegram_post", array("video_url" => $video_url, "caption" => $caption, "custom_name" => $custom_name));
             }
             
             // Takror bosilmasligi uchun tugmalarni o'chirib tashlash
