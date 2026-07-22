@@ -359,6 +359,15 @@ if (isset($update['callback_query'])) {
         file_get_contents($url . "?chat_id=$chat_id&message_id=$message_id&reply_markup=" . json_encode(["inline_keyboard" => []]));
         exit;
     }
+    elseif (strpos($data, "del_") === 0) {
+        // O'chirish komandasini yuboramiz
+        triggerGitHubAction("telegram_command", array("command" => $data));
+        
+        // Callback'ga vizual javob
+        $url = "https://api.telegram.org/bot" . $TELEGRAM_TOKEN . "/answerCallbackQuery";
+        file_get_contents($url . "?callback_query_id=" . $update['callback_query']['id'] . "&text=" . urlencode("⏳ O'chirish jarayoni boshlandi..."));
+        exit;
+    }
 }
 
 // ==========================
