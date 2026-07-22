@@ -28,13 +28,12 @@ class VideoManager:
         return video_files[0]
         
     def mark_as_posted(self, filename: str):
-        """Qo'yilgan videoni 'posted' papkasiga o'tkazadi"""
+        """Qo'yilgan videoni butunlay o'chirib yuboradi (Musur yig'ilmasligi uchun)"""
         source = os.path.join(self.pending_dir, filename)
-        destination = os.path.join(self.posted_dir, filename)
         
         if os.path.exists(source):
-            shutil.move(source, destination)
-            print(f"[VideoManager] '{filename}' posted papkasiga o'tkazildi.")
+            os.remove(source)
+            print(f"[VideoManager] '{filename}' joylangandan so'ng butunlay o'chirildi (Xotira tozalandi).")
             
     def get_caption_for_video(self, filename: str) -> str:
         """Agar video bilan bir xil nomdagi .txt fayl bo'lsa, uni caption qilib o'qiydi"""
