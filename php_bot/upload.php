@@ -38,13 +38,29 @@ if (!is_dir($upload_dir)) {
 }
 
 // 🧹 ESKI FAYLLARNI TOZALASH (Memory Leak oldini olish)
-// 24 soatdan (86400 soniya) eskirgan barcha videolarni avtomat o'chiramiz
+// 24 soatdan eskirgan videolarni o'chiramiz, LEKIN rejalashtirilganlarni (scheduled) himoya qilamiz
 if (is_dir($upload_dir)) {
+    $scheduled_file = __DIR__ . '/scheduled.json';
+    $protected_urls = [];
+    if (file_exists($scheduled_file)) {
+        $scheduled_videos = json_decode(file_get_contents($scheduled_file), true) ?: [];
+        foreach ($scheduled_videos as $sv) {
+            $protected_urls[] = $sv['video_url'];
+        }
+    }
+
     $files = glob($upload_dir . '/*');
     $now = time();
     foreach ($files as $f) {
         if (is_file($f) && basename($f) != '.htaccess') {
-            if ($now - filemtime($f) >= 86400) { 
+            $is_protected = false;
+            foreach ($protected_urls as $p_url) {
+                if (strpos($p_url, basename($f)) !== false) {
+                    $is_protected = true;
+                    break;
+                }
+            }
+            if (!$is_protected && ($now - filemtime($f) >= 86400)) { 
                 unlink($f);
             }
         }

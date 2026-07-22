@@ -65,12 +65,73 @@ if (isset($update['message'])) {
         $keyboard = json_encode([
             "inline_keyboard" => [
                 [
-                    ["text" => "📥 Navbatga qo'shish", "callback_data" => "act_queue_manual"],
-                    ["text" => "🚀 Hozir joylash", "callback_data" => "act_postnow_manual"]
+                    ["text" => "📥 Navbat", "callback_data" => "act_queue_manual"],
+                    ["text" => "🚀 Hozir", "callback_data" => "act_postnow_manual"],
+                    ["text" => "⏱ Aniq vaqtga", "callback_data" => "act_schedule_manual"]
                 ]
             ]
         ]);
-        sendMessage($chat_id, "✅ Ajoyib izoh qabul qilindi!\n\nEndi videoni hozir joylaymi yoki navbatga qo'shaymi?", $keyboard);
+        sendMessage($chat_id, "✅ Ajoyib izoh qabul qilindi!\n\nVideoni nima qilamiz?", $keyboard);
+        exit;
+    }
+    
+    // Aniq vaqtni qabul qilish qismi
+    if (file_exists("state.txt") && file_get_contents("state.txt") == "waiting_for_time" && $text != "") {
+        file_put_contents("state.txt", "none");
+        
+        $time_str = trim($text);
+        $timestamp = false;
+        
+        // Agar faqat soat yozilgan bo'lsa (Masalan: 19:30)
+        if (preg_match('/^\d{1,2}:\d{2}$/', $time_str)) {
+            $timestamp = strtotime(date("Y-m-d") . " " . $time_str);
+            if ($timestamp < time()) {
+                $timestamp += 86400; // O'tib ketgan bo'lsa ertasi kunga
+            }
+        } else {
+            // Agar sana bilan yozilgan bo'lsa (Masalan: 25.07.2026 14:00)
+            $dt = DateTime::createFromFormat('d.m.Y H:i', $time_str);
+            if ($dt) {
+                $timestamp = $dt->getTimestamp();
+            } else {
+                $timestamp = strtotime($time_str);
+            }
+        }
+        
+        if (!$timestamp || $timestamp < time() - 3600) {
+            sendMessage($chat_id, "❌ Noto'g'ri vaqt formati yoki vaqt o'tib ketgan! Qaytadan yuboring.");
+            exit;
+        }
+        
+        if (file_exists("last_video.txt")) {
+            $video_url = file_get_contents("last_video.txt");
+            $caption = "";
+            $mode = file_exists("schedule_mode.txt") ? file_get_contents("schedule_mode.txt") : "";
+            
+            if (strpos($mode, "_manual") !== false && file_exists("last_caption.txt")) {
+                $caption = file_get_contents("last_caption.txt");
+            }
+            
+            $scheduled_file = "scheduled.json";
+            $scheduled_list = [];
+            if (file_exists($scheduled_file)) {
+                $scheduled_list = json_decode(file_get_contents($scheduled_file), true) ?: [];
+            }
+            
+            $scheduled_list[] = [
+                "video_url" => $video_url,
+                "caption" => $caption,
+                "post_time" => $timestamp
+            ];
+            
+            file_put_contents($scheduled_file, json_encode($scheduled_list, JSON_PRETTY_PRINT));
+            
+            $formatted_time = date("d.m.Y H:i", $timestamp);
+            sendMessage($chat_id, "✅ Video ro'yxatga olindi!\n\nVideo aynan <b>$formatted_time</b> da avtomatik tarzda joylanadi.");
+        } else {
+            sendMessage($chat_id, "❌ Video manzili topilmadi.");
+        }
+        
         exit;
     }
     
@@ -177,12 +238,13 @@ if (isset($update['callback_query'])) {
         $keyboard = json_encode([
             "inline_keyboard" => [
                 [
-                    ["text" => "📥 Navbatga qo'shish", "callback_data" => "act_queue_ai"],
-                    ["text" => "🚀 Hozir joylash", "callback_data" => "act_postnow_ai"]
+                    ["text" => "📥 Navbat", "callback_data" => "act_queue_ai"],
+                    ["text" => "🚀 Hozir", "callback_data" => "act_postnow_ai"],
+                    ["text" => "⏱ Aniq vaqtga", "callback_data" => "act_schedule_ai"]
                 ]
             ]
         ]);
-        sendMessage($chat_id, "🤖 AI yozishga tayyor!\n\nVideoni hozir joylaymi yoki navbatga qo'shaymi?", $keyboard);
+        sendMessage($chat_id, "🤖 AI yozishga tayyor!\n\nVideoni nima qilamiz?", $keyboard);
         $url = "https://api.telegram.org/bot" . $TELEGRAM_TOKEN . "/editMessageReplyMarkup";
         file_get_contents($url . "?chat_id=$chat_id&message_id=$message_id&reply_markup=" . json_encode(["inline_keyboard" => []]));
         exit;
@@ -191,6 +253,22 @@ if (isset($update['callback_query'])) {
     if ($data == "video_manual") {
         file_put_contents("state.txt", "waiting_for_caption");
         sendMessage($chat_id, "✍️ Iltimos, video uchun izohni (caption) jo'nating.\n\n*(Keyingi xabaringiz to'g'ridan-to'g'ri izoh sifatida qabul qilinadi)*");
+        $url = "https://api.telegram.org/bot" . $TELEGRAM_TOKEN . "/editMessageReplyMarkup";
+        file_get_contents($url . "?chat_id=$chat_id&message_id=$message_id&reply_markup=" . json_encode(["inline_keyboard" => []]));
+        exit;
+    }
+    
+    if (strpos($data, "act_schedule_") === 0) {
+        file_put_contents("state.txt", "waiting_for_time");
+        file_put_contents("schedule_mode.txt", $data); // act_schedule_manual or act_schedule_ai
+        
+        $msg = "⏱ <b>Videoni qachon joylaymiz?</b>\n\n";
+        $msg .= "Quyidagi formatlardan birida yozing:\n";
+        $msg .= "• Bugun uchun faqat soat: <b>19:30</b>\n";
+        $msg .= "• Boshqa kun uchun: <b>25.07.2026 14:00</b>\n\n";
+        $msg .= "<i>Iltimos, vaqtni kiriting:</i>";
+        
+        sendMessage($chat_id, $msg);
         $url = "https://api.telegram.org/bot" . $TELEGRAM_TOKEN . "/editMessageReplyMarkup";
         file_get_contents($url . "?chat_id=$chat_id&message_id=$message_id&reply_markup=" . json_encode(["inline_keyboard" => []]));
         exit;
