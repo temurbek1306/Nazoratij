@@ -170,7 +170,12 @@ CAPTION_A: (videoga to'liq mos yozilgan caption)"""
     if yt_client_id and yt_client_secret and yt_refresh_token:
         try:
             yt_api = YouTubeAPI(yt_client_id, yt_client_secret, yt_refresh_token)
-            yt_api.upload_shorts(local_video_path, "Yangi Video!", caption)
+            final_video_path = f"videos/posted/{video_name}" if success_ig else f"videos/pending/{video_name}"
+            
+            if os.path.exists(final_video_path):
+                yt_api.upload_shorts(final_video_path, "Yangi Video!", caption)
+            else:
+                print(f"❌ YouTube uchun fayl topilmadi: {final_video_path}")
         except Exception as e:
             print(f"⚠️ YouTube zaxira yuklashda xatolik: {e}")
 
