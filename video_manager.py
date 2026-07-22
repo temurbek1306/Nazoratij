@@ -5,13 +5,12 @@ class VideoManager:
     def __init__(self, base_dir="videos"):
         self.base_dir = base_dir
         self.pending_dir = os.path.join(self.base_dir, "pending")
-        self.posted_dir = os.path.join(self.base_dir, "posted")
         
         self._ensure_directories()
         
     def _ensure_directories(self):
         """Kerakli papkalarni yaratish"""
-        for d in [self.base_dir, self.pending_dir, self.posted_dir]:
+        for d in [self.base_dir, self.pending_dir]:
             if not os.path.exists(d):
                 os.makedirs(d)
                 

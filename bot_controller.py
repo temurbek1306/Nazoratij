@@ -63,15 +63,12 @@ def handle_clear():
     send_telegram_msg(f"🧹 <b>Navbat tozalandi!</b>\n\n{count} ta fayl o'chirib tashlandi.")
 
 def handle_stats():
-    os.makedirs("videos/posted", exist_ok=True)
     os.makedirs("videos/pending", exist_ok=True)
     
     # Local stats
-    posted_files = [f for f in os.listdir("videos/posted") if f.endswith(('.mp4', '.mov'))]
     pending_files = [f for f in os.listdir("videos/pending") if f.endswith(('.mp4', '.mov'))]
     
     msg = "📊 <b>AvtoReels Statistikasi</b>\n\n"
-    msg += f"✅ Joylangan videolar: <b>{len(posted_files)}</b> ta\n"
     msg += f"⏳ Kutilayotgan videolar: <b>{len(pending_files)}</b> ta\n\n"
     
     # YouTube stats
