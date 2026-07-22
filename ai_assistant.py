@@ -173,7 +173,7 @@ Vazifang:
 2. Ikkala tarmoqni (YouTube va Instagram) alohida tahlil qil. Quruq raqamlar emas, inson o'qiydigan chiroyli tilda yoz.
 3. Mijozga motivatsiya ber va kelajak uchun bitta foydali, kreativ SMM maslahat qoldir.
 4. Javobingni chiroyli emojilar bilan, sof O'zbek tilida (kirill yozuvidan qochib, lotinda) yoz.
-5. Juda uzun emas, o'qishga qulay qilib (bold, list) yoz.
+5. Juda uzun emas, o'qishga qulay qilib yoz. Qalin shrift (bold) qilish uchun ** (yulduzcha) ISHLATMA, uning o'rniga HTML <b> va </b> taglaridan foydalan!
 """
     
     for _ in range(3):
@@ -185,7 +185,8 @@ Vazifang:
             model = genai.GenerativeModel("gemini-1.5-flash")
             response = model.generate_content(prompt)
             if response.text:
-                return response.text
+                import re
+                return re.sub(r'\*\*(.*?)\*\*', r'<b>\1</b>', response.text)
         except Exception as e:
             print(f"[AI Stats Error Gemini]: {e}")
             continue
@@ -203,7 +204,8 @@ Vazifang:
             if response.status_code == 200:
                 data = response.json()
                 if "choices" in data and len(data["choices"]) > 0:
-                    return data["choices"][0]["message"]["content"].strip()
+                    import re
+                    return re.sub(r'\*\*(.*?)\*\*', r'<b>\1</b>', data["choices"][0]["message"]["content"].strip())
         except Exception as e:
             print(f"[AI Stats Error Groq]: {e}")
             continue
