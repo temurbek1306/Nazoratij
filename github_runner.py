@@ -40,6 +40,14 @@ def run():
         with open(txt_file, "r", encoding="utf-8") as f:
             manual_caption = f.read().strip()
             
+        import ai_assistant
+        try:
+            print("🧠 AI orqali top heshteglar qo'shilmoqda...")
+            manual_caption = ai_assistant.append_viral_hashtags(manual_caption)
+        except Exception as e:
+            print(f"⚠️ Heshteg qo'shishda xatolik: {e}")
+            manual_caption += "\n\n#rek #trend #uzbekistan #foryou #temurbekdev"
+            
         print(f"📝 Instagramga joylanmoqda (Qo'lda yozilgan)...")
         ig_media_id = post_to_instagram(url, manual_caption, video_name)
         
