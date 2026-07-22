@@ -51,7 +51,11 @@ def run():
         print(f"📝 Instagramga joylanmoqda (Qo'lda yozilgan)...")
         ig_media_id = post_to_instagram(url, manual_caption, video_name)
         
-        first_comment = "Videodagi holat kimga tanish? 😂 Fikringizni yozib qoldiring 👇"
+        try:
+            first_comment = ai_assistant.generate_first_comment(manual_caption)
+        except:
+            first_comment = "Videodagi holat kimga tanish? 😂 Fikringizni yozib qoldiring 👇"
+            
         if ig_media_id:
             from agent_tools import post_ig_comment
             post_ig_comment(ig_media_id, first_comment)

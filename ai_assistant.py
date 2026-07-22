@@ -151,21 +151,86 @@ def generate_caption_openrouter(summary):
 import random
 
 def append_viral_hashtags(caption):
-    # O'zbekistondagi eng kuchli blogerlar va IT sohasidagilar ishlatadigan viral hashteglar
-    general_viral = ["#rek", "#rekka", "#uzbekistan", "#toshkent", "#trend", "#qiziqarli", "#uzbek", "#foydali"]
-    niche_tech = ["#dasturlash", "#dasturchi", "#ituz", "#biznes", "#rivojlanish", "#motivatsiya", "#smm"]
-    ai_tags = ["#sunniyintellekt", "#aiuz", "#ai"]
+    km = KeyManager()
+    prompt = f"Sen O'zbekistondagi eng kuchli SMM ekspertisan. Quyidagi matnga qarab eng zo'r, mashhur va mos keladigan 7 ta viral hashtag yoz. Faqat hashtaglar ro'yxatini yoz, ortiqcha gaplarsiz (masalan: #rek #trend):\n\n{caption}"
     
-    # Aralashtirib tanlab olish: 3 ta umumiy, 2 ta tech, 1 ta AI
-    selected_tags = random.sample(general_viral, 3) + random.sample(niche_tech, 2) + random.sample(ai_tags, 1)
-    
-    # Har doim mualliflik hashtegi
-    selected_tags.append("#temurbekdev")
-    
-    # Matn ichida agar hashtaglar qolib ketgan bo'lsa (AI baribir yozib qo'ygan bo'lsa) tozalaymiz
+    ai_tags = ""
+    for _ in range(3):
+        gemini_key = km.get_gemini_key()
+        if not gemini_key: break
+        try:
+            import google.generativeai as genai
+            genai.configure(api_key=gemini_key)
+            model = genai.GenerativeModel("gemini-1.5-flash")
+            response = model.generate_content(prompt)
+            if response.text:
+                ai_tags = response.text.strip()
+                break
+        except Exception:
+            pass
+            
+    if not ai_tags:
+        for _ in range(3):
+            groq_key = km.get_groq_key()
+            if not groq_key: break
+            try:
+                import requests
+                url = "https://api.groq.com/openai/v1/chat/completions"
+                headers = {"Authorization": f"Bearer {groq_key}", "Content-Type": "application/json"}
+                payload = {"model": "llama-3.3-70b-versatile", "messages": [{"role": "user", "content": prompt}]}
+                response = requests.post(url, headers=headers, json=payload, timeout=10)
+                if response.status_code == 200:
+                    ai_tags = response.json()["choices"][0]["message"]["content"].strip()
+                    break
+            except Exception:
+                pass
+                
+    if not ai_tags:
+        ai_tags = "#rek #trend #uzbekistan #foryou"
+        
+    ai_tags = ai_tags.replace("\n", " ") + " #temurbekdev"
     clean_caption = "\n".join([line for line in caption.split("\n") if not line.strip().startswith("#")])
+    return clean_caption.strip() + "\n\n" + ai_tags
+
+def generate_first_comment(caption):
+    km = KeyManager()
+    prompt = f"Sen kreativ SMM yozuvchisan. Quyidagi Reels/TikTok post matni (caption):\n\n{caption}\n\nVAZIFA: Odamlarni fikr bildirishga chorlaydigan 1 ta qisqacha 'Birinchi Komment' yoz (O'zbek tilida). Juda qisqa, qiziqarli yoki baxsli savol bo'lsin. Faqat komment matnini yoz, qo'shtirnoqlarsiz:"
     
-    return clean_caption.strip() + "\n\n" + " ".join(selected_tags)
+    first_comment = ""
+    for _ in range(3):
+        gemini_key = km.get_gemini_key()
+        if not gemini_key: break
+        try:
+            import google.generativeai as genai
+            genai.configure(api_key=gemini_key)
+            model = genai.GenerativeModel("gemini-1.5-flash")
+            response = model.generate_content(prompt)
+            if response.text:
+                first_comment = response.text.strip().replace('"', '')
+                break
+        except Exception:
+            pass
+            
+    if not first_comment:
+        for _ in range(3):
+            groq_key = km.get_groq_key()
+            if not groq_key: break
+            try:
+                import requests
+                url = "https://api.groq.com/openai/v1/chat/completions"
+                headers = {"Authorization": f"Bearer {groq_key}", "Content-Type": "application/json"}
+                payload = {"model": "llama-3.3-70b-versatile", "messages": [{"role": "user", "content": prompt}]}
+                response = requests.post(url, headers=headers, json=payload, timeout=10)
+                if response.status_code == 200:
+                    first_comment = response.json()["choices"][0]["message"]["content"].strip().replace('"', '')
+                    break
+            except Exception:
+                pass
+                
+    if not first_comment:
+        first_comment = "Videodagi holat kimga tanish? 😂 Fikringizni yozib qoldiring 👇"
+        
+    return first_comment
 
 def generate_data_driven_strategy(profile_data, trend_data):
     km = KeyManager()
