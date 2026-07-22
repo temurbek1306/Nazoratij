@@ -326,6 +326,19 @@ def handle_stats():
     current_data = {"yt": yt_stats or {}, "ig": ig_stats or {}}
     history[today_str] = current_data
     
+    # Eskirgan ma'lumotlarni tozalash (45 kundan eskisini o'chirish)
+    keys_to_delete = []
+    for k_date_str in history:
+        try:
+            k_date = datetime.strptime(k_date_str, "%Y-%m-%d")
+            if (datetime.now() - k_date).days > 45:
+                keys_to_delete.append(k_date_str)
+        except:
+            keys_to_delete.append(k_date_str) # Noto'g'ri formatlarni ham o'chiramiz
+            
+    for k in keys_to_delete:
+        del history[k]
+    
     with open(history_file, "w") as f:
         json.dump(history, f, indent=2)
         
