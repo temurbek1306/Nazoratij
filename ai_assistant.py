@@ -151,46 +151,13 @@ def generate_caption_openrouter(summary):
 import random
 
 def append_viral_hashtags(caption):
-    km = KeyManager()
-    prompt = f"Sen O'zbekistondagi eng kuchli SMM ekspertisan. Quyidagi matnga qarab eng zo'r, mashhur va mos keladigan 7 ta viral hashtag yoz. Faqat hashtaglar ro'yxatini yoz, ortiqcha gaplarsiz (masalan: #rek #trend):\n\n{caption}"
-    
-    ai_tags = ""
-    for _ in range(3):
-        gemini_key = km.get_gemini_key()
-        if not gemini_key: break
-        try:
-            import google.generativeai as genai
-            genai.configure(api_key=gemini_key)
-            model = genai.GenerativeModel("gemini-1.5-flash")
-            response = model.generate_content(prompt)
-            if response.text:
-                ai_tags = response.text.strip()
-                break
-        except Exception:
-            pass
-            
-    if not ai_tags:
-        for _ in range(3):
-            groq_key = km.get_groq_key()
-            if not groq_key: break
-            try:
-                import requests
-                url = "https://api.groq.com/openai/v1/chat/completions"
-                headers = {"Authorization": f"Bearer {groq_key}", "Content-Type": "application/json"}
-                payload = {"model": "llama-3.3-70b-versatile", "messages": [{"role": "user", "content": prompt}]}
-                response = requests.post(url, headers=headers, json=payload, timeout=10)
-                if response.status_code == 200:
-                    ai_tags = response.json()["choices"][0]["message"]["content"].strip()
-                    break
-            except Exception:
-                pass
-                
-    if not ai_tags:
-        ai_tags = "#rek #trend #uzbekistan #foryou"
-        
-    ai_tags = ai_tags.replace("\n", " ") + " #temurbekdev"
+    """
+    AI o'zidan yomon/noto'g'ri hashteglar o'ylab topib videoni 'tashlab' yubormasligi uchun, 
+    AI orqali hashteg yasash o'chirib qo'yildi. 
+    Uning o'rniga foydalanuvchining 'Doimiy Hashteglar' funksiyasidan keladigan matn ishlatiladi.
+    """
     clean_caption = "\n".join([line for line in caption.split("\n") if not line.strip().startswith("#")])
-    return clean_caption.strip() + "\n\n" + ai_tags
+    return clean_caption.strip()
 
 def generate_first_comment(caption):
     km = KeyManager()
