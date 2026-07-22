@@ -129,7 +129,7 @@ if (isset($update['message'])) {
     
     $main_keyboard = json_encode([
         "keyboard" => [
-            [["text" => "🚀 Hozir Joylash"]],
+            [["text" => "➕ Yangi Video Qo'shish"], ["text" => "🚀 Hozir Joylash"]],
             [["text" => "📊 Statistika"], ["text" => "📋 Navbat (Queue)"]],
             [["text" => "⚙️ Vaqt Sozlamalari"]],
             [["text" => "🗑 Eski videolarni o'chirish"], ["text" => "🗓️ Kontent Reja"]]
@@ -152,6 +152,9 @@ if (isset($update['message'])) {
         setupBotCommands();
         sendMessage($chat_id, "👋 Salom, Boss! Ultra God Mode (v3.0) aktiv.\n\nPastdagi menyudan kerakli tugmani tanlang:", $main_keyboard);
     } 
+    elseif ($text == "➕ Yangi Video Qo'shish") {
+        sendMessage($chat_id, "📥 <b>Yangi video qo'shish</b>\n\nVideoni shunchaki Telegram botga yuboring (fayl yoki galereya orqali). Qolganini o'zim hal qilaman!");
+    }
     elseif ($text == "🚀 Hozir Joylash") {
         sendMessage($chat_id, "🚀 <b>Videoni joylash jarayoni boshlandi!</b>\n\nNavbatdagi (Pending) video hozir tarmoqlarga joylanadi (1-2 daqiqa kuting).");
         triggerGitHubAction("telegram_post", array("video_url" => ""));
