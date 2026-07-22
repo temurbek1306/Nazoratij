@@ -23,7 +23,12 @@ def handle_list():
     import datetime
     os.makedirs("videos/pending", exist_ok=True)
     files = [f for f in os.listdir("videos/pending") if f.endswith(('.mp4', '.mov'))]
-    files.sort() # Ensure they are shown in processing order (alphabetical == chronological for github run_ids)
+    def extract_run_id(f):
+        import re
+        match = re.search(r'_(\d+)\.(mp4|mov)$', f, re.IGNORECASE)
+        return int(match.group(1)) if match else 0
+        
+    files.sort(key=extract_run_id) # Ensure they are shown in processing order (github run_ids)
     if not files:
         send_telegram_msg("📭 Oddiy navbatda hech qanday video yo'q.")
         return

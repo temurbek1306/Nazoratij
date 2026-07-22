@@ -22,8 +22,13 @@ class VideoManager:
         if not video_files:
             return None
             
-        # Alifbo tartibida yoki vaqt bo'yicha eng birinchisini oladi
-        video_files.sort()
+        # Alifbo o'rniga fayl nomidagi run_id (tarix) bo'yicha tartiblash
+        def extract_run_id(f):
+            import re
+            match = re.search(r'_(\d+)\.(mp4|mov)$', f, re.IGNORECASE)
+            return int(match.group(1)) if match else 0
+            
+        video_files.sort(key=extract_run_id)
         return video_files[0]
         
     def mark_as_posted(self, filename: str):
