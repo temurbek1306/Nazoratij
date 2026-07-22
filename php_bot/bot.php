@@ -211,8 +211,30 @@ if (isset($update['message'])) {
         triggerGitHubAction("telegram_command", array("command" => "stats"));
     }
     elseif ($text == "📋 Navbat (Queue)" || $text == "/list") {
-        sendMessage($chat_id, "⏳ Navbat tekshirilmoqda...");
-        triggerGitHubAction("telegram_command", array("command" => "list"));
+        
+        $scheduled_msg = "";
+        if (file_exists("scheduled.json")) {
+            $scheduled_videos = json_decode(file_get_contents("scheduled.json"), true) ?: [];
+            if (count($scheduled_videos) > 0) {
+                $scheduled_msg = "⏱ <b>Aniq vaqtga belgilangan videolar:</b>\n\n";
+                foreach ($scheduled_videos as $i => $sv) {
+                    $time = date("d.m.Y H:i", $sv['post_time']);
+                    $scheduled_msg .= ($i+1) . ". 🕰 <b>$time</b> da chiqadi\n";
+                }
+                sendMessage($chat_id, $scheduled_msg);
+            }
+        }
+        
+        sendMessage($chat_id, "⏳ Oddiy navbat hisoblanmoqda...");
+        
+        $config_file = 'config.json';
+        $interval = 2;
+        if (file_exists($config_file)) {
+            $config = json_decode(file_get_contents($config_file), true);
+            $interval = isset($config['interval_hours']) ? $config['interval_hours'] : 2;
+        }
+        
+        triggerGitHubAction("telegram_command", array("command" => "list", "interval" => $interval));
     }
     elseif ($text == "🗑 Eski videolarni o'chirish" || $text == "/clear") {
         sendMessage($chat_id, "⏳ Tozalanmoqda...");

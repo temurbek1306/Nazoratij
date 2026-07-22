@@ -17,16 +17,22 @@ def send_telegram_msg(text):
             print(f"Telegram xatosi: {e}")
 
 def handle_list():
+    import datetime
     os.makedirs("videos/pending", exist_ok=True)
     files = [f for f in os.listdir("videos/pending") if f.endswith(('.mp4', '.mov'))]
     files.sort() # Ensure they are shown in processing order (alphabetical == chronological for github run_ids)
     if not files:
-        send_telegram_msg("📭 Navbatda hech qanday video yo'q.")
+        send_telegram_msg("📭 Oddiy navbatda hech qanday video yo'q.")
         return
     
-    msg = f"📋 <b>Navbatdagi videolar ({len(files)} ta):</b>\n\n"
+    interval_hours = int(os.getenv("TELEGRAM_INTERVAL", "2"))
+    
+    msg = f"📋 <b>Oddiy navbatdagi videolar ({len(files)} ta):</b>\n\n"
+    now = datetime.datetime.now()
     for i, f in enumerate(files, 1):
-        msg += f"{i}. {f}\n"
+        estimated_time = now + datetime.timedelta(hours=interval_hours * i)
+        time_str = estimated_time.strftime("%d.%m.%Y %H:%M")
+        msg += f"{i}. {f} <i>(~{time_str} da)</i>\n"
     
     send_telegram_msg(msg)
 

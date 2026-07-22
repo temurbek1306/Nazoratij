@@ -132,6 +132,7 @@ jobs:
           AI_KEYS_JSON: ${{ secrets.AI_KEYS_JSON }}
           TELEGRAM_COMMAND: ${{ github.event.client_payload.command }}
           TELEGRAM_PROMPT: ${{ github.event.client_payload.prompt }}
+          TELEGRAM_INTERVAL: ${{ github.event.client_payload.interval }}
         run: |
           python bot_controller.py
           
