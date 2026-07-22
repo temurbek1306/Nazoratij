@@ -64,11 +64,9 @@ if (isset($update['message'])) {
         
         $keyboard = json_encode([
             "inline_keyboard" => [
-                [
-                    ["text" => "📥 Navbat", "callback_data" => "act_queue_manual"],
-                    ["text" => "🚀 Hozir", "callback_data" => "act_postnow_manual"],
-                    ["text" => "⏱ Aniq vaqtga", "callback_data" => "act_schedule_manual"]
-                ]
+                [["text" => "📥 Navbat", "callback_data" => "act_queue_manual"]],
+                [["text" => "🚀 Hozir", "callback_data" => "act_postnow_manual"]],
+                [["text" => "⏱ Aniq vaqtga", "callback_data" => "act_schedule_manual"]]
             ]
         ]);
         sendMessage($chat_id, "✅ Ajoyib izoh qabul qilindi!\n\nVideoni nima qilamiz?", $keyboard);
@@ -144,10 +142,14 @@ if (isset($update['message'])) {
         $main_keyboard_temp = json_encode([
             "keyboard" => [
                 [["text" => "☁️ Web-App orqali yuklash"]],
-                [["text" => "➕ Yangi Video Qo'shish"], ["text" => "🚀 Hozir Joylash"]],
-                [["text" => "🔖 Doimiy Hashteglar"], ["text" => "📋 Navbat (Queue)"]],
-                [["text" => "⚙️ Vaqt Sozlamalari"], ["text" => "📊 Statistika"]],
-                [["text" => "🗑 Eski videolarni o'chirish"], ["text" => "🗓️ Kontent Reja"]]
+                [["text" => "➕ Yangi Video Qo'shish"]],
+                [["text" => "🚀 Hozir Joylash"]],
+                [["text" => "🔖 Doimiy Hashteglar"]],
+                [["text" => "📋 Navbat (Queue)"]],
+                [["text" => "⚙️ Vaqt Sozlamalari"]],
+                [["text" => "📊 Statistika"]],
+                [["text" => "🗓️ Kontent Reja"]],
+                [["text" => "🗑 Eski videolarni o'chirish"]]
             ],
             "resize_keyboard" => true,
             "one_time_keyboard" => false
@@ -160,10 +162,14 @@ if (isset($update['message'])) {
     $main_keyboard = json_encode([
         "keyboard" => [
             [["text" => "☁️ Web-App orqali yuklash"]],
-            [["text" => "➕ Yangi Video Qo'shish"], ["text" => "🚀 Hozir Joylash"]],
-            [["text" => "🔖 Doimiy Hashteglar"], ["text" => "📋 Navbat (Queue)"]],
-            [["text" => "⚙️ Vaqt Sozlamalari"], ["text" => "📊 Statistika"]],
-            [["text" => "🗑 Eski videolarni o'chirish"], ["text" => "🗓️ Kontent Reja"]]
+            [["text" => "➕ Yangi Video Qo'shish"]],
+            [["text" => "🚀 Hozir Joylash"]],
+            [["text" => "🔖 Doimiy Hashteglar"]],
+            [["text" => "📋 Navbat (Queue)"]],
+            [["text" => "⚙️ Vaqt Sozlamalari"]],
+            [["text" => "📊 Statistika"]],
+            [["text" => "🗓️ Kontent Reja"]],
+            [["text" => "🗑 Eski videolarni o'chirish"]]
         ],
         "resize_keyboard" => true,
         "one_time_keyboard" => false
@@ -264,11 +270,9 @@ if (isset($update['callback_query'])) {
     if ($data == "video_ai") {
         $keyboard = json_encode([
             "inline_keyboard" => [
-                [
-                    ["text" => "📥 Navbat", "callback_data" => "act_queue_ai"],
-                    ["text" => "🚀 Hozir", "callback_data" => "act_postnow_ai"],
-                    ["text" => "⏱ Aniq vaqtga", "callback_data" => "act_schedule_ai"]
-                ]
+                [["text" => "📥 Navbat", "callback_data" => "act_queue_ai"]],
+                [["text" => "🚀 Hozir", "callback_data" => "act_postnow_ai"]],
+                [["text" => "⏱ Aniq vaqtga", "callback_data" => "act_schedule_ai"]]
             ]
         ]);
         sendMessage($chat_id, "🤖 AI yozishga tayyor!\n\nVideoni nima qilamiz?", $keyboard);
