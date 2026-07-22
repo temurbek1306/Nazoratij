@@ -71,6 +71,7 @@ jobs:
             FILE_NAME="zz_tg_video_${{ github.run_id }}.mp4"
           fi
           curl -s -L -o "videos/pending/$FILE_NAME" "${{ github.event.client_payload.video_url }}"
+          echo "TARGET_VIDEO=$FILE_NAME" >> $GITHUB_ENV
 
       - name: Save Manual Caption 📝
         if: github.event_name == 'repository_dispatch' && github.event.client_payload.caption != ''

@@ -19,7 +19,11 @@ def run():
         with open("viral_tags.txt", "r", encoding="utf-8") as f:
             global_tags = f.read().strip()
             
-    video_name = get_pending_video()
+    target = os.getenv("TARGET_VIDEO")
+    if target and os.path.exists(f"videos/pending/{target}"):
+        video_name = target
+    else:
+        video_name = get_pending_video()
     if not video_name:
         print("📁 Hozircha yangi videolar yo'q. Dastur to'xtatildi.")
         send_alert("⚠️ <b>Diqqat! Video qolmadi!</b>\n\nNavbatdagi (Pending) papkada videolar tugadi. Iltimos, tizim ishlashda davom etishi uchun yana yangi videolar yuboring!")
