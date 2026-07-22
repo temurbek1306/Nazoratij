@@ -217,11 +217,22 @@ if (isset($update['message'])) {
             $scheduled_videos = json_decode(file_get_contents("scheduled.json"), true) ?: [];
             if (count($scheduled_videos) > 0) {
                 $scheduled_msg = "⏱ <b>Aniq vaqtga belgilangan videolar:</b>\n\n";
+                $keyboard_buttons = [];
+                $row = [];
                 foreach ($scheduled_videos as $i => $sv) {
                     $time = date("d.m.Y H:i", $sv['post_time']);
                     $scheduled_msg .= ($i+1) . ". 🕰 <b>$time</b> da chiqadi\n";
+                    $row[] = ["text" => "🗑 " . ($i+1), "callback_data" => "delsched_" . $i];
+                    if (count($row) == 5) {
+                        $keyboard_buttons[] = $row;
+                        $row = [];
+                    }
                 }
-                sendMessage($chat_id, $scheduled_msg);
+                if (!empty($row)) {
+                    $keyboard_buttons[] = $row;
+                }
+                $reply_markup = json_encode(["inline_keyboard" => $keyboard_buttons]);
+                sendMessage($chat_id, $scheduled_msg, $reply_markup);
             }
         }
         
@@ -366,6 +377,29 @@ if (isset($update['callback_query'])) {
         // Callback'ga vizual javob
         $url = "https://api.telegram.org/bot" . $TELEGRAM_TOKEN . "/answerCallbackQuery";
         file_get_contents($url . "?callback_query_id=" . $update['callback_query']['id'] . "&text=" . urlencode("⏳ O'chirish jarayoni boshlandi..."));
+        exit;
+    }
+    elseif (strpos($data, "delsched_") === 0) {
+        $index = (int) str_replace("delsched_", "", $data);
+        $scheduled_file = "scheduled.json";
+        if (file_exists($scheduled_file)) {
+            $scheduled_videos = json_decode(file_get_contents($scheduled_file), true) ?: [];
+            if (isset($scheduled_videos[$index])) {
+                array_splice($scheduled_videos, $index, 1);
+                file_put_contents($scheduled_file, json_encode($scheduled_videos, JSON_PRETTY_PRINT));
+                sendMessage($chat_id, "✅ Aniq vaqtli video (T/r: " . ($index+1) . ") navbatdan o'chirildi!");
+                
+                $url = "https://api.telegram.org/bot" . $TELEGRAM_TOKEN . "/answerCallbackQuery";
+                file_get_contents($url . "?callback_query_id=" . $update['callback_query']['id'] . "&text=" . urlencode("O'chirildi!"));
+                
+                // Takror bosilmasligi uchun tugmalarni o'chirib tashlash
+                $url = "https://api.telegram.org/bot" . $TELEGRAM_TOKEN . "/editMessageReplyMarkup";
+                file_get_contents($url . "?chat_id=$chat_id&message_id=$message_id&reply_markup=" . json_encode(["inline_keyboard" => []]));
+                exit;
+            }
+        }
+        $url = "https://api.telegram.org/bot" . $TELEGRAM_TOKEN . "/answerCallbackQuery";
+        file_get_contents($url . "?callback_query_id=" . $update['callback_query']['id'] . "&text=" . urlencode("Topilmadi!"));
         exit;
     }
 }
