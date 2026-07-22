@@ -28,7 +28,8 @@ def handle_list():
     interval_hours = int(os.getenv("TELEGRAM_INTERVAL", "2"))
     
     msg = f"📋 <b>Oddiy navbatdagi videolar ({len(files)} ta):</b>\n\n"
-    now = datetime.datetime.now()
+    # GitHub Actions UTC da ishlaydi, O'zbekiston vaqti (UTC+5) uchun 5 soat qo'shamiz
+    now = datetime.datetime.utcnow() + datetime.timedelta(hours=5)
     for i, f in enumerate(files, 1):
         estimated_time = now + datetime.timedelta(hours=interval_hours * i)
         time_str = estimated_time.strftime("%d.%m.%Y %H:%M")
