@@ -37,6 +37,20 @@ if (!is_dir($upload_dir)) {
     file_put_contents($upload_dir . '/.htaccess', "Options -Indexes\nAllow from all");
 }
 
+// 🧹 ESKI FAYLLARNI TOZALASH (Memory Leak oldini olish)
+// 24 soatdan (86400 soniya) eskirgan barcha videolarni avtomat o'chiramiz
+if (is_dir($upload_dir)) {
+    $files = glob($upload_dir . '/*');
+    $now = time();
+    foreach ($files as $f) {
+        if (is_file($f) && basename($f) != '.htaccess') {
+            if ($now - filemtime($f) >= 86400) { 
+                unlink($f);
+            }
+        }
+    }
+}
+
 // Unikal nom beramiz
 $ext = pathinfo($file['name'], PATHINFO_EXTENSION);
 if (!$ext) $ext = 'mp4';
