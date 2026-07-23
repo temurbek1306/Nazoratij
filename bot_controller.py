@@ -77,14 +77,23 @@ def handle_list():
     send_telegram_msg(msg, reply_markup=reply_markup)
 
 def handle_clear():
-    files = glob.glob("videos/pending/*")
     count = 0
-    for f in files:
-        if f.endswith(('.mp4', '.mov', '.txt')):
+    
+    # Delete pending
+    pending_files = glob.glob("videos/pending/*")
+    for f in pending_files:
+        if f.endswith(('.mp4', '.mov', '.txt', '.json')):
             os.remove(f)
             count += 1
             
-    send_telegram_msg(f"🧹 <b>Navbat tozalandi!</b>\n\n{count} ta fayl o'chirib tashlandi.")
+    # Delete posted
+    posted_files = glob.glob("videos/posted/*")
+    for f in posted_files:
+        if f.endswith(('.mp4', '.mov', '.txt', '.json')):
+            os.remove(f)
+            count += 1
+            
+    send_telegram_msg(f"🧹 <b>Navbat va Eski videolar tozalandi!</b>\n\nJami {count} ta fayl o'chirib tashlandi.")
 
 def handle_stats():
     send_telegram_msg("⏳ Statistika yig'ilmoqda va AI tahlil qilmoqda... (Biroz kuting)")
