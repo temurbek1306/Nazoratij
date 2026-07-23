@@ -33,8 +33,15 @@ def handle_list():
         send_telegram_msg("📭 Oddiy navbatda hech qanday video yo'q.")
         return
     
-    interval_hours = int(os.getenv("TELEGRAM_INTERVAL", "2"))
-    last_run_timestamp = float(os.getenv("TELEGRAM_LAST_RUN", "0"))
+    interval_str = os.getenv("TELEGRAM_INTERVAL", "2")
+    if not interval_str.strip():
+        interval_str = "2"
+    interval_hours = int(interval_str)
+    
+    last_run_str = os.getenv("TELEGRAM_LAST_RUN", "0")
+    if not last_run_str.strip():
+        last_run_str = "0"
+    last_run_timestamp = float(last_run_str)
     
     msg = f"📋 <b>Oddiy navbatdagi videolar ({len(files)} ta):</b>\n\n"
     
