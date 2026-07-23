@@ -23,7 +23,11 @@ def run():
             
     if hashtag_mode != "off" and os.path.exists("viral_tags.txt"):
         with open("viral_tags.txt", "r", encoding="utf-8") as f:
-            global_tags = f.read().strip()
+            content = f.read().strip()
+            tags_list = [t.strip() for t in content.split("===") if t.strip()]
+            if tags_list:
+                run_index = int(os.getenv("GITHUB_RUN_NUMBER", "0"))
+                global_tags = tags_list[run_index % len(tags_list)]
             
     target = os.getenv("TARGET_VIDEO")
     if target and os.path.exists(f"videos/pending/{target}"):
