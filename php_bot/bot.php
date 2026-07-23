@@ -500,6 +500,9 @@ if (isset($update['callback_query'])) {
 
 👇 <i>Qanday ishlashini tanlang:</i>";
         file_get_contents($url . "?chat_id=$chat_id&message_id=$message_id&text=" . urlencode($msg) . "&parse_mode=HTML&reply_markup=" . $keyboard);
+        
+        $url_ans = "https://api.telegram.org/bot" . $TELEGRAM_TOKEN . "/answerCallbackQuery";
+        file_get_contents($url_ans . "?callback_query_id=" . $update['callback_query']['id'] . "&text=" . urlencode("Saqlandi!"));
         exit;
     }
     elseif ($data == "edit_global_tags") {
@@ -525,6 +528,9 @@ Masalan:
 
 👇 <i>Yangi doimiy matnni yuboring (Diqqat: yangisini yuborsangiz, eskisi butunlay o'chib ketadi!):</i>";
         sendMessage($chat_id, $msg);
+        
+        $url_ans = "https://api.telegram.org/bot" . $TELEGRAM_TOKEN . "/answerCallbackQuery";
+        file_get_contents($url_ans . "?callback_query_id=" . $update['callback_query']['id']);
         exit;
     }
     elseif (strpos($data, "del_") === 0) {
