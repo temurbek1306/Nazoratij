@@ -499,7 +499,7 @@ if (isset($update['callback_query'])) {
 <pre>$current_tags</pre>
 
 👇 <i>Qanday ishlashini tanlang:</i>";
-        file_get_contents($url . "?chat_id=$chat_id&message_id=$message_id&text=" . urlencode($msg) . "&parse_mode=HTML&reply_markup=" . $keyboard);
+        file_get_contents($url . "?chat_id=$chat_id&message_id=$message_id&text=" . urlencode($msg) . "&parse_mode=HTML&reply_markup=" . urlencode($keyboard));
         
         $url_ans = "https://api.telegram.org/bot" . $TELEGRAM_TOKEN . "/answerCallbackQuery";
         file_get_contents($url_ans . "?callback_query_id=" . $update['callback_query']['id'] . "&text=" . urlencode("Saqlandi!"));
