@@ -171,6 +171,11 @@ jobs:
           if [[ -n "$(git status --porcelain)" ]]; then
             git add -A videos/
             git commit -m "🤖 Bot: Telegram komandasi orqali fayllar o'zgartirildi"
-            git pull --rebase --autostash origin main || true
-            git push
+            for i in {1..5}; do
+              git pull origin main --rebase --autostash || (git rebase --abort && sleep 5 && continue)
+              if git push; then
+                break
+              fi
+              sleep 5
+            done
           fi
