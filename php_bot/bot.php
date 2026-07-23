@@ -252,6 +252,10 @@ if (isset($update['message'])) {
         elseif ($mode == "tags_only") $mode_text = "Faqat Hashteglar";
         elseif ($mode == "off") $mode_text = "O'chirilgan";
         
+        $t = time();
+        $current_tags = @file_get_contents("https://raw.githubusercontent.com/temurbek1306/InstagaramAvtoReels/main/viral_tags.txt?t=$t");
+        if (!$current_tags) $current_tags = "Hozircha bo'sh.";
+        
         $keyboard = json_encode([
             "inline_keyboard" => [
                 [["text" => "✍️ Hashteglarni o'zgartirish", "callback_data" => "edit_global_tags"]],
@@ -260,7 +264,8 @@ if (isset($update['message'])) {
                 [["text" => ($mode == "off" ? "✅ " : "") . "❌ O'chirib qo'yish", "callback_data" => "hmod_off"]]
             ]
         ]);
-        sendMessage($chat_id, "🔖 <b>Doimiy Hashteglar Sozlamasi</b>\n\nHozirgi holat: <b>$mode_text</b>\n\nQanday ishlashini tanlang:", $keyboard);
+        $msg = "🔖 <b>Doimiy Hashteglar Sozlamasi</b>\n\n⚙️ Hozirgi rejim: <b>$mode_text</b>\n\n📝 <b>Joriy saqlangan hashteglar:</b>\n<pre>$current_tags</pre>\n\n👇 <i>Qanday ishlashini tanlang:</i>";
+        sendMessage($chat_id, $msg, $keyboard);
     }
     elseif ($text == "🚀 Hozir Joylash") {
         $keyboard = json_encode([
@@ -472,6 +477,10 @@ if (isset($update['callback_query'])) {
         elseif ($mode == "tags_only") $mode_text = "Faqat Hashteglar";
         elseif ($mode == "off") $mode_text = "O'chirilgan";
         
+        $t = time();
+        $current_tags = @file_get_contents("https://raw.githubusercontent.com/temurbek1306/InstagaramAvtoReels/main/viral_tags.txt?t=$t");
+        if (!$current_tags) $current_tags = "Hozircha bo'sh.";
+        
         $keyboard = json_encode([
             "inline_keyboard" => [
                 [["text" => "✍️ Hashteglarni o'zgartirish", "callback_data" => "edit_global_tags"]],
@@ -484,17 +493,28 @@ if (isset($update['callback_query'])) {
         $url = "https://api.telegram.org/bot" . $TELEGRAM_TOKEN . "/editMessageText";
         $msg = "🔖 <b>Doimiy Hashteglar Sozlamasi</b>
 
-Hozirgi holat: <b>$mode_text</b>
+⚙️ Hozirgi rejim: <b>$mode_text</b>
 
-Qanday ishlashini tanlang:";
+📝 <b>Joriy saqlangan hashteglar:</b>
+<pre>$current_tags</pre>
+
+👇 <i>Qanday ishlashini tanlang:</i>";
         file_get_contents($url . "?chat_id=$chat_id&message_id=$message_id&text=" . urlencode($msg) . "&parse_mode=HTML&reply_markup=" . $keyboard);
         exit;
     }
     elseif ($data == "edit_global_tags") {
         file_put_contents("state.txt", "waiting_for_global_tags");
+        
+        $t = time();
+        $current_tags = @file_get_contents("https://raw.githubusercontent.com/temurbek1306/InstagaramAvtoReels/main/viral_tags.txt?t=$t");
+        if (!$current_tags) $current_tags = "Hozircha bo'sh.";
+        
         $msg = "🔖 <b>Doimiy Matn/Hashteglar</b>
 
 Bu yerda yozgan har qanday matningiz videolarga qo'shiladi.
+
+📝 <b>Hozirgi saqlangan matn:</b>
+<pre>$current_tags</pre>
 
 🔄 <b>Navbatma-navbat ishlashi uchun:</b>
 Agar siz bir nechta xil hashteglarni navbat bilan (1-videoga 1-hashteg, 2-videoga 2-hashteg) chiqishini xohlasangiz, ularni <b>===</b> belgisi bilan ajrating.
@@ -503,7 +523,7 @@ Masalan:
 ===
 #uzb #trend
 
-👇 <i>Yangi doimiy matnni yuboring:</i>";
+👇 <i>Yangi doimiy matnni yuboring (Diqqat: yangisini yuborsangiz, eskisi butunlay o'chib ketadi!):</i>";
         sendMessage($chat_id, $msg);
         exit;
     }
