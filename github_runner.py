@@ -150,7 +150,7 @@ Shularni tahlil qilib, batafsil SUMMARY yoz.
 Keyin Instagram Reels uchun videoning AYNAN SHU voqeasiga 100% bog'langan, hazil aralash yoki kreativ O'ZBEKCHA CAPTION (post matni) yoz.
 QOIDALAR: 
 - Caption aynan videodagi holat bilan bog'lanishi SHART! Umumiy, zerikarli gaplarni (masalan: "Hayotda shunaqa", "Bugun ajoyib video") umuman yozma.
-- Matn qisqa, odamni tortadigan va qiziqarli savol bilan tugasin.
+- Matn qisqa bo'lsin. Oxirida tomoshabinni fikr bildirishga, LIKE bosishga va profilingizga OBUNA BO'LISHGA (follow) undovchi kreativ chaqiriq qo'sh. Shunchaki 'fikringizni yozing' emas, aynan sahifamizga obuna bo'lish haqida ham chiroyli qilib yoz!
 - Hashtag umuman ishlatma.
 
 Formati:
