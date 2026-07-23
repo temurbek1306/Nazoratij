@@ -1,1 +1,1 @@
-caption_and_tags
+tags_only
