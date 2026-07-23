@@ -15,7 +15,13 @@ def run():
     print("🚀 GitHub Actions: Avtomatik Video Yuklash boshlandi...")
     
     global_tags = ""
-    if os.path.exists("viral_tags.txt"):
+    hashtag_mode = "caption_and_tags"
+    
+    if os.path.exists("hashtag_mode.txt"):
+        with open("hashtag_mode.txt", "r", encoding="utf-8") as f:
+            hashtag_mode = f.read().strip()
+            
+    if hashtag_mode != "off" and os.path.exists("viral_tags.txt"):
         with open("viral_tags.txt", "r", encoding="utf-8") as f:
             global_tags = f.read().strip()
             
@@ -58,7 +64,10 @@ def run():
             manual_caption += "\n\n#rek #trend #uzbekistan #foryou #temurbekdev"
             
         if global_tags:
-            manual_caption += "\n\n" + global_tags
+            if hashtag_mode == "tags_only":
+                manual_caption = global_tags
+            else:
+                manual_caption += "\n\n" + global_tags
             
         print(f"📝 Instagramga joylanmoqda (Qo'lda yozilgan)...")
         ig_media_id = post_to_instagram(url, manual_caption, video_name)
@@ -175,9 +184,14 @@ CAPTION_A: (videoga to'liq mos yozilgan caption)"""
                 caption_c = ai_assistant.append_viral_hashtags(caption_c)
                 
                 if global_tags:
-                    caption_a += "\n\n" + global_tags
-                    caption_b += "\n\n" + global_tags
-                    caption_c += "\n\n" + global_tags
+                    if hashtag_mode == "tags_only":
+                        caption_a = global_tags
+                        caption_b = global_tags
+                        caption_c = global_tags
+                    else:
+                        caption_a += "\n\n" + global_tags
+                        caption_b += "\n\n" + global_tags
+                        caption_c += "\n\n" + global_tags
                 
                 import json
                 # Saqlash
@@ -237,7 +251,10 @@ CAPTION_A: (videoga to'liq mos yozilgan caption)"""
         final_fallback_caption = caption + "\n\n#rek #trend #uzbekistan #foryou #temurbekdev"
         
     if global_tags:
-        final_fallback_caption += "\n\n" + global_tags
+        if hashtag_mode == "tags_only":
+            final_fallback_caption = global_tags
+        else:
+            final_fallback_caption += "\n\n" + global_tags
         
     ig_media_id = post_to_instagram(url, final_fallback_caption, video_name)
     
