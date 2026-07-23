@@ -185,6 +185,7 @@ if (isset($update['message'])) {
     if (file_exists("state.txt") && file_get_contents("state.txt") == "waiting_for_global_tags" && $text != "") {
         file_put_contents("state.txt", "none");
         sendMessage($chat_id, "⏳ GitHub serveriga yozilmoqda...");
+        file_put_contents("viral_tags.txt", $text);
         updateGitHubFile($GITHUB_REPO, "viral_tags.txt", $text, $GITHUB_PAT);
         
         $main_keyboard_temp = json_encode([
@@ -252,9 +253,13 @@ if (isset($update['message'])) {
         elseif ($mode == "tags_only") $mode_text = "Faqat Hashteglar";
         elseif ($mode == "off") $mode_text = "O'chirilgan";
         
-        $t = time();
-        $current_tags = @file_get_contents("https://raw.githubusercontent.com/temurbek1306/InstagaramAvtoReels/main/viral_tags.txt?t=$t");
-        if (!$current_tags) $current_tags = "Hozircha bo'sh.";
+        if (file_exists("viral_tags.txt")) {
+            $current_tags = file_get_contents("viral_tags.txt");
+        } else {
+            $t = time();
+            $current_tags = @file_get_contents("https://raw.githubusercontent.com/temurbek1306/InstagaramAvtoReels/main/viral_tags.txt?t=$t");
+            if (!$current_tags) $current_tags = "Hozircha bo'sh.";
+        }
         
         $keyboard = json_encode([
             "inline_keyboard" => [
@@ -477,9 +482,13 @@ if (isset($update['callback_query'])) {
         elseif ($mode == "tags_only") $mode_text = "Faqat Hashteglar";
         elseif ($mode == "off") $mode_text = "O'chirilgan";
         
-        $t = time();
-        $current_tags = @file_get_contents("https://raw.githubusercontent.com/temurbek1306/InstagaramAvtoReels/main/viral_tags.txt?t=$t");
-        if (!$current_tags) $current_tags = "Hozircha bo'sh.";
+        if (file_exists("viral_tags.txt")) {
+            $current_tags = file_get_contents("viral_tags.txt");
+        } else {
+            $t = time();
+            $current_tags = @file_get_contents("https://raw.githubusercontent.com/temurbek1306/InstagaramAvtoReels/main/viral_tags.txt?t=$t");
+            if (!$current_tags) $current_tags = "Hozircha bo'sh.";
+        }
         
         $keyboard = json_encode([
             "inline_keyboard" => [
@@ -508,9 +517,13 @@ if (isset($update['callback_query'])) {
     elseif ($data == "edit_global_tags") {
         file_put_contents("state.txt", "waiting_for_global_tags");
         
-        $t = time();
-        $current_tags = @file_get_contents("https://raw.githubusercontent.com/temurbek1306/InstagaramAvtoReels/main/viral_tags.txt?t=$t");
-        if (!$current_tags) $current_tags = "Hozircha bo'sh.";
+        if (file_exists("viral_tags.txt")) {
+            $current_tags = file_get_contents("viral_tags.txt");
+        } else {
+            $t = time();
+            $current_tags = @file_get_contents("https://raw.githubusercontent.com/temurbek1306/InstagaramAvtoReels/main/viral_tags.txt?t=$t");
+            if (!$current_tags) $current_tags = "Hozircha bo'sh.";
+        }
         
         $msg = "🔖 <b>Doimiy Matn/Hashteglar</b>
 
