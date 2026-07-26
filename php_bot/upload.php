@@ -87,14 +87,13 @@ if (move_uploaded_file($file['tmp_name'], $dest_path)) {
     // Telegramga xabar jo'natamiz
     $keyboard = json_encode([
         "inline_keyboard" => [
-            [
-                ["text" => "🤖 AI O'zi yozsin", "callback_data" => "video_ai"],
-                ["text" => "✍️ O'zim yozaman", "callback_data" => "video_manual"]
-            ]
+            [["text" => "📸 Instagram", "callback_data" => "platform_ig"]],
+            [["text" => "📺 YouTube", "callback_data" => "platform_yt"]],
+            [["text" => "📸+📺 Ikkalasiga ham", "callback_data" => "platform_both"]]
         ]
     ]);
     
-    $text = "☁️ <b>Web-App orqali KATTA VIDEO qabul qilindi!</b>\n\nFayl hajmi: " . number_format($file['size'] / 1048576, 2) . " MB\n\nIzohni kim yozadi?";
+    $text = "☁️ <b>Web-App orqali KATTA VIDEO qabul qilindi!</b>\n\nFayl hajmi: " . number_format($file['size'] / 1048576, 2) . " MB\n\nQaysi tarmoqqa joylaymiz?";
     
     $url = "https://api.telegram.org/bot" . $TELEGRAM_TOKEN . "/sendMessage";
     $data = array(
