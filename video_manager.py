@@ -32,12 +32,23 @@ class VideoManager:
         return video_files[0]
         
     def mark_as_posted(self, filename: str):
-        """Qo'yilgan videoni butunlay o'chirib yuboradi (Musur yig'ilmasligi uchun)"""
-        source = os.path.join(self.pending_dir, filename)
+        """Qo'yilgan videoni butunlay o'chirib yuboradi (Musur yig'ilmasligi uchun barcha qoldiq fayllari bilan)"""
+        base_name = os.path.splitext(filename)[0]
         
-        if os.path.exists(source):
-            os.remove(source)
-            print(f"[VideoManager] '{filename}' joylangandan so'ng butunlay o'chirildi (Xotira tozalandi).")
+        # O'chirilishi kerak bo'lgan barcha fayl turlari
+        files_to_remove = [
+            filename,
+            f"{base_name}.txt",
+            f"{base_name}.json",
+            f"{base_name}.platform.txt"
+        ]
+        
+        for f_name in files_to_remove:
+            path = os.path.join(self.pending_dir, f_name)
+            if os.path.exists(path):
+                os.remove(path)
+                
+        print(f"[VideoManager] '{base_name}' nomli video va uning barcha qoldiq fayllari (txt, json, platform) butunlay o'chirildi (Xotira tozalandi).")
             
     def get_caption_for_video(self, filename: str) -> str:
         """Agar video bilan bir xil nomdagi .txt fayl bo'lsa, uni caption qilib o'qiydi"""
