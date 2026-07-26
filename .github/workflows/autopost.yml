@@ -40,6 +40,19 @@ jobs:
           ${{ github.event.client_payload.caption }}
           EOF
 
+      - name: Save Platform Choice 💾
+        run: |
+          CUSTOM_NAME="${{ github.event.client_payload.custom_name }}"
+          if [ -n "$CUSTOM_NAME" ]; then
+            BASE_NAME="${CUSTOM_NAME}_${{ github.run_id }}"
+          else
+            BASE_NAME="zz_tg_video_${{ github.run_id }}"
+          fi
+          PLATFORM="${{ github.event.client_payload.platform }}"
+          if [ -n "$PLATFORM" ]; then
+            echo "$PLATFORM" > "videos/pending/$BASE_NAME.platform.txt"
+          fi
+
       - name: Commit and Push changes 💾
         run: |
           git config --local user.email "bot@temurbek.dev"
@@ -90,6 +103,20 @@ jobs:
           cat << 'EOF' > "videos/pending/$FILE_NAME"
           ${{ github.event.client_payload.caption }}
           EOF
+
+      - name: Save Platform Choice 💾
+        if: github.event_name == 'repository_dispatch'
+        run: |
+          CUSTOM_NAME="${{ github.event.client_payload.custom_name }}"
+          if [ -n "$CUSTOM_NAME" ]; then
+            BASE_NAME="${CUSTOM_NAME}_${{ github.run_id }}"
+          else
+            BASE_NAME="zz_tg_video_${{ github.run_id }}"
+          fi
+          PLATFORM="${{ github.event.client_payload.platform }}"
+          if [ -n "$PLATFORM" ]; then
+            echo "$PLATFORM" > "videos/pending/$BASE_NAME.platform.txt"
+          fi
 
       - name: Setup Python 🐍
         uses: actions/setup-python@v5

@@ -59,13 +59,12 @@ if (isset($update['message'])) {
             } else {
                 $keyboard = json_encode([
                     "inline_keyboard" => [
-                        [
-                            ["text" => "🤖 AI O'zi yozsin", "callback_data" => "video_ai"],
-                            ["text" => "✍️ O'zim yozaman", "callback_data" => "video_manual"]
-                        ]
+                        [["text" => "📸 Instagram", "callback_data" => "platform_ig"]],
+                        [["text" => "📺 YouTube", "callback_data" => "platform_yt"]],
+                        [["text" => "📸+📺 Ikkalasiga ham", "callback_data" => "platform_both"]]
                     ]
                 ]);
-                sendMessage($chat_id, "🎬 Video qabul qilindi! Nomi: <b>$video_name_custom</b>\n\nIzohni kim yozadi?", $keyboard);
+                sendMessage($chat_id, "🎬 Video qabul qilindi! Nomi: <b>$video_name_custom</b>\n\nQaysi tarmoqqa joylaymiz?", $keyboard);
             }
         } else {
             sendMessage($chat_id, "❌ Videoni qabul qilishda xatolik yuz berdi (Fayl hajmi juda katta bo'lishi mumkin).");
@@ -88,13 +87,12 @@ if (isset($update['message'])) {
             
             $keyboard = json_encode([
                 "inline_keyboard" => [
-                    [
-                        ["text" => "🤖 AI O'zi yozsin", "callback_data" => "video_ai"],
-                        ["text" => "✍️ O'zim yozaman", "callback_data" => "video_manual"]
-                    ]
+                    [["text" => "📸 Instagram", "callback_data" => "platform_ig"]],
+                    [["text" => "📺 YouTube", "callback_data" => "platform_yt"]],
+                    [["text" => "📸+📺 Ikkalasiga ham", "callback_data" => "platform_both"]]
                 ]
             ]);
-            sendMessage($chat_id, "✅ Videoga <b>$video_name_custom</b> deb nom berildi!\n\nEndi izohni kim yozadi?", $keyboard);
+            sendMessage($chat_id, "✅ Videoga <b>$video_name_custom</b> deb nom berildi!\n\nQaysi tarmoqqa joylaymiz?", $keyboard);
             exit;
         }
     }
@@ -163,11 +161,17 @@ if (isset($update['message'])) {
                 $scheduled_list = json_decode(file_get_contents($scheduled_file), true) ?: [];
             }
             
+            $platform = "both";
+            if (file_exists("last_platform.txt")) {
+                $platform = file_get_contents("last_platform.txt");
+            }
+            
             $scheduled_list[] = [
                 "video_url" => $video_url,
                 "caption" => $caption,
                 "custom_name" => $custom_name,
-                "post_time" => $timestamp
+                "post_time" => $timestamp,
+                "platform" => $platform
             ];
             
             file_put_contents($scheduled_file, json_encode($scheduled_list, JSON_PRETTY_PRINT));
@@ -382,13 +386,30 @@ if (isset($update['callback_query'])) {
         file_put_contents("state.txt", "none");
         $keyboard = json_encode([
             "inline_keyboard" => [
+                [["text" => "📸 Instagram", "callback_data" => "platform_ig"]],
+                [["text" => "📺 YouTube", "callback_data" => "platform_yt"]],
+                [["text" => "📸+📺 Ikkalasiga ham", "callback_data" => "platform_both"]]
+            ]
+        ]);
+        sendMessage($chat_id, "✅ Faylga avtomatik nom beriladi.\n\nQaysi tarmoqqa joylaymiz?", $keyboard);
+        $url = "https://api.telegram.org/bot" . $TELEGRAM_TOKEN . "/editMessageReplyMarkup";
+        file_get_contents($url . "?chat_id=$chat_id&message_id=$message_id&reply_markup=" . json_encode(["inline_keyboard" => []]));
+        exit;
+    }
+    
+    if (strpos($data, "platform_") === 0) {
+        $platform = str_replace("platform_", "", $data);
+        file_put_contents("last_platform.txt", $platform);
+        
+        $keyboard = json_encode([
+            "inline_keyboard" => [
                 [
                     ["text" => "🤖 AI O'zi yozsin", "callback_data" => "video_ai"],
                     ["text" => "✍️ O'zim yozaman", "callback_data" => "video_manual"]
                 ]
             ]
         ]);
-        sendMessage($chat_id, "✅ Faylga avtomatik nom beriladi.\n\nEndi, izohni (caption) kim yozadi?", $keyboard);
+        sendMessage($chat_id, "✅ Tarmoq tanlandi!\n\nEndi izohni kim yozadi?", $keyboard);
         $url = "https://api.telegram.org/bot" . $TELEGRAM_TOKEN . "/editMessageReplyMarkup";
         file_get_contents($url . "?chat_id=$chat_id&message_id=$message_id&reply_markup=" . json_encode(["inline_keyboard" => []]));
         exit;
@@ -447,12 +468,29 @@ if (isset($update['callback_query'])) {
                 $custom_name = file_get_contents("last_custom_name.txt");
             }
             
+            $platform = "both";
+            if (file_exists("last_platform.txt")) {
+                $platform = file_get_contents("last_platform.txt");
+            }
+            
             if (strpos($data, "act_queue") === 0) {
-                sendMessage($chat_id, "📥 Video navbatga qo'shildi! Vaqti kelganda joylanadi.");
-                triggerGitHubAction("telegram_queue", array("video_url" => $video_url, "caption" => $caption, "custom_name" => $custom_name));
-            } else {
-                sendMessage($chat_id, "🚀 Video hozir joylash uchun tayyorlanmoqda...");
-                triggerGitHubAction("telegram_post", array("video_url" => $video_url, "caption" => $caption, "custom_name" => $custom_name));
+                sendMessage($chat_id, "✅ Video navbatga qo'shilmoqda... (Background processing)");
+                triggerGitHubAction("telegram_queue", array(
+                    "video_url" => $video_url,
+                    "caption" => $caption,
+                    "custom_name" => $custom_name,
+                    "target" => "queue",
+                    "platform" => $platform
+                ));
+            } else if (strpos($data, "act_postnow") === 0) {
+                sendMessage($chat_id, "🚀 Video hoziroq joylanmoqda... (Background processing)");
+                triggerGitHubAction("telegram_post", array(
+                    "video_url" => $video_url,
+                    "caption" => $caption,
+                    "custom_name" => $custom_name,
+                    "target" => "postnow",
+                    "platform" => $platform
+                ));
             }
             
             // Takror bosilmasligi uchun tugmalarni o'chirib tashlash

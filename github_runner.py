@@ -51,8 +51,15 @@ def run():
     
     local_video_path = f"videos/pending/{video_name}"
     
-    # ✍️ QO'LDA YOZILGAN IZOH TEKSHIRUVI
+    # Platformani tekshirish
     base_name = os.path.splitext(video_name)[0]
+    platform = "both"
+    platform_file = f"videos/pending/{base_name}.platform.txt"
+    if os.path.exists(platform_file):
+        with open(platform_file, "r", encoding="utf-8") as f:
+            platform = f.read().strip()
+            
+    # ✍️ QO'LDA YOZILGAN IZOH TEKSHIRUVI
     txt_file = f"videos/pending/{base_name}.txt"
     if os.path.exists(txt_file):
         print("✍️ Qo'lda yozilgan izoh topildi. AI chetlab o'tilmoqda va to'g'ridan-to'g'ri joylanmoqda...")
@@ -73,35 +80,45 @@ def run():
             else:
                 manual_caption += "\n\n" + global_tags
             
-        print(f"📝 Instagramga joylanmoqda (Qo'lda yozilgan)...")
-        ig_media_id = post_to_instagram(url, manual_caption, video_name)
-        
-        try:
-            first_comment = ai_assistant.get_standard_comment(manual_caption)
-        except:
-            first_comment = "👇 Fikringizni izohlarda yozib qoldiring!"
+        if platform in ["ig", "both"]:
+            print(f"📝 Instagramga joylanmoqda (Qo'lda yozilgan)...")
+            ig_media_id = post_to_instagram(url, manual_caption, video_name)
             
-        if ig_media_id:
-            from agent_tools import post_ig_comment
-            post_ig_comment(ig_media_id, first_comment)
-            
-        print(f"📺 YouTubega joylanmoqda (Qo'lda yozilgan)...")
-        from youtube_api import YouTubeAPI
-        yt_client_id = os.getenv("YOUTUBE_CLIENT_ID")
-        yt_client_secret = os.getenv("YOUTUBE_CLIENT_SECRET")
-        yt_refresh_token = os.getenv("YOUTUBE_REFRESH_TOKEN")
-        if yt_client_id and yt_client_secret and yt_refresh_token:
             try:
-                yt_api = YouTubeAPI(yt_client_id, yt_client_secret, yt_refresh_token)
-                final_video_path = f"videos/pending/{video_name}"
-                if os.path.exists(final_video_path):
-                    yt_video_id = yt_api.upload_shorts(final_video_path, manual_caption.split('\n')[0][:100], manual_caption)
-                    if yt_video_id:
-                        yt_api.post_comment(yt_video_id, first_comment)
-                else:
-                    print(f"❌ YouTube uchun fayl topilmadi: {final_video_path}")
-            except Exception as e:
-                print(f"⚠️ YouTube yuklashda xatolik: {e}")
+                first_comment = ai_assistant.get_standard_comment(manual_caption)
+            except:
+                first_comment = "👇 Fikringizni izohlarda yozib qoldiring!"
+                
+            if ig_media_id:
+                from agent_tools import post_ig_comment
+                post_ig_comment(ig_media_id, first_comment)
+        else:
+            print("⏭ Instagram tanlanmagan, tashlab o'tilmoqda...")
+            try:
+                first_comment = ai_assistant.get_standard_comment(manual_caption)
+            except:
+                first_comment = "👇 Fikringizni izohlarda yozib qoldiring!"
+            
+        if platform in ["yt", "both"]:
+            print(f"📺 YouTubega joylanmoqda (Qo'lda yozilgan)...")
+            from youtube_api import YouTubeAPI
+            yt_client_id = os.getenv("YOUTUBE_CLIENT_ID")
+            yt_client_secret = os.getenv("YOUTUBE_CLIENT_SECRET")
+            yt_refresh_token = os.getenv("YOUTUBE_REFRESH_TOKEN")
+            if yt_client_id and yt_client_secret and yt_refresh_token:
+                try:
+                    yt_api = YouTubeAPI(yt_client_id, yt_client_secret, yt_refresh_token)
+                    final_video_path = f"videos/pending/{video_name}"
+                    if os.path.exists(final_video_path):
+                        yt_video_id = yt_api.upload_shorts(final_video_path, manual_caption.split('\n')[0][:100], manual_caption)
+                        if yt_video_id:
+                            yt_api.post_comment(yt_video_id, first_comment)
+                    else:
+                        print(f"❌ YouTube uchun fayl topilmadi: {final_video_path}")
+                except Exception as e:
+                    print(f"⚠️ YouTube yuklashda xatolik: {e}")
+        else:
+            print("⏭ YouTube tanlanmagan, tashlab o'tilmoqda...")
                 
         send_alert(f"✅ Boss, video MUVAFFAQIYATLI joylandi (Qo'lda yozilgan izoh bilan)!\n\nVideo: {video_name}")
         os.remove(txt_file)
@@ -246,50 +263,57 @@ CAPTION_A: (videoga to'liq mos yozilgan caption)"""
             print(f"\n⚠️ Gemini ishlatishda xatolik yuz berdi: {e}")
             continue
 
-    # Agar Gemini umuman ishlamay qolsa, eski usulda birdaniga joylab yuboramiz. (Zaxira)
-    print(f"📝 Instagramga joylanmoqda (Zaxira rejim)...")
-    
-    try:
-        final_fallback_caption = ai_assistant.append_viral_hashtags(caption)
-    except:
-        final_fallback_caption = caption + "\n\n#rek #trend #uzbekistan #foryou #temurbekdev"
+    if platform in ["ig", "both"]:
+        print(f"📝 Instagramga joylanmoqda (Zaxira rejim)...")
         
-    if global_tags:
-        if hashtag_mode == "tags_only":
-            final_fallback_caption = global_tags
-        else:
-            final_fallback_caption += "\n\n" + global_tags
-        
-    ig_media_id = post_to_instagram(url, final_fallback_caption, video_name)
-    
-    try:
-        first_comment = ai_assistant.get_standard_comment(final_fallback_caption)
-    except:
-        first_comment = "👇 Fikringizni izohlarda yozib qoldiring!"
-        
-    if ig_media_id:
-        from agent_tools import post_ig_comment
-        post_ig_comment(ig_media_id, first_comment)
-    
-    print(f"📺 YouTubega joylanmoqda (Zaxira rejim)...")
-    from youtube_api import YouTubeAPI
-    yt_client_id = os.getenv("YOUTUBE_CLIENT_ID")
-    yt_client_secret = os.getenv("YOUTUBE_CLIENT_SECRET")
-    yt_refresh_token = os.getenv("YOUTUBE_REFRESH_TOKEN")
-    
-    if yt_client_id and yt_client_secret and yt_refresh_token:
         try:
-            yt_api = YouTubeAPI(yt_client_id, yt_client_secret, yt_refresh_token)
-            final_video_path = f"videos/pending/{video_name}"
+            final_fallback_caption = ai_assistant.append_viral_hashtags(caption)
+        except:
+            final_fallback_caption = caption + "\n\n#rek #trend #uzbekistan #foryou #temurbekdev"
             
-            if os.path.exists(final_video_path):
-                yt_video_id = yt_api.upload_shorts(final_video_path, "Kulgili Holat! 😂", final_fallback_caption)
-                if yt_video_id:
-                    yt_api.post_comment(yt_video_id, first_comment)
+        if global_tags:
+            if hashtag_mode == "tags_only":
+                final_fallback_caption = global_tags
             else:
-                print(f"❌ YouTube uchun fayl topilmadi: {final_video_path}")
-        except Exception as e:
-            print(f"⚠️ YouTube zaxira yuklashda xatolik: {e}")
+                final_fallback_caption += "\n\n" + global_tags
+            
+        ig_media_id = post_to_instagram(url, final_fallback_caption, video_name)
+        
+        try:
+            first_comment = ai_assistant.get_standard_comment(final_fallback_caption)
+        except:
+            first_comment = "👇 Fikringizni izohlarda yozib qoldiring!"
+            
+        if ig_media_id:
+            from agent_tools import post_ig_comment
+            post_ig_comment(ig_media_id, first_comment)
+    else:
+        print("⏭ Instagram tanlanmagan (Zaxira rejimda tashlab o'tilmoqda)...")
+    
+    if platform in ["yt", "both"]:
+        print(f"📺 YouTubega joylanmoqda (Zaxira rejim)...")
+        from youtube_api import YouTubeAPI
+        yt_client_id = os.getenv("YOUTUBE_CLIENT_ID")
+        yt_client_secret = os.getenv("YOUTUBE_CLIENT_SECRET")
+        yt_refresh_token = os.getenv("YOUTUBE_REFRESH_TOKEN")
+        
+        if yt_client_id and yt_client_secret and yt_refresh_token:
+            try:
+                yt_api = YouTubeAPI(yt_client_id, yt_client_secret, yt_refresh_token)
+                final_video_path = f"videos/pending/{video_name}"
+                if os.path.exists(final_video_path):
+                    yt_video_id = yt_api.upload_shorts(final_video_path, final_fallback_caption.split('\n')[0][:100], final_fallback_caption)
+                    if yt_video_id:
+                        try:
+                            yt_api.post_comment(yt_video_id, first_comment)
+                        except:
+                            pass
+                else:
+                    print(f"❌ YouTube uchun fayl topilmadi: {final_video_path}")
+            except Exception as e:
+                print(f"⚠️ YouTube yuklashda xatolik: {e}")
+    else:
+        print("⏭ YouTube tanlanmagan (Zaxira rejimda tashlab o'tilmoqda)...")
             
     # Delete the video from pending since everything is done
     from video_manager import VideoManager

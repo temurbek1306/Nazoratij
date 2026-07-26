@@ -31,47 +31,69 @@ def run():
             print("❌ Ngrok URL olib bo'lmadi.")
             return
             
-        print(f"📝 Instagramga joylanmoqda...")
-        ig_media_id = post_to_instagram(url, caption, video_name)
-        
-        import ai_assistant
-        try:
-            first_comment = ai_assistant.get_standard_comment(caption)
-        except:
-            first_comment = "👇 Fikringizni izohlarda yozib qoldiring!"
-        
-        if ig_media_id:
-            print("✅ Video IG ga muvaffaqiyatli yuklandi va 'posted' papkasiga o'tkazildi!")
+        # Platformani tekshirish
+        base_name = os.path.splitext(video_name)[0]
+        platform = "both"
+        platform_file = f"videos/pending/{base_name}.platform.txt"
+        if os.path.exists(platform_file):
+            with open(platform_file, "r", encoding="utf-8") as f:
+                platform = f.read().strip()
+                
+        if platform in ["ig", "both"]:
+            print(f"📝 Instagramga joylanmoqda...")
+            ig_media_id = post_to_instagram(url, caption, video_name)
             
-            # --- IG AUTO-COMMENT ---
-            from agent_tools import post_ig_comment
-            post_ig_comment(ig_media_id, first_comment)
+            import ai_assistant
+            try:
+                first_comment = ai_assistant.get_standard_comment(caption)
+            except:
+                first_comment = "👇 Fikringizni izohlarda yozib qoldiring!"
             
+            if ig_media_id:
+                print("✅ Video IG ga muvaffaqiyatli yuklandi va 'posted' papkasiga o'tkazildi!")
+                
+                # --- IG AUTO-COMMENT ---
+                from agent_tools import post_ig_comment
+                post_ig_comment(ig_media_id, first_comment)
+                
+            else:
+                print("❌ Videoni IG ga yuklashda xatolik yuz berdi.")
         else:
-            print("❌ Videoni IG ga yuklashda xatolik yuz berdi.")
+            print("⏭ Instagram tanlanmagan, tashlab o'tilmoqda...")
+            import ai_assistant
+            try:
+                first_comment = ai_assistant.get_standard_comment(caption)
+            except:
+                first_comment = "👇 Fikringizni izohlarda yozib qoldiring!"
             
         # --- YOUTUBE SHORTS YUKLASH ---
-        yt_client_id = os.getenv("YOUTUBE_CLIENT_ID")
-        yt_client_secret = os.getenv("YOUTUBE_CLIENT_SECRET")
-        yt_refresh_token = os.getenv("YOUTUBE_REFRESH_TOKEN")
-        
-        if yt_client_id and yt_client_secret and yt_refresh_token:
-            try:
-                print("\n📺 YouTube Shorts yuklash boshlanmoqda...")
-                from youtube_api import YouTubeAPI
-                yt_api = YouTubeAPI(yt_client_id, yt_client_secret, yt_refresh_token)
-                title = caption.split('\n')[0][:100] 
-                local_video_path = f"videos/pending/{video_name}"
-                
-                if os.path.exists(local_video_path):
-                    yt_video_id = yt_api.upload_shorts(video_path=local_video_path, title=title, description=caption)
-                    if yt_video_id:
-                        # --- YOUTUBE AUTO-COMMENT ---
-                        yt_api.post_comment(yt_video_id, first_comment)
-                else:
-                    print(f"❌ YouTube uchun lokal fayl topilmadi: {local_video_path}")
-            except Exception as yt_error:
-                print(f"⚠️ YouTube ga yuklashda xatolik: {yt_error}")
+        if platform in ["yt", "both"]:
+            yt_client_id = os.getenv("YOUTUBE_CLIENT_ID")
+            yt_client_secret = os.getenv("YOUTUBE_CLIENT_SECRET")
+            yt_refresh_token = os.getenv("YOUTUBE_REFRESH_TOKEN")
+            
+            if yt_client_id and yt_client_secret and yt_refresh_token:
+                try:
+                    print("\n📺 YouTube Shorts yuklash boshlanmoqda...")
+                    from youtube_api import YouTubeAPI
+                    yt_api = YouTubeAPI(yt_client_id, yt_client_secret, yt_refresh_token)
+                    title = caption.split('\n')[0][:100] 
+                    local_video_path = f"videos/pending/{video_name}"
+                    
+                    if os.path.exists(local_video_path):
+                        yt_video_id = yt_api.upload_shorts(video_path=local_video_path, title=title, description=caption)
+                        if yt_video_id:
+                            # --- YOUTUBE AUTO-COMMENT ---
+                            try:
+                                yt_api.post_comment(yt_video_id, first_comment)
+                            except:
+                                pass
+                    else:
+                        print(f"❌ YouTube uchun lokal fayl topilmadi: {local_video_path}")
+                except Exception as yt_error:
+                    print(f"⚠️ YouTube ga yuklashda xatolik: {yt_error}")
+        else:
+            print("⏭ YouTube tanlanmagan, tashlab o'tilmoqda...")
                 
         # --- TELEGRAM HISOBOT ---
         tg_token = os.getenv("TELEGRAM_BOT_TOKEN")
