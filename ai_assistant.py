@@ -200,14 +200,37 @@ Vazifang:
             url = "https://api.groq.com/openai/v1/chat/completions"
             headers = {"Authorization": f"Bearer {groq_key}", "Content-Type": "application/json"}
             payload = {"model": "llama-3.3-70b-versatile", "messages": [{"role": "user", "content": prompt}]}
-            response = requests.post(url, headers=headers, json=payload, timeout=10)
+            response = requests.post(url, headers=headers, json=payload, timeout=20)
             if response.status_code == 200:
                 data = response.json()
                 if "choices" in data and len(data["choices"]) > 0:
                     import re
                     return re.sub(r'\*\*(.*?)\*\*', r'<b>\1</b>', data["choices"][0]["message"]["content"].strip())
+            else:
+                print(f"[AI Stats Groq non-200]: {response.status_code} - {response.text}")
         except Exception as e:
             print(f"[AI Stats Error Groq]: {e}")
+            continue
+            
+    # Zaxira 2: OpenRouter orqali
+    for _ in range(3):
+        or_key = km.get_openrouter_key()
+        if not or_key: break
+        try:
+            import requests
+            url = "https://openrouter.ai/api/v1/chat/completions"
+            headers = {"Authorization": f"Bearer {or_key}", "Content-Type": "application/json"}
+            payload = {"model": "google/gemini-2.0-flash-lite-preview-02-05:free", "messages": [{"role": "user", "content": prompt}]}
+            response = requests.post(url, headers=headers, json=payload, timeout=20)
+            if response.status_code == 200:
+                data = response.json()
+                if "choices" in data and len(data["choices"]) > 0:
+                    import re
+                    return re.sub(r'\*\*(.*?)\*\*', r'<b>\1</b>', data["choices"][0]["message"]["content"].strip())
+            else:
+                print(f"[AI Stats OR non-200]: {response.status_code} - {response.text}")
+        except Exception as e:
+            print(f"[AI Stats Error OR]: {e}")
             continue
             
     return "⚠️ AI tahlilini olishda xatolik yuz berdi. (Server band yoki limit tugagan)"
