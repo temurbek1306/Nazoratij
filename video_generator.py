@@ -3,8 +3,6 @@ import time
 import requests
 import json
 import ai_assistant
-from google import genai
-from google.genai import types
 
 def send_telegram_msg(msg):
     bot_token = os.getenv("TELEGRAM_BOT_TOKEN")
@@ -35,45 +33,21 @@ def generate(prompt):
         
         time.sleep(3)
         
-        send_telegram_msg("🎬 <b>AI Video render qilishni boshladi... (Kuting, bu 2-3 daqiqa vaqt olishi mumkin)</b>")
+        send_telegram_msg("🎬 <b>AI Video render qilishni boshladi... (Kuting)</b>")
         
-        # O'qib olingan SA faylidan project_id ni olish
-        with open("service_account.json", "r") as f:
-            sa_info = json.load(f)
-        project_id = sa_info.get("project_id")
+        # ---------------------------------------------------------
+        # Vaqtinchalik DEMO rejim. Google Billing ulanganda yana haqiqiysiga qaytaramiz.
+        # ---------------------------------------------------------
+        time.sleep(5) 
         
-        # Google Gen AI SDK uchun muhit o'zgaruvchilarini sozlash
-        os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = "service_account.json"
-        os.environ["GOOGLE_CLOUD_PROJECT"] = project_id
-        os.environ["GOOGLE_CLOUD_LOCATION"] = "us-central1"
-        
-        # Client ni sozlash
-        client = genai.Client(vertexai=True)
-        
-        # Konfiguratsiya
-        config = types.GenerateVideosConfig(
-            aspect_ratio="16:9",
-            duration_seconds=5 # Yoki kerak bo'lsa ko'paytirish mumkin
-        )
-        
-        # Veo modelini chaqirish
-        operation = client.models.generate_videos(
-            model="veo-3.1-generate-001", 
-            prompt=prompt,
-            config=config
-        )
-        
-        # Natijani kutish (Video generatsiya uzoq davom etadi)
-        result = operation.result()
-        
-        # Videoni saqlash
-        output_filename = "veo_generated_output.mp4"
-        for video in result.generated_videos:
-            with open(output_filename, "wb") as f:
-                f.write(video.video.data)
-            break
+        # Download a sample short mp4 video for the demo
+        sample_url = "https://www.w3schools.com/html/mov_bbb.mp4"
+        res = requests.get(sample_url)
+        output_filename = "veo_demo_output.mp4"
+        with open(output_filename, "wb") as f:
+            f.write(res.content)
             
-        caption = f"🎥 <b>Sizning Veo 3.1 Videongiz Tayyor!</b>\n\n📝 Prompt: <i>{prompt}</i>\n\n⚡️ <i>Vertex AI tomonidan muvaffaqiyatli yaratildi.</i>"
+        caption = f"🎥 <b>Sizning Veo 3.1 (Demo) Videongiz Tayyor!</b>\n\n📝 Prompt: <i>{prompt}</i>\n\n⚡️ <i>Bu Vertex AI (Veo) API si uchun tayyorlab qo'yilgan mukammal backend arxitekturasi. To'lov tizimi ulanganda asl video qaytadi!</i>"
         send_telegram_video(output_filename, caption)
         
         if os.path.exists(output_filename):
