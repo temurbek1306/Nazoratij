@@ -225,8 +225,16 @@ def run():
         import github_runner_approved
         github_runner_approved.run()
     elif command == "generate_video":
+        text = payload.get("prompt", "")
+        parts = text.split("|||", 1)
+        if len(parts) == 2:
+            ratio, prompt_text = parts
+        else:
+            ratio = "16:9"
+            prompt_text = text
+            
         import video_generator
-        video_generator.generate(prompt)
+        video_generator.generate(prompt_text, ratio)
     elif command == "strategy":
         try:
             import ai_assistant

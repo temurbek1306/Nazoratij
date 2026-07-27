@@ -26,7 +26,7 @@ def send_telegram_video(video_path, caption=""):
         data = {'chat_id': chat_id, 'caption': caption, "parse_mode": "HTML"}
         requests.post(url, data=data, files=files)
 
-def generate(prompt):
+def generate(prompt, ratio="16:9"):
     try:
         km = ai_assistant.KeyManager()
         gemini_key = km.get_gemini_key()
@@ -70,7 +70,7 @@ def generate(prompt):
         
         # Konfiguratsiya
         config = types.GenerateVideosConfig(
-            aspect_ratio="16:9",
+            aspect_ratio=ratio,
             duration_seconds=5
         )
         

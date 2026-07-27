@@ -186,10 +186,13 @@ if (isset($update['message'])) {
     }
     
     // Video yaratish promptini qabul qilish
-    if (file_exists("state.txt") && file_get_contents("state.txt") == "waiting_for_veo_prompt" && $text != "") {
+    if (file_exists("state.txt") && strpos(file_get_contents("state.txt"), "waiting_for_veo_prompt_") === 0 && $text != "") {
+        $state_val = file_get_contents("state.txt");
+        $ratio = str_replace("waiting_for_veo_prompt_", "", $state_val);
+        
         file_put_contents("state.txt", "none");
-        sendMessage($chat_id, "🎬 Video g'oyasi qabul qilindi! AI uni yaratishni boshladi (1-3 daqiqa kuting)...");
-        triggerGitHubAction("telegram_command", ["command" => "generate_video", "prompt" => $text]);
+        sendMessage($chat_id, "🎬 Video g'oyasi qabul qilindi! AI uni $ratio formatida yaratishni boshladi (2-3 daqiqa kuting)...");
+        triggerGitHubAction("telegram_command", ["command" => "generate_video", "prompt" => $ratio . "|||" . $text]);
         exit;
     }
 
@@ -259,8 +262,14 @@ if (isset($update['message'])) {
         sendMessage($chat_id, "📥 <b>Yangi video qo'shish</b>\n\nVideoni shunchaki Telegram botga yuboring (fayl yoki galereya orqali). Qolganini o'zim hal qilaman!");
     }
     elseif ($text == "🎬 AI Video Yaratish") {
-        file_put_contents("state.txt", "waiting_for_veo_prompt");
-        sendMessage($chat_id, "🎬 <b>AI Video Yaratish (Veo)</b>\n\nVideoda nimalar sodir bo'lishini xohlaysiz? Qisqacha (ingliz tilida yozsangiz yaxshiroq tushunadi) yoki o'zbekcha yozing:\n\n<i>Masalan: A futuristic cyberpunk city at night with neon lights and a flying car, cinematic 4k</i>");
+        file_put_contents("state.txt", "waiting_for_veo_ratio");
+        $keyboard = json_encode([
+            "inline_keyboard" => [
+                [["text" => "📱 9:16 (Reels/TikTok)", "callback_data" => "veoratio_9:16"]],
+                [["text" => "💻 16:9 (YouTube/Kino)", "callback_data" => "veoratio_16:9"]]
+            ]
+        ]);
+        sendMessage($chat_id, "🎬 <b>AI Video Yaratish (Veo)</b>\n\nQaysi formatda video yaratmoqchisiz?", $keyboard);
     }
     elseif ($text == "🔖 Doimiy Hashteglar") {
         $mode = file_exists("hashtag_mode.txt") ? file_get_contents("hashtag_mode.txt") : "caption_and_tags";
@@ -645,6 +654,16 @@ Masalan:
     elseif ($data == "confirm_cancel") {
         $url = "https://api.telegram.org/bot" . $TELEGRAM_TOKEN . "/editMessageText";
         file_get_contents($url . "?chat_id=$chat_id&message_id=$message_id&text=" . urlencode("❌ Amaliyot bekor qilindi."));
+        exit;
+    }
+    elseif (strpos($data, "veoratio_") === 0) {
+        $ratio = str_replace("veoratio_", "", $data);
+        file_put_contents("state.txt", "waiting_for_veo_prompt_" . $ratio);
+        
+        $msg = "✅ Format tanlandi: <b>$ratio</b>\n\nEndi videoda nimalar sodir bo'lishini xohlaysiz? Qisqacha (ingliz tilida yozsangiz yaxshiroq tushunadi) yoki o'zbekcha yozing:\n\n<i>Masalan: A futuristic cyberpunk city at night with neon lights and a flying car, cinematic 4k</i>";
+        
+        $url = "https://api.telegram.org/bot" . $TELEGRAM_TOKEN . "/editMessageText";
+        file_get_contents($url . "?chat_id=$chat_id&message_id=$message_id&text=" . urlencode($msg) . "&parse_mode=HTML");
         exit;
     }
 }
