@@ -58,7 +58,7 @@ def brainstorm_idea(prompt):
             import google.generativeai as genai
             os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = os.path.join(os.path.dirname(__file__), "service_account.json")
             genai.configure()
-            model = genai.GenerativeModel("gemini-2.5-flash")
+            model = genai.GenerativeModel("gemini-3.5-flash")
             response = model.generate_content(full_prompt)
             if response.text:
                 return "✨ [Gemini AI]:\n\n" + response.text
@@ -182,7 +182,7 @@ DIQQAT - QAT'IY QOIDALAR:
             import google.generativeai as genai
             os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = os.path.join(os.path.dirname(__file__), "service_account.json")
             genai.configure()
-            model = genai.GenerativeModel("gemini-2.5-flash")
+            model = genai.GenerativeModel("gemini-3.5-flash")
             response = model.generate_content(prompt)
             if response.text:
                 import re
@@ -256,7 +256,7 @@ def generate_first_comment(caption):
             import google.generativeai as genai
             os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = os.path.join(os.path.dirname(__file__), "service_account.json")
             genai.configure()
-            model = genai.GenerativeModel("gemini-2.5-flash")
+            model = genai.GenerativeModel("gemini-3.5-flash")
             response = model.generate_content(prompt)
             if response.text:
                 first_comment = response.text.strip().replace('"', '')
@@ -318,7 +318,7 @@ Javobing to'g'ridan-to'g'ri jadval bilan boshlansin, keraksiz kirish so'zlari yo
             import google.generativeai as genai
             os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = os.path.join(os.path.dirname(__file__), "service_account.json")
             genai.configure()
-            model = genai.GenerativeModel("gemini-2.5-flash")
+            model = genai.GenerativeModel("gemini-3.5-flash")
             response = model.generate_content(prompt)
             if response.text:
                 return response.text.strip()
