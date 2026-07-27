@@ -23,11 +23,9 @@ class KeyManager:
         self.current_or_index = 0
         
     def get_gemini_key(self):
-        if self.keys.get("gemini") and len(self.keys["gemini"]) > 0:
-            key = self.keys["gemini"][self.current_gemini_index]
-            self.current_gemini_index = (self.current_gemini_index + 1) % len(self.keys["gemini"])
-            return key
-        return os.getenv("GEMINI_API_KEY")
+        # We now use Service Account JSON, so we just return a dummy key 
+        # to pass the truthiness check in the loops below.
+        return "SERVICE_ACCOUNT_AUTH"
 
     def get_groq_key(self):
         if self.keys.get("groq") and len(self.keys["groq"]) > 0:
@@ -58,8 +56,9 @@ def brainstorm_idea(prompt):
             
         try:
             import google.generativeai as genai
-            genai.configure(api_key=gemini_key)
-            model = genai.GenerativeModel("gemini-1.5-flash")
+            os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = os.path.join(os.path.dirname(__file__), "service_account.json")
+            genai.configure()
+            model = genai.GenerativeModel("gemini-2.5-flash")
             response = model.generate_content(full_prompt)
             if response.text:
                 return "✨ [Gemini AI]:\n\n" + response.text
@@ -181,8 +180,9 @@ DIQQAT - QAT'IY QOIDALAR:
         if not gemini_key: break
         try:
             import google.generativeai as genai
-            genai.configure(api_key=gemini_key)
-            model = genai.GenerativeModel("gemini-1.5-flash")
+            os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = os.path.join(os.path.dirname(__file__), "service_account.json")
+            genai.configure()
+            model = genai.GenerativeModel("gemini-2.5-flash")
             response = model.generate_content(prompt)
             if response.text:
                 import re
@@ -254,8 +254,9 @@ def generate_first_comment(caption):
         if not gemini_key: break
         try:
             import google.generativeai as genai
-            genai.configure(api_key=gemini_key)
-            model = genai.GenerativeModel("gemini-1.5-flash")
+            os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = os.path.join(os.path.dirname(__file__), "service_account.json")
+            genai.configure()
+            model = genai.GenerativeModel("gemini-2.5-flash")
             response = model.generate_content(prompt)
             if response.text:
                 first_comment = response.text.strip().replace('"', '')
@@ -315,8 +316,9 @@ Javobing to'g'ridan-to'g'ri jadval bilan boshlansin, keraksiz kirish so'zlari yo
         if not gemini_key: break
         try:
             import google.generativeai as genai
-            genai.configure(api_key=gemini_key)
-            model = genai.GenerativeModel("gemini-1.5-flash")
+            os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = os.path.join(os.path.dirname(__file__), "service_account.json")
+            genai.configure()
+            model = genai.GenerativeModel("gemini-2.5-flash")
             response = model.generate_content(prompt)
             if response.text:
                 return response.text.strip()
