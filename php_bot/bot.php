@@ -205,11 +205,11 @@ if (isset($update['message'])) {
         
         $main_keyboard_temp = json_encode([
             "keyboard" => [
-                [["text" => "☁️ Web-App orqali yuklash"], ["text" => "🎬 AI Video Yaratish"]],
-                [["text" => "➕ Yangi Video Qo'shish"], ["text" => "🚀 Hozir Joylash"]],
-                [["text" => "🔖 Doimiy Hashteglar"], ["text" => "📋 Navbat (Queue)"]],
-                [["text" => "⚙️ Vaqt Sozlamalari"], ["text" => "📊 Statistika"]],
-                [["text" => "🗓️ Kontent Reja"], ["text" => "🗑 Eski videolarni o'chirish"]]
+                [["text" => "☁️ Web-App orqali yuklash"], ["text" => "➕ Yangi Video Qo'shish"]],
+                [["text" => "🚀 Hozir Joylash"], ["text" => "📋 Navbat (Queue)"]],
+                [["text" => "🔖 Doimiy Hashteglar"], ["text" => "⚙️ Vaqt Sozlamalari"]],
+                [["text" => "📊 Statistika"], ["text" => "🗓️ Kontent Reja"]],
+                [["text" => "🗑 Eski videolarni o'chirish"]]
             ],
             "resize_keyboard" => true,
             "one_time_keyboard" => false
@@ -221,11 +221,11 @@ if (isset($update['message'])) {
     
     $main_keyboard = json_encode([
         "keyboard" => [
-            [["text" => "☁️ Web-App orqali yuklash"], ["text" => "🎬 AI Video Yaratish"]],
-            [["text" => "➕ Yangi Video Qo'shish"], ["text" => "🚀 Hozir Joylash"]],
-            [["text" => "🔖 Doimiy Hashteglar"], ["text" => "📋 Navbat (Queue)"]],
-            [["text" => "⚙️ Vaqt Sozlamalari"], ["text" => "📊 Statistika"]],
-            [["text" => "🗓️ Kontent Reja"], ["text" => "🗑 Eski videolarni o'chirish"]]
+            [["text" => "☁️ Web-App orqali yuklash"], ["text" => "➕ Yangi Video Qo'shish"]],
+            [["text" => "🚀 Hozir Joylash"], ["text" => "📋 Navbat (Queue)"]],
+            [["text" => "🔖 Doimiy Hashteglar"], ["text" => "⚙️ Vaqt Sozlamalari"]],
+            [["text" => "📊 Statistika"], ["text" => "🗓️ Kontent Reja"]],
+            [["text" => "🗑 Eski videolarni o'chirish"]]
         ],
         "resize_keyboard" => true,
         "one_time_keyboard" => false
@@ -260,16 +260,6 @@ if (isset($update['message'])) {
     }
     elseif ($text == "➕ Yangi Video Qo'shish") {
         sendMessage($chat_id, "📥 <b>Yangi video qo'shish</b>\n\nVideoni shunchaki Telegram botga yuboring (fayl yoki galereya orqali). Qolganini o'zim hal qilaman!");
-    }
-    elseif ($text == "🎬 AI Video Yaratish") {
-        file_put_contents("state.txt", "waiting_for_veo_ratio");
-        $keyboard = json_encode([
-            "inline_keyboard" => [
-                [["text" => "📱 9:16 (Reels/TikTok)", "callback_data" => "veoratio_9:16"]],
-                [["text" => "💻 16:9 (YouTube/Kino)", "callback_data" => "veoratio_16:9"]]
-            ]
-        ]);
-        sendMessage($chat_id, "🎬 <b>AI Video Yaratish (Veo)</b>\n\nQaysi formatda video yaratmoqchisiz?", $keyboard);
     }
     elseif ($text == "🔖 Doimiy Hashteglar") {
         $mode = file_exists("hashtag_mode.txt") ? file_get_contents("hashtag_mode.txt") : "caption_and_tags";
