@@ -18,14 +18,29 @@ class KeyManager:
             except:
                 self.keys = {"gemini": [], "groq": [], "openrouter": []}
         
+        try:
+            with open("service_accounts.json", "r") as f:
+                self.service_accounts = json.load(f)
+        except:
+            self.service_accounts = []
+        
         self.current_groq_index = 0
         self.current_gemini_index = 0
+        self.current_sa_index = 0
         self.current_or_index = 0
         
     def get_gemini_key(self):
-        # We now use Service Account JSON, so we just return a dummy key 
-        # to pass the truthiness check in the loops below.
-        return "SERVICE_ACCOUNT_AUTH"
+        # We now use multiple Service Account JSONs.
+        if self.service_accounts and len(self.service_accounts) > 0:
+            sa = self.service_accounts[self.current_sa_index]
+            self.current_sa_index = (self.current_sa_index + 1) % len(self.service_accounts)
+            
+            # Write the dynamically chosen SA to service_account.json
+            with open("service_account.json", "w") as f:
+                json.dump(sa, f, indent=2)
+                
+            return "SERVICE_ACCOUNT_AUTH"
+        return None
 
     def get_groq_key(self):
         if self.keys.get("groq") and len(self.keys["groq"]) > 0:

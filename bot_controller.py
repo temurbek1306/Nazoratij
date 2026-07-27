@@ -224,6 +224,9 @@ def run():
         send_telegram_msg("🚀 Tasdiqlandi! Yakuniy post jarayoni boshlandi...")
         import github_runner_approved
         github_runner_approved.run()
+    elif command == "generate_video":
+        import video_generator
+        video_generator.generate(prompt)
     elif command == "strategy":
         try:
             import ai_assistant

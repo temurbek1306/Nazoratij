@@ -185,6 +185,14 @@ if (isset($update['message'])) {
         exit;
     }
     
+    // Video yaratish promptini qabul qilish
+    if (file_exists("state.txt") && file_get_contents("state.txt") == "waiting_for_veo_prompt" && $text != "") {
+        file_put_contents("state.txt", "none");
+        sendMessage($chat_id, "🎬 Video g'oyasi qabul qilindi! AI uni yaratishni boshladi (1-3 daqiqa kuting)...");
+        triggerGitHubAction("telegram_command", ["command" => "generate_video", "prompt" => $text]);
+        exit;
+    }
+
     // Doimiy hashteglarni qabul qilish
     if (file_exists("state.txt") && file_get_contents("state.txt") == "waiting_for_global_tags" && $text != "") {
         file_put_contents("state.txt", "none");
@@ -194,7 +202,7 @@ if (isset($update['message'])) {
         
         $main_keyboard_temp = json_encode([
             "keyboard" => [
-                [["text" => "☁️ Web-App orqali yuklash"]],
+                [["text" => "☁️ Web-App orqali yuklash"], ["text" => "🎬 AI Video Yaratish"]],
                 [["text" => "➕ Yangi Video Qo'shish"], ["text" => "🚀 Hozir Joylash"]],
                 [["text" => "🔖 Doimiy Hashteglar"], ["text" => "📋 Navbat (Queue)"]],
                 [["text" => "⚙️ Vaqt Sozlamalari"], ["text" => "📊 Statistika"]],
@@ -210,7 +218,7 @@ if (isset($update['message'])) {
     
     $main_keyboard = json_encode([
         "keyboard" => [
-            [["text" => "☁️ Web-App orqali yuklash"]],
+            [["text" => "☁️ Web-App orqali yuklash"], ["text" => "🎬 AI Video Yaratish"]],
             [["text" => "➕ Yangi Video Qo'shish"], ["text" => "🚀 Hozir Joylash"]],
             [["text" => "🔖 Doimiy Hashteglar"], ["text" => "📋 Navbat (Queue)"]],
             [["text" => "⚙️ Vaqt Sozlamalari"], ["text" => "📊 Statistika"]],
@@ -249,6 +257,10 @@ if (isset($update['message'])) {
     }
     elseif ($text == "➕ Yangi Video Qo'shish") {
         sendMessage($chat_id, "📥 <b>Yangi video qo'shish</b>\n\nVideoni shunchaki Telegram botga yuboring (fayl yoki galereya orqali). Qolganini o'zim hal qilaman!");
+    }
+    elseif ($text == "🎬 AI Video Yaratish") {
+        file_put_contents("state.txt", "waiting_for_veo_prompt");
+        sendMessage($chat_id, "🎬 <b>AI Video Yaratish (Veo)</b>\n\nVideoda nimalar sodir bo'lishini xohlaysiz? Qisqacha (ingliz tilida yozsangiz yaxshiroq tushunadi) yoki o'zbekcha yozing:\n\n<i>Masalan: A futuristic cyberpunk city at night with neon lights and a flying car, cinematic 4k</i>");
     }
     elseif ($text == "🔖 Doimiy Hashteglar") {
         $mode = file_exists("hashtag_mode.txt") ? file_get_contents("hashtag_mode.txt") : "caption_and_tags";
