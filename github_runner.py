@@ -269,27 +269,26 @@ CAPTION_A: (videoga to'liq mos yozilgan caption)"""
             print(f"\n⚠️ Gemini ishlatishda xatolik yuz berdi: {e}")
             continue
 
+    try:
+        final_fallback_caption = ai_assistant.append_viral_hashtags(caption)
+    except:
+        final_fallback_caption = caption + "\n\n#rek #trend #uzbekistan #foryou #temurbekdev"
+        
+    if global_tags:
+        if hashtag_mode == "tags_only":
+            final_fallback_caption = global_tags
+        else:
+            final_fallback_caption += "\n\n" + global_tags
+            
+    try:
+        first_comment = ai_assistant.get_standard_comment(final_fallback_caption)
+    except:
+        first_comment = "👇 Fikringizni izohlarda yozib qoldiring!"
+
     if platform in ["ig", "both"]:
         print(f"📝 Instagramga joylanmoqda (Zaxira rejim)...")
-        
-        try:
-            final_fallback_caption = ai_assistant.append_viral_hashtags(caption)
-        except:
-            final_fallback_caption = caption + "\n\n#rek #trend #uzbekistan #foryou #temurbekdev"
-            
-        if global_tags:
-            if hashtag_mode == "tags_only":
-                final_fallback_caption = global_tags
-            else:
-                final_fallback_caption += "\n\n" + global_tags
-            
         ig_media_id = post_to_instagram(url, final_fallback_caption, video_name)
         
-        try:
-            first_comment = ai_assistant.get_standard_comment(final_fallback_caption)
-        except:
-            first_comment = "👇 Fikringizni izohlarda yozib qoldiring!"
-            
         if ig_media_id:
             from agent_tools import post_ig_comment
             post_ig_comment(ig_media_id, first_comment)
