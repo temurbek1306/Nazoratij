@@ -66,6 +66,7 @@ def run():
             except:
                 first_comment = "👇 Fikringizni izohlarda yozib qoldiring!"
             
+        yt_status_msg = ""
         # --- YOUTUBE SHORTS YUKLASH ---
         if platform in ["yt", "both"]:
             yt_client_id = os.getenv("YOUTUBE_CLIENT_ID")
@@ -83,17 +84,20 @@ def run():
                     if os.path.exists(local_video_path):
                         yt_video_id = yt_api.upload_shorts(video_path=local_video_path, title=title, description=caption)
                         if yt_video_id:
+                            yt_status_msg = "✅ YouTube: Muvaffaqiyatli joylandi!"
                             # --- YOUTUBE AUTO-COMMENT ---
                             try:
                                 yt_api.post_comment(yt_video_id, first_comment)
                             except:
                                 pass
                     else:
-                        print(f"❌ YouTube uchun lokal fayl topilmadi: {local_video_path}")
+                        yt_status_msg = "❌ YouTube: Lokal fayl topilmadi"
                 except Exception as yt_error:
-                    print(f"⚠️ YouTube ga yuklashda xatolik: {yt_error}")
+                    yt_status_msg = f"❌ YouTube Xatolik: {yt_error}"
+            else:
+                yt_status_msg = "⚠️ YouTube: API kalitlar yo'q, shuning uchun joylanmadi"
         else:
-            print("⏭ YouTube tanlanmagan, tashlab o'tilmoqda...")
+            yt_status_msg = "⏭ YouTube: Tanlanmagan"
                 
         # --- TELEGRAM HISOBOT ---
         tg_token = os.getenv("TELEGRAM_BOT_TOKEN")
@@ -101,7 +105,7 @@ def run():
         if tg_token and tg_admin:
             import requests
             try:
-                tg_msg = f"✅ Boss, video tarmoqlarga muvaffaqiyatli joylandi!\n\nVariant: {choice.upper()}"
+                tg_msg = f"✅ Boss, video tarmoqlarga uzatildi!\n\nVariant: {choice.upper()}\n\n{yt_status_msg}"
                 requests.post(f"https://api.telegram.org/bot{tg_token}/sendMessage", data={
                     "chat_id": tg_admin,
                     "text": tg_msg

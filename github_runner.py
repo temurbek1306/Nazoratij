@@ -105,6 +105,8 @@ def run():
             yt_client_id = os.getenv("YOUTUBE_CLIENT_ID")
             yt_client_secret = os.getenv("YOUTUBE_CLIENT_SECRET")
             yt_refresh_token = os.getenv("YOUTUBE_REFRESH_TOKEN")
+            
+            yt_status_msg = ""
             if yt_client_id and yt_client_secret and yt_refresh_token:
                 try:
                     yt_api = YouTubeAPI(yt_client_id, yt_client_secret, yt_refresh_token)
@@ -112,15 +114,18 @@ def run():
                     if os.path.exists(final_video_path):
                         yt_video_id = yt_api.upload_shorts(final_video_path, manual_caption.split('\n')[0][:100], manual_caption)
                         if yt_video_id:
+                            yt_status_msg = "✅ YouTube: Joylandi"
                             yt_api.post_comment(yt_video_id, first_comment)
                     else:
-                        print(f"❌ YouTube uchun fayl topilmadi: {final_video_path}")
+                        yt_status_msg = "❌ YouTube: Lokal video topilmadi"
                 except Exception as e:
-                    print(f"⚠️ YouTube yuklashda xatolik: {e}")
+                    yt_status_msg = f"❌ YouTube Xatolik: {e}"
+            else:
+                yt_status_msg = "⚠️ YouTube: API kalitlar to'liq kiritilmagan"
         else:
-            print("⏭ YouTube tanlanmagan, tashlab o'tilmoqda...")
+            yt_status_msg = "⏭ YouTube: Tanlanmagan"
                 
-        send_alert(f"✅ Boss, video MUVAFFAQIYATLI joylandi (Qo'lda yozilgan izoh bilan)!\n\nVideo: {video_name}")
+        send_alert(f"✅ Boss, video holati (Qo'lda yozilgan izoh bilan):\n\nVideo: {video_name}\n\n{yt_status_msg}")
         os.remove(txt_file)
         
         from video_manager import VideoManager
@@ -291,6 +296,7 @@ CAPTION_A: (videoga to'liq mos yozilgan caption)"""
     else:
         print("⏭ Instagram tanlanmagan (Zaxira rejimda tashlab o'tilmoqda)...")
     
+    yt_status_msg = ""
     if platform in ["yt", "both"]:
         print(f"📺 YouTubega joylanmoqda (Zaxira rejim)...")
         from youtube_api import YouTubeAPI
@@ -305,22 +311,25 @@ CAPTION_A: (videoga to'liq mos yozilgan caption)"""
                 if os.path.exists(final_video_path):
                     yt_video_id = yt_api.upload_shorts(final_video_path, final_fallback_caption.split('\n')[0][:100], final_fallback_caption)
                     if yt_video_id:
+                        yt_status_msg = "✅ YouTube: Muvaffaqiyatli joylandi!"
                         try:
                             yt_api.post_comment(yt_video_id, first_comment)
                         except:
                             pass
                 else:
-                    print(f"❌ YouTube uchun fayl topilmadi: {final_video_path}")
+                    yt_status_msg = "❌ YouTube: Lokal video topilmadi"
             except Exception as e:
-                print(f"⚠️ YouTube yuklashda xatolik: {e}")
+                yt_status_msg = f"❌ YouTube Xatolik: {e}"
+        else:
+            yt_status_msg = "⚠️ YouTube: API kalitlar kiritilmagan!"
     else:
-        print("⏭ YouTube tanlanmagan (Zaxira rejimda tashlab o'tilmoqda)...")
+        yt_status_msg = "⏭ YouTube: Tanlanmagan"
             
     # Delete the video from pending since everything is done
     from video_manager import VideoManager
     VideoManager().mark_as_posted(video_name)
     
-    send_alert(f"✅ <b>Yangi video tarmoqlarga joylandi!</b>\n\nNomi: <code>{video_name}</code>\n\n<i>Platformalar: Instagram, YouTube Shorts (agar ulanish bo'lsa)</i>")
+    send_alert(f"📋 <b>Yangi video yakuniy hisoboti!</b>\n\nNomi: <code>{video_name}</code>\n\n{yt_status_msg}")
 
 if __name__ == "__main__":
     run()
