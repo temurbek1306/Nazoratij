@@ -250,7 +250,7 @@ def run():
             if ig_token and ig_account_id:
                 try:
                     url = f"https://graph.facebook.com/v18.0/{ig_account_id}/media?fields=caption,like_count,comments_count,media_type&limit=15&access_token={ig_token}"
-                    res = requests.get(url).json()
+                    res = requests.get(url, timeout=15).json()
                     if "data" in res and len(res["data"]) > 0:
                         posts = res["data"]
                         sorted_posts = sorted(posts, key=lambda x: x.get('like_count', 0), reverse=True)
@@ -268,11 +268,11 @@ def run():
                     trend_data = "Butun Instagramdagi ayni damdagi (IT va AI bo'yicha) eng ommabop begona postlar (Trendlar):\n"
                     for hashtag in ["dasturlash", "sunniyintellekt"]:
                         h_url = f"https://graph.facebook.com/v18.0/ig_hashtag_search?user_id={ig_account_id}&q={hashtag}&access_token={ig_token}"
-                        h_res = requests.get(h_url).json()
+                        h_res = requests.get(h_url, timeout=15).json()
                         if "data" in h_res and len(h_res["data"]) > 0:
                             h_id = h_res["data"][0]["id"]
                             top_url = f"https://graph.facebook.com/v18.0/{h_id}/top_media?user_id={ig_account_id}&fields=caption,like_count&limit=5&access_token={ig_token}"
-                            top_res = requests.get(top_url).json()
+                            top_res = requests.get(top_url, timeout=15).json()
                             if "data" in top_res:
                                 for idx, p in enumerate(top_res["data"]):
                                     cpt = p.get('caption', 'Sarlavha yoq')[:150].replace('\n', ' ')

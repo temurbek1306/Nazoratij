@@ -325,15 +325,15 @@ Jadval ustunlari: [Hafta/Kun] | [Viral Video Mavzusi] | [Bomba Hook (1-soniya)] 
 
 Javobing to'g'ridan-to'g'ri jadval bilan boshlansin, keraksiz kirish so'zlari yozma."""
     
-    # 1. Gemini orqali urinish (Foydalanuvchi talabi)
-    for _ in range(3):
+    # 1. Gemini orqali urinish (agar ishlasa)
+    for _ in range(2):
         gemini_key = km.get_gemini_key()
         if not gemini_key: break
         try:
             import google.generativeai as genai
             os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = os.path.join(os.path.dirname(__file__), "service_account.json")
             genai.configure()
-            model = genai.GenerativeModel("gemini-3.5-flash")
+            model = genai.GenerativeModel("gemini-1.5-flash")
             response = model.generate_content(prompt)
             if response.text:
                 return response.text.strip()
@@ -351,9 +351,29 @@ Javobing to'g'ridan-to'g'ri jadval bilan boshlansin, keraksiz kirish so'zlari yo
             payload = {"model": "llama-3.3-70b-versatile", "messages": [{"role": "user", "content": prompt}]}
             response = requests.post(url, headers=headers, json=payload, timeout=15)
             if response.status_code == 200:
-                return response.json()["choices"][0]["message"]["content"].strip()
+                data = response.json()
+                if "choices" in data and len(data["choices"]) > 0:
+                    return data["choices"][0]["message"]["content"].strip()
         except Exception:
             continue
+            
+    # 3. Zaxira sifatida OpenRouter
+    for _ in range(3):
+        or_key = km.get_openrouter_key()
+        if not or_key: break
+        try:
+            import requests
+            url = "https://openrouter.ai/api/v1/chat/completions"
+            headers = {"Authorization": f"Bearer {or_key}", "Content-Type": "application/json"}
+            payload = {"model": "google/gemini-2.0-flash-lite-preview-02-05:free", "messages": [{"role": "user", "content": prompt}]}
+            response = requests.post(url, headers=headers, json=payload, timeout=20)
+            if response.status_code == 200:
+                data = response.json()
+                if "choices" in data and len(data["choices"]) > 0:
+                    return data["choices"][0]["message"]["content"].strip()
+        except Exception:
+            continue
+            
     return None
 
 
