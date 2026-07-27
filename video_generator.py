@@ -5,7 +5,7 @@ import ai_assistant
 
 def send_telegram_msg(msg):
     bot_token = os.getenv("TELEGRAM_BOT_TOKEN")
-    chat_id = os.getenv("TELEGRAM_CHAT_ID")
+    chat_id = os.getenv("TELEGRAM_ADMIN_ID")
     if not bot_token or not chat_id:
         return
     url = f"https://api.telegram.org/bot{bot_token}/sendMessage"
@@ -14,7 +14,7 @@ def send_telegram_msg(msg):
 
 def send_telegram_video(video_path, caption=""):
     bot_token = os.getenv("TELEGRAM_BOT_TOKEN")
-    chat_id = os.getenv("TELEGRAM_CHAT_ID")
+    chat_id = os.getenv("TELEGRAM_ADMIN_ID")
     if not bot_token or not chat_id:
         return
     url = f"https://api.telegram.org/bot{bot_token}/sendVideo"
@@ -28,7 +28,7 @@ def generate(prompt):
         km = ai_assistant.KeyManager()
         gemini_key = km.get_gemini_key()
         
-        send_telegram_msg(f"🔄 <b>Vertex AI (Veo 3.1) ga ulanilmoqda...</b>\n🔑 Tanlangan Service Account ID: {km.current_index + 1}/{len(km.keys)}")
+        send_telegram_msg(f"🔄 <b>Vertex AI (Veo 3.1) ga ulanilmoqda...</b>\n🔑 Tanlangan Service Account ID: {km.current_sa_index}/{len(km.service_accounts)}")
         
         time.sleep(3)
         
