@@ -3,6 +3,8 @@ import time
 import requests
 import json
 import ai_assistant
+from google import genai
+from google.genai import types
 
 def send_telegram_msg(msg):
     bot_token = os.getenv("TELEGRAM_BOT_TOKEN")
@@ -33,25 +35,70 @@ def generate(prompt):
         
         time.sleep(3)
         
-        send_telegram_msg("🎬 <b>AI Video render qilishni boshladi... (Kuting)</b>")
+        send_telegram_msg("🎬 <b>AI Video render qilishni boshladi... (Kuting, bu 2-3 daqiqa vaqt olishi mumkin)</b>")
         
-        # ---------------------------------------------------------
-        # Vaqtinchalik DEMO rejim. Google Billing ulanganda yana haqiqiysiga qaytaramiz.
-        # ---------------------------------------------------------
-        time.sleep(5) 
+        # Bizga aynan Billing (To'lov) ulangan 'service-503705' loyihasi kerak
+        target_project = "service-503705"
         
-        # Download a sample short mp4 video for the demo
-        sample_url = "https://www.w3schools.com/html/mov_bbb.mp4"
-        res = requests.get(sample_url)
-        output_filename = "veo_demo_output.mp4"
-        with open(output_filename, "wb") as f:
-            f.write(res.content)
+        # Barcha kalitlarni o'qish
+        with open("service_accounts.json", "r") as f:
+            all_accounts = json.load(f)
             
-        caption = f"🎥 <b>Sizning Veo 3.1 (Demo) Videongiz Tayyor!</b>\n\n📝 Prompt: <i>{prompt}</i>\n\n⚡️ <i>Bu Vertex AI (Veo) API si uchun tayyorlab qo'yilgan mukammal backend arxitekturasi. To'lov tizimi ulanganda asl video qaytadi!</i>"
+        # Qidirilayotgan kalitni topish
+        billed_account = None
+        for acc in all_accounts:
+            if acc.get("project_id") == target_project:
+                billed_account = acc
+                break
+                
+        if not billed_account:
+            send_telegram_msg("❌ Tizimda Billing ulangan kalit (service-503705) topilmadi!")
+            return
+            
+        # Topilgan kalitni alohida vaqtinchalik faylga saqlash (GenAI SDK ishlashi uchun)
+        veo_sa_path = "veo_service_account.json"
+        with open(veo_sa_path, "w") as f:
+            json.dump(billed_account, f)
+        
+        # Google Gen AI SDK uchun muhit o'zgaruvchilarini to'g'rilash
+        os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = veo_sa_path
+        os.environ["GOOGLE_CLOUD_PROJECT"] = target_project
+        os.environ["GOOGLE_CLOUD_LOCATION"] = "us-central1"
+        
+        # Client ni sozlash
+        client = genai.Client(vertexai=True)
+        
+        # Konfiguratsiya
+        config = types.GenerateVideosConfig(
+            aspect_ratio="16:9",
+            duration_seconds=5
+        )
+        
+        # Haqiqiy Veo modelini chaqirish
+        operation = client.models.generate_videos(
+            model="veo-3.1-generate-001", 
+            prompt=prompt,
+            config=config
+        )
+        
+        # Natijani kutish (Video generatsiya uzoq davom etadi)
+        result = operation.result()
+        
+        # Videoni saqlash
+        output_filename = "veo_generated_output.mp4"
+        for video in result.generated_videos:
+            with open(output_filename, "wb") as f:
+                f.write(video.video.data)
+            break
+            
+        caption = f"🎥 <b>Sizning Veo 3.1 Videongiz Tayyor!</b>\n\n📝 Prompt: <i>{prompt}</i>\n\n⚡️ <i>Vertex AI (Haqiqiy Veo) tomonidan muvaffaqiyatli yaratildi.</i>"
         send_telegram_video(output_filename, caption)
         
+        # Tozalash
         if os.path.exists(output_filename):
             os.remove(output_filename)
+        if os.path.exists(veo_sa_path):
+            os.remove(veo_sa_path)
             
     except Exception as e:
         send_telegram_msg(f"❌ Video generatsiya jarayonida xatolik yuz berdi: {e}")
