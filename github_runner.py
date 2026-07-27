@@ -142,7 +142,8 @@ def run():
         try:
             import google.generativeai as genai
             print(f"🧠 Gemini AI ishga tushmoqda (Urinish {attempt+1})...")
-            genai.configure(api_key=gemini_key)
+            os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = os.path.join(os.path.dirname(__file__), "service_account.json")
+            genai.configure()
             
             print(f"📤 Video Gemini serveriga yuklanmoqda: {local_video_path}")
             video_file = genai.upload_file(path=local_video_path)
@@ -157,7 +158,7 @@ def run():
                 print("\n❌ Gemini videoni qayta ishlashda xatoga yo'l qo'ydi.")
             else:
                 print("\n✨ Video tayyor. Ssenariy yozilmoqda...")
-                model = genai.GenerativeModel("gemini-1.5-flash")
+                model = genai.GenerativeModel("gemini-3.5-flash")
                 prompt = """Sen O'zbekistondagi eng mashhur SMM va Video tahlilchisan! Shu videoni IPI-IDAN IGASIGACHA, har bir detalini (yuz harakatlari, emotsiyalar, ekrandagi yozuvlar, kiyimlar, ovoz) diqqat bilan ko'r va tahlil qil.
 1. Kadrda nima bo'lyapti o'zi? (To'liq voqea)
 2. Ekranda qanday so'zlar/yozuvlar bor?
