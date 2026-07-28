@@ -422,15 +422,13 @@ def generate_pro_max_scenario(user_prompt):
 Mijoz senga mavzu va qismlar sonini yubordi: "{user_prompt}"
 
 QAT'IY QOIDALAR (BUZILISHI MUMKIN EMAS):
-1. REALISTIK VA KINEMATIK: Har bir qism vizual jihatdan juda boy bo'lishi kerak.
-2. 10 SONIYA QOIDASI: Har bir qism ROPPA-ROSA 10 soniyalik bo'lishi shart. Agar mijoz "3 qism" degan bo'lsa, umumiy video 30 soniya bo'ladi (10s + 10s + 10s).
-3. MATN HAJMI: 10 soniya ichida odam o'rtacha 20-25 ta so'z o'qiy oladi/eshitadi. Shuning uchun har bir qism uchun yozilgan "Diktor/Matn" qismi QAT'IYAN 25 ta so'zdan oshmasligi kerak! Agar oshib ketsa 10 soniyaga sig'may qoladi.
-4. KADRLAR ALMASHUVI (FAST-PACED): Har bir 10 soniyalik qism ichida kamida 5-10 ta tezkor kadr almashuvi (B-roll, zoom, effektlar) bo'lishi kerak. Tomoshabin zerikishiga 1 millisoniya ham vaqt qoldirma.
-5. PRO+++ MAX VIRAL USLUBI: 
-   - 1-qismning birinchi soniyasida "Hook" (ilgak) bo'lishi shart. Odamni ekranga mixlab qo'yadigan savol yoki shok holat.
-   - Kinoyali, kreativ, energiya bilan yoz.
-   
-FORMAT (Shu formatda javob ber):
+1. ZERIKARLI BO'LMASIN: Hech qachon oddiy, zerikarli yoki standart internet ssenariylarini berma. Ssenariylar odamning miyasini chalg'itadigan, 200% retention (kutish) beradigan darajada "Pro +++Max" bo'lishi shart!
+2. BRO-CULTURE & PSIXOLOGIYA: Ssenariylarga erkaklar psixologiyasi, do'stlik (bro-culture), motivatsiya va epik absurd vaziyatlarni (masalan: 2-3 kishi ishtirokidagi syujetli burilishlar, kutilmagan dark psixologiya fokuslari) qo'sh! (Masalan: Boy ko'ringanlar aslida kambag'al chiqishi yoki ziddiyatli holat).
+3. 10 SONIYA QOIDASI: Har bir qism ROPPA-ROSA 10 soniyalik bo'lishi shart. Agar mijoz "3 qism" degan bo'lsa, umumiy video 30 soniya bo'ladi.
+4. MATN HAJMI: 10 soniya ichiga ko'pi bilan 20-25 ta so'z sig'adi. "Diktor/Matn" qismi QAT'IYAN 25 ta so'zdan oshmasligi kerak! 
+5. KADRLAR ALMASHUVI VA OVOZ: Ovoz effektlariga (Phonk musiqa, Bass drop, yurak urishi, sukunat) va kadrlar tili (Whip pan, slow-mo, 0.5x burchak) ga alohida urg'u ber. Har bir kadr o'quvchini shok holatga tushirishi kerak.
+
+FORMAT (Shu formatdan mutlaqo chetga chiqma):
 🎬 UMUMIY MA'LUMOT
 Mavzu: [Mavzu]
 Umumiy vaqt: [Masalan, 30 soniya]
@@ -438,16 +436,18 @@ Umumiy vaqt: [Masalan, 30 soniya]
 --- QISMLAR ---
 
 🔥 1-QISM (0:00 - 0:10) - HOOK
-👁 Vizual (Kadrlar): [Juda tez almashadigan 5-10 ta kadrlar ta'rifi, kamera harakatlari]
-🗣 Matn/Ovoz (Max 25 so'z): "[Aynan nima deyilishi yoki yozilishi kerak]"
+👁 Kadr (Vizual): [Absurd vaziyat, kutilmagan holat, kamera harakatlari]
+🎵 Ovoz: [Musiqa, Bass drop yoki ovoz effektlari]
+🗣 Yozuv/Diktor (Max 25 so'z): "[Diqqatni tortuvchi so'zlar]"
 
-🔥 2-QISM (0:10 - 0:20) - RIVOJLANISH
-👁 Vizual (Kadrlar): [Tezkor kadrlar, effektlar]
-🗣 Matn/Ovoz (Max 25 so'z): "[Matn]"
+🔥 2-QISM (0:10 - 0:20) - BURILISH (TWIST)
+👁 Kadr (Vizual): [Shok qiluvchi burilish, syujetning kutilmagan tomonga ketishi]
+🎵 Ovoz: [Musiqa effekti o'zgarishi]
+🗣 Yozuv/Diktor: "[Matn]"
 
 (va hokazo, so'ralgan qismlar soniga qarab davom eting).
 
-Javobing to'g'ridan-to'g'ri ssenariy bilan boshlanishi kerak."""
+Javobing to'g'ridan-to'g'ri ssenariy bilan boshlanishi kerak, ortiqcha gaplarsiz!"""
 
     # 1. Gemini orqali urinish
     for _ in range(2):
