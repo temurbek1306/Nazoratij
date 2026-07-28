@@ -45,11 +45,7 @@ if (isset($update['message'])) {
                 file_put_contents("last_video_group.txt", $current_group);
                 
                 $count = count(array_filter(explode("\n", $current_group)));
-                sendMessage($chat_id, "✅ $count-video qabul qilindi. Yana yuboring yoki quyidagi tugmani bosing.", json_encode([
-                    "inline_keyboard" => [
-                        [["text" => "✅ Birlashtirishni boshlash", "callback_data" => "start_merging"]]
-                    ]
-                ]));
+                sendMessage($chat_id, "✅ $count-video qabul qilindi. Yana yuboring yoki pastdagi '✅ Birlashtirishni boshlash' tugmasini bosing.");
                 exit;
             }
             
@@ -313,11 +309,36 @@ if (isset($update['message'])) {
         file_put_contents("state.txt", "waiting_for_multiple_videos");
         file_put_contents("last_video_group.txt", ""); // clear existing
         $keyboard = json_encode([
-            "inline_keyboard" => [
-                [["text" => "✅ Birlashtirishni boshlash", "callback_data" => "start_merging"]]
-            ]
+            "keyboard" => [
+                [["text" => "✅ Birlashtirishni boshlash"]],
+                [["text" => "🔙 Ortga"]]
+            ],
+            "resize_keyboard" => true,
+            "one_time_keyboard" => false
         ]);
         sendMessage($chat_id, "🎬 <b>Videolarni Birlashtirish rejimi yondi!</b>\n\nMenga birlashtirmoqchi bo'lgan videolaringizni ketma-ket yuboring (har birini jo'natib kutib turing).\n\nTugatgach, pastdagi tugmani bosing.", $keyboard);
+    }
+    elseif ($text == "✅ Birlashtirishni boshlash") {
+        if (file_exists("state.txt") && file_get_contents("state.txt") == "waiting_for_multiple_videos") {
+            $group = "";
+            if (file_exists("last_video_group.txt")) {
+                $group = file_get_contents("last_video_group.txt");
+            }
+            $videos = array_filter(explode("\n", $group));
+            if (count($videos) < 2) {
+                sendMessage($chat_id, "⚠️ Birlashtirish uchun kamida 2 ta video yuborishingiz kerak!");
+                exit;
+            }
+            
+            file_put_contents("state.txt", "none");
+            sendMessage($chat_id, "⏳ <b>Birlashtirish jarayoni serverda boshlandi!</b>\nBu 2-3 daqiqa vaqt olishi mumkin. Tayyor bo'lgach, sizga prevyusini yuboraman.", $main_keyboard);
+            
+            triggerGitHubAction("telegram_command", array(
+                "command" => "merge_videos",
+                "prompt" => implode(",", $videos)
+            ));
+            exit;
+        }
     }
     elseif ($text == "📝 Pro Ssenariy Yozish") {
         file_put_contents("state.txt", "waiting_for_scenario_topic");
