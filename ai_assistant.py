@@ -302,28 +302,25 @@ def generate_first_comment(caption):
 
 def generate_data_driven_strategy(profile_data, trend_data):
     km = KeyManager()
-    prompt = f"""Sen O'zbekistondagi eng mashhur va kreativ SMM prodyusersan (TikTok/Reels bo'yicha millionlik ekspert).
+    prompt = f"""Sen O'zbekistondagi eng qimmat va kuchli "Dark SMM" va Viral-Video prodyusersan. Sening videolaring doim millionlab ko'riladi. Senga zerikarli "motivatsiya" yoki "hayotiy maslahat" umuman kerak emas. 
 
-Quyida ma'lumotlar:
-1. FOYDALANUVCHI FAKTLARI:
-{profile_data}
-
-2. GLOBAL TRENDLAR:
-{trend_data}
+Quyidagi profil va trendlarga qarab:
+FOYDALANUVCHI: {profile_data}
+TRENDLAR: {trend_data}
 
 VAZIFA:
-Shunga asoslanib kelgusi 30 kun uchun 💥 VIRAL VIDEO G'OYALARI jadvalini tuz.
+Menga 30 KUNLIK SUPER-VIRAL, MIYANI PORTLATADIGAN, ODAMLARNI QOTIRIB QO'YADIGAN video ssenariylar jadvalini yozib ber. Bular shunday g'oyalar bo'lishi kerakki, odamlar o'tkazib yubora olmasin!
 
-DIQQAT - ENG MUHIM QOIDALAR:
-1. Bu videolar rostdan ham 10 SONIYALIK bo'lishi shart. Ssenariy JAMI 20 TA SO'ZDAN oshmasligi qat'iyan talab qilinadi!
-2. FAKAT TEXNOLOGIYA EMAS! Mavzular butunlay OMMABOP, KULGILI, PSIXOLOGIK yoki hayotiy trendlar bo'lsin. Masalan: "Yolg'onchini ko'zidan bilib olish", "Odamni tez uxlab qolish siri", "Erkaklar va Ayollar o'rtasidagi kulgili farq", "Hech qachon qilinmasligi kerak bo'lgan 3 ta ish". Dasturlashni umuman aralashtirma!
-3. HOOK: 1-soniyada uradigan, qisqa va vahimali bo'lsin. (Masalan: "Zaryadingiz tez tugayaptimi?!", "Bu saytni hech kim bilmaydi!").
-4. [10 Soniyalik Ssenariy] qismi: Faqat 2 ta qadamdan iborat bo'lsin. 1. Muallif bitta jumla gapiradi. 2. Ekranda harakat ko'rsatiladi. Hammasi jami 15-20 so'zdan iborat bo'lsin.
-5. Hech qanday inglizcha qotib qolgan tarjimalar yoki uzun salomlashishlar kerak emas. "Salom do'stlar" degan gapni UCHIRIB TASHLA.
+🔥 QOIDALAR (BUZILMASIN!):
+1. MAVZULAR: Barcha 30 ta video BIR-BIRIDAN BUTUNLAY FARQ QILSIN! Takrorlanish (masalan: yana "sevgi", yana "uyqu") QAT'IYAN TAQIQLANADI!
+   (Zo'r mavzular: Dark psixologiya, Brendlarning yashirin sirlari, Sizni aldashayotgani haqida faktlar, Telefoningizning yashirin funksiyalari, Manipulyatsiya usullari, Katta pullar siri, Kutilmagan qiziqarli faktlar).
+2. 10 SONIYA QOIDASI: Har bir video atigi 10 soniya! Shuning uchun uzun gaplar yo'q.
+3. BOMBA HOOK (1-soniya): Tomoshabinni 1-soniyada mixlab qo'yadigan, kutilmagan, vahimali yoki sirli 1 ta jumla. (Masalan: "Telefoningiz sizni pinhona eshitishini bilarmidingiz?", "Magazinlar bizni qanday aldaydi?", "Hozir sizga miyangizni aldashni o'rgataman!").
+4. 10s SSENARIY (JAMI 15 SO'Z!): Faqat 2 ta narsa: Kadrdagi harakat + Ovoz. Masalan: "[Kadrda: Qorong'i xona, telefonga zoom] Ovoz: Sozlamalarga kiring va bu tugmani hoziroq o'chiring, aks holda..."
 
-Jadval ustunlari: [Hafta/Kun] | [Viral Video Mavzusi] | [Bomba Hook (1-soniya)] | [10s Ssenariy (Max 20 so'z)] | [Format]
+Jadval ustunlari: | Hafta/Kun | Viral Video Mavzusi (Juda aniq) | Bomba Hook (1-soniya) | 10s Ssenariy (Harakat + Ovoz) | Format |
 
-Javobing to'g'ridan-to'g'ri jadval bilan boshlansin, keraksiz kirish so'zlari yozma."""
+Jadvaldan boshqa hech qanday salomlashish, kirish yoki xulosa yozma. To'g'ridan-to'g'ri jadvalni ber! Barcha 30 kunga to'ldir!"""
     
     # 1. Gemini orqali urinish (agar ishlasa)
     for _ in range(2):
