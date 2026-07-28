@@ -301,8 +301,12 @@ def generate_first_comment(caption):
     return first_comment
 
 def generate_data_driven_strategy(profile_data, trend_data):
+    import random
+    import time
     km = KeyManager()
     prompt = f"""Sen O'zbekistondagi eng qimmat va kuchli "Dark SMM" va Viral-Video prodyusersan. Sening videolaring doim millionlab ko'riladi. Senga zerikarli "motivatsiya" yoki "hayotiy maslahat" umuman kerak emas. 
+
+(Tasodifiy generatsiya kodi: {random.randint(1000,99999)} / Vaqt: {time.time()})
 
 Quyidagi profil va trendlarga qarab:
 FOYDALANUVCHI: {profile_data}

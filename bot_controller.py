@@ -270,8 +270,11 @@ def run():
                     print("IG Profile fetch error:", e)
                     
                 try:
-                    trend_data = "Butun Instagramdagi ayni damdagi (IT va AI bo'yicha) eng ommabop begona postlar (Trendlar):\n"
-                    for hashtag in ["dasturlash", "sunniyintellekt"]:
+                    import random
+                    all_tags = ["biznes", "pul", "psixologiya", "faktlar", "sirlar", "qiziqarli", "motivatsiya", "foydali", "hiylalar", "internet", "texnologiya", "dasturlash", "sunniyintellekt"]
+                    chosen_tags = random.sample(all_tags, 2)
+                    trend_data = "Butun Instagramdagi ayni damdagi eng ommabop begona postlar (Trendlar):\n"
+                    for hashtag in chosen_tags:
                         h_url = f"https://graph.facebook.com/v18.0/ig_hashtag_search?user_id={ig_account_id}&q={hashtag}&access_token={ig_token}"
                         h_res = requests.get(h_url, timeout=15).json()
                         if "data" in h_res and len(h_res["data"]) > 0:
