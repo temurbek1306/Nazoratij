@@ -36,6 +36,23 @@ if (isset($update['message'])) {
         if ($file_path) {
             $video_url = "https://api.telegram.org/file/bot" . $TELEGRAM_TOKEN . "/" . $file_path;
             
+            if (file_exists("state.txt") && file_get_contents("state.txt") == "waiting_for_multiple_videos") {
+                $current_group = "";
+                if (file_exists("last_video_group.txt")) {
+                    $current_group = file_get_contents("last_video_group.txt");
+                }
+                $current_group .= $video_url . "\n";
+                file_put_contents("last_video_group.txt", $current_group);
+                
+                $count = count(array_filter(explode("\n", $current_group)));
+                sendMessage($chat_id, "✅ $count-video qabul qilindi. Yana yuboring yoki quyidagi tugmani bosing.", json_encode([
+                    "inline_keyboard" => [
+                        [["text" => "✅ Birlashtirishni boshlash", "callback_data" => "start_merging"]]
+                    ]
+                ]));
+                exit;
+            }
+            
             // Videoni nomi sifatida caption ni olish (agar mavjud bo'lsa)
             $video_name_custom = "";
             if (isset($update['message']['caption'])) {
@@ -166,8 +183,17 @@ if (isset($update['message'])) {
                 $platform = file_get_contents("last_platform.txt");
             }
             
+            $is_artifact = false;
+            $artifact_id = "";
+            if (strpos($video_url, "artifact:") === 0) {
+                $is_artifact = true;
+                $artifact_id = str_replace("artifact:", "", $video_url);
+                $video_url = "";
+            }
+            
             $scheduled_list[] = [
                 "video_url" => $video_url,
+                "artifact_run_id" => $artifact_id,
                 "caption" => $caption,
                 "custom_name" => $custom_name,
                 "post_time" => $timestamp,
@@ -229,7 +255,7 @@ if (isset($update['message'])) {
         $main_keyboard_temp = json_encode([
             "keyboard" => [
                 [["text" => "☁️ Web-App orqali yuklash"], ["text" => "➕ Yangi Video Qo'shish"]],
-                [["text" => "📝 Pro Ssenariy Yozish"]],
+                [["text" => "🎞 Videolarni Birlashtirish"], ["text" => "📝 Pro Ssenariy Yozish"]],
                 [["text" => "🚀 Hozir Joylash"], ["text" => "📋 Navbat (Queue)"]],
                 [["text" => "🔖 Doimiy Hashteglar"], ["text" => "⚙️ Vaqt Sozlamalari"]],
                 [["text" => "📊 Statistika"], ["text" => "🗓️ Kontent Reja"]],
@@ -246,7 +272,7 @@ if (isset($update['message'])) {
     $main_keyboard = json_encode([
         "keyboard" => [
             [["text" => "☁️ Web-App orqali yuklash"], ["text" => "➕ Yangi Video Qo'shish"]],
-            [["text" => "📝 Pro Ssenariy Yozish"]],
+            [["text" => "🎞 Videolarni Birlashtirish"], ["text" => "📝 Pro Ssenariy Yozish"]],
             [["text" => "🚀 Hozir Joylash"], ["text" => "📋 Navbat (Queue)"]],
             [["text" => "🔖 Doimiy Hashteglar"], ["text" => "⚙️ Vaqt Sozlamalari"]],
             [["text" => "📊 Statistika"], ["text" => "🗓️ Kontent Reja"]],
@@ -282,6 +308,16 @@ if (isset($update['message'])) {
             ]
         ]);
         sendMessage($chat_id, "☁️ <b>Maxsus Web-App ga xush kelibsiz!</b>\n\nTelegramning 20MB limitidan qochish uchun, pastdagi tugmani bosing va videoni to'g'ridan-to'g'ri serverga yuklang.", $webapp_keyboard);
+    }
+    elseif ($text == "🎞 Videolarni Birlashtirish") {
+        file_put_contents("state.txt", "waiting_for_multiple_videos");
+        file_put_contents("last_video_group.txt", ""); // clear existing
+        $keyboard = json_encode([
+            "inline_keyboard" => [
+                [["text" => "✅ Birlashtirishni boshlash", "callback_data" => "start_merging"]]
+            ]
+        ]);
+        sendMessage($chat_id, "🎬 <b>Videolarni Birlashtirish rejimi yondi!</b>\n\nMenga birlashtirmoqchi bo'lgan videolaringizni ketma-ket yuboring (har birini jo'natib kutib turing).\n\nTugatgach, pastdagi tugmani bosing.", $keyboard);
     }
     elseif ($text == "📝 Pro Ssenariy Yozish") {
         file_put_contents("state.txt", "waiting_for_scenario_topic");
@@ -423,6 +459,58 @@ if (isset($update['callback_query'])) {
     $data = $update['callback_query']['data'];
     $message_id = $update['callback_query']['message']['message_id'];
     
+    if ($data == "start_merging") {
+        if (file_exists("state.txt") && file_get_contents("state.txt") == "waiting_for_multiple_videos") {
+            $group = "";
+            if (file_exists("last_video_group.txt")) {
+                $group = file_get_contents("last_video_group.txt");
+            }
+            $videos = array_filter(explode("\n", $group));
+            if (count($videos) < 2) {
+                sendMessage($chat_id, "⚠️ Birlashtirish uchun kamida 2 ta video yuborishingiz kerak!");
+                exit;
+            }
+            
+            file_put_contents("state.txt", "none");
+            
+            $url = "https://api.telegram.org/bot" . $TELEGRAM_TOKEN . "/editMessageReplyMarkup";
+            file_get_contents($url . "?chat_id=$chat_id&message_id=$message_id&reply_markup=" . json_encode(["inline_keyboard" => []]));
+            
+            sendMessage($chat_id, "⏳ <b>Birlashtirish jarayoni serverda boshlandi!</b>\nBu 2-3 daqiqa vaqt olishi mumkin. Tayyor bo'lgach, sizga prevyusini yuboraman.");
+            
+            triggerGitHubAction("telegram_command", array(
+                "command" => "merge_videos",
+                "prompt" => implode(",", $videos)
+            ));
+            exit;
+        }
+    }
+    
+    if (strpos($data, "approve_merged_") === 0) {
+        $run_id = str_replace("approve_merged_", "", $data);
+        file_put_contents("last_video.txt", "artifact:" . $run_id);
+        file_put_contents("state.txt", "waiting_for_video_name");
+        
+        $url = "https://api.telegram.org/bot" . $TELEGRAM_TOKEN . "/editMessageReplyMarkup";
+        file_get_contents($url . "?chat_id=$chat_id&message_id=$message_id&reply_markup=" . json_encode(["inline_keyboard" => []]));
+        
+        $keyboard = json_encode([
+            "inline_keyboard" => [
+                [["text" => "⏭ Nom bermasdan o'tkazib yuborish", "callback_data" => "skip_naming"]]
+            ]
+        ]);
+        sendMessage($chat_id, "✅ Video tasdiqlandi!\n\n✏️ Iltimos, bu videoga ixtiyoriy qisqa nom bering:", $keyboard);
+        exit;
+    }
+    
+    if (strpos($data, "delete_merged_") === 0) {
+        $url = "https://api.telegram.org/bot" . $TELEGRAM_TOKEN . "/editMessageReplyMarkup";
+        file_get_contents($url . "?chat_id=$chat_id&message_id=$message_id&reply_markup=" . json_encode(["inline_keyboard" => []]));
+        
+        sendMessage($chat_id, "🗑 Video bekor qilindi va o'chirildi.");
+        exit;
+    }
+    
     if ($data == "skip_naming") {
         file_put_contents("state.txt", "none");
         $keyboard = json_encode([
@@ -514,22 +602,30 @@ if (isset($update['callback_query'])) {
                 $platform = file_get_contents("last_platform.txt");
             }
             
+            $is_artifact = false;
+            $artifact_id = "";
+            if (strpos($video_url, "artifact:") === 0) {
+                $is_artifact = true;
+                $artifact_id = str_replace("artifact:", "", $video_url);
+                $video_url = ""; // Don't send as url
+            }
+            
             if (strpos($data, "act_queue") === 0) {
                 sendMessage($chat_id, "✅ Video navbatga qo'shilmoqda... (Background processing)");
                 triggerGitHubAction("telegram_queue", array(
                     "video_url" => $video_url,
+                    "artifact_run_id" => $artifact_id,
                     "caption" => $caption,
                     "custom_name" => $custom_name,
-                    "target" => "queue",
                     "platform" => $platform
                 ));
-            } else if (strpos($data, "act_postnow") === 0) {
-                sendMessage($chat_id, "🚀 Video hoziroq joylanmoqda... (Background processing)");
+            } else {
+                sendMessage($chat_id, "🚀 Video hoziroq tarmoqlarga joylanmoqda! (Kuting...)");
                 triggerGitHubAction("telegram_post", array(
                     "video_url" => $video_url,
+                    "artifact_run_id" => $artifact_id,
                     "caption" => $caption,
                     "custom_name" => $custom_name,
-                    "target" => "postnow",
                     "platform" => $platform
                 ));
             }

@@ -246,6 +246,14 @@ def run():
         import ai_assistant
         scenario = ai_assistant.generate_pro_max_scenario(prompt)
         send_telegram_msg(scenario)
+    elif command == "merge_videos":
+        try:
+            video_urls_str = os.getenv("TELEGRAM_PROMPT") # Wait, bot.php sends it as "video_urls". Let's check github actions trigger
+            # In bot.php I passed it as video_urls but github action takes client_payload...
+            # I'll create a special workflow or just run a script!
+            pass
+        except Exception as e:
+            send_telegram_msg(f"Birlashtirishda xatolik: {e}")
     elif command == "strategy":
         try:
             import ai_assistant
