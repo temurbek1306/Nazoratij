@@ -196,6 +196,29 @@ if (isset($update['message'])) {
         exit;
     }
 
+    // Ssenariy mavzusini qabul qilish
+    if (file_exists("state.txt") && file_get_contents("state.txt") == "waiting_for_scenario_topic" && $text != "") {
+        file_put_contents("state.txt", "none");
+        file_put_contents("scenario_topic.txt", $text);
+        
+        $parts_keyboard = json_encode([
+            "inline_keyboard" => [
+                [
+                    ["text" => "1 qism", "callback_data" => "scenario_parts_1"],
+                    ["text" => "2 qism", "callback_data" => "scenario_parts_2"],
+                    ["text" => "3 qism", "callback_data" => "scenario_parts_3"]
+                ],
+                [
+                    ["text" => "4 qism", "callback_data" => "scenario_parts_4"],
+                    ["text" => "5 qism", "callback_data" => "scenario_parts_5"],
+                    ["text" => "6 qism", "callback_data" => "scenario_parts_6"]
+                ]
+            ]
+        ]);
+        sendMessage($chat_id, "🔢 Zo'r! Endi bu video necha qism (har biri 10 soniyadan) bo'lishini tanlang:", $parts_keyboard);
+        exit;
+    }
+
     // Doimiy hashteglarni qabul qilish
     if (file_exists("state.txt") && file_get_contents("state.txt") == "waiting_for_global_tags" && $text != "") {
         file_put_contents("state.txt", "none");
@@ -206,6 +229,7 @@ if (isset($update['message'])) {
         $main_keyboard_temp = json_encode([
             "keyboard" => [
                 [["text" => "☁️ Web-App orqali yuklash"], ["text" => "➕ Yangi Video Qo'shish"]],
+                [["text" => "📝 Pro Ssenariy Yozish"]],
                 [["text" => "🚀 Hozir Joylash"], ["text" => "📋 Navbat (Queue)"]],
                 [["text" => "🔖 Doimiy Hashteglar"], ["text" => "⚙️ Vaqt Sozlamalari"]],
                 [["text" => "📊 Statistika"], ["text" => "🗓️ Kontent Reja"]],
@@ -222,6 +246,7 @@ if (isset($update['message'])) {
     $main_keyboard = json_encode([
         "keyboard" => [
             [["text" => "☁️ Web-App orqali yuklash"], ["text" => "➕ Yangi Video Qo'shish"]],
+            [["text" => "📝 Pro Ssenariy Yozish"]],
             [["text" => "🚀 Hozir Joylash"], ["text" => "📋 Navbat (Queue)"]],
             [["text" => "🔖 Doimiy Hashteglar"], ["text" => "⚙️ Vaqt Sozlamalari"]],
             [["text" => "📊 Statistika"], ["text" => "🗓️ Kontent Reja"]],
@@ -257,6 +282,11 @@ if (isset($update['message'])) {
             ]
         ]);
         sendMessage($chat_id, "☁️ <b>Maxsus Web-App ga xush kelibsiz!</b>\n\nTelegramning 20MB limitidan qochish uchun, pastdagi tugmani bosing va videoni to'g'ridan-to'g'ri serverga yuklang.", $webapp_keyboard);
+    }
+    elseif ($text == "📝 Pro Ssenariy Yozish") {
+        file_put_contents("state.txt", "waiting_for_scenario_topic");
+        $msg = "📝 <b>Pro+++ Max Viral Ssenariy yaratish</b>\n\nAI sizga har bir qadami mukammal o'ylangan (10 soniyalik segmentlardan iborat) realistik va kinematik ssenariy yozib beradi.\n\n👇 <i>Iltimos, video nima haqida bo'lishini (mavzusini) yozing:</i>";
+        sendMessage($chat_id, $msg);
     }
     elseif ($text == "➕ Yangi Video Qo'shish") {
         sendMessage($chat_id, "📥 <b>Yangi video qo'shish</b>\n\nVideoni shunchaki Telegram botga yuboring (fayl yoki galereya orqali). Qolganini o'zim hal qilaman!");
@@ -515,6 +545,23 @@ if (isset($update['callback_query'])) {
     elseif (strpos($data, "post_a_") === 0 || strpos($data, "post_b_") === 0 || strpos($data, "post_c_") === 0 || strpos($data, "cancel_") === 0) {
         // A, B, C matnlari tanlanganda yoki Bekor qilinganda
         triggerGitHubAction("telegram_command", array("command" => $data));
+        
+        file_get_contents($url . "?chat_id=$chat_id&message_id=$message_id&reply_markup=" . json_encode(["inline_keyboard" => []]));
+        exit;
+    }
+    elseif (strpos($data, "scenario_parts_") === 0) {
+        $parts = str_replace("scenario_parts_", "", $data);
+        
+        $topic = "Mavzu ko'rsatilmagan";
+        if (file_exists("scenario_topic.txt")) {
+            $topic = file_get_contents("scenario_topic.txt");
+            unlink("scenario_topic.txt");
+        }
+        
+        $prompt = "$topic, $parts qism";
+        
+        sendMessage($chat_id, "🎬 Pro+++ Max Ssenariy uchun so'rov qabul qilindi! Daho AI ishga tushdi (20-30 soniya kuting)...");
+        triggerGitHubAction("telegram_command", ["command" => "generate_scenario", "prompt" => $prompt]);
         
         // Takror bosilmasligi uchun tugmalarni o'chirib tashlash
         $url = "https://api.telegram.org/bot" . $TELEGRAM_TOKEN . "/editMessageReplyMarkup";

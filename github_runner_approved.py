@@ -106,10 +106,15 @@ def run():
             import requests
             try:
                 tg_msg = f"✅ Boss, video tarmoqlarga uzatildi!\n\nVariant: {choice.upper()}\n\n{yt_status_msg}"
-                requests.post(f"https://api.telegram.org/bot{tg_token}/sendMessage", data={
+                url = f"https://api.telegram.org/bot{tg_token}/sendMessage"
+                res = requests.post(url, data={
                     "chat_id": tg_admin,
-                    "text": tg_msg
+                    "text": tg_msg,
+                    "parse_mode": "HTML"
                 })
+                if res.status_code != 200:
+                    # Retry without HTML
+                    requests.post(url, data={"chat_id": tg_admin, "text": tg_msg})
             except Exception as e:
                 pass
                 

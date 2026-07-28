@@ -383,3 +383,68 @@ def get_standard_comment(caption):
     if 'kino kodi' in lower_text or 'kod:' in lower_text or 'kodi:' in lower_text or 'kino:' in lower_text:
         return "🎬 Kino kodi orqali botdan kinoni ko'ring: @TemurbekDevbot"
     return "👇 Fikringizni izohlarda yozib qoldiring!"
+
+def generate_pro_max_scenario(user_prompt):
+    km = KeyManager()
+    prompt = f"""Sen jahon darajasidagi, gollivud uslubida fikrlaydigan "Pro+++ Max Viral Max" video ssenaristisan.
+Mijoz senga mavzu va qismlar sonini yubordi: "{user_prompt}"
+
+QAT'IY QOIDALAR (BUZILISHI MUMKIN EMAS):
+1. REALISTIK VA KINEMATIK: Har bir qism vizual jihatdan juda boy bo'lishi kerak.
+2. 10 SONIYA QOIDASI: Har bir qism ROPPA-ROSA 10 soniyalik bo'lishi shart. Agar mijoz "3 qism" degan bo'lsa, umumiy video 30 soniya bo'ladi (10s + 10s + 10s).
+3. MATN HAJMI: 10 soniya ichida odam o'rtacha 20-25 ta so'z o'qiy oladi/eshitadi. Shuning uchun har bir qism uchun yozilgan "Diktor/Matn" qismi QAT'IYAN 25 ta so'zdan oshmasligi kerak! Agar oshib ketsa 10 soniyaga sig'may qoladi.
+4. KADRLAR ALMASHUVI (FAST-PACED): Har bir 10 soniyalik qism ichida kamida 5-10 ta tezkor kadr almashuvi (B-roll, zoom, effektlar) bo'lishi kerak. Tomoshabin zerikishiga 1 millisoniya ham vaqt qoldirma.
+5. PRO+++ MAX VIRAL USLUBI: 
+   - 1-qismning birinchi soniyasida "Hook" (ilgak) bo'lishi shart. Odamni ekranga mixlab qo'yadigan savol yoki shok holat.
+   - Kinoyali, kreativ, energiya bilan yoz.
+   
+FORMAT (Shu formatda javob ber):
+🎬 UMUMIY MA'LUMOT
+Mavzu: [Mavzu]
+Umumiy vaqt: [Masalan, 30 soniya]
+
+--- QISMLAR ---
+
+🔥 1-QISM (0:00 - 0:10) - HOOK
+👁 Vizual (Kadrlar): [Juda tez almashadigan 5-10 ta kadrlar ta'rifi, kamera harakatlari]
+🗣 Matn/Ovoz (Max 25 so'z): "[Aynan nima deyilishi yoki yozilishi kerak]"
+
+🔥 2-QISM (0:10 - 0:20) - RIVOJLANISH
+👁 Vizual (Kadrlar): [Tezkor kadrlar, effektlar]
+🗣 Matn/Ovoz (Max 25 so'z): "[Matn]"
+
+(va hokazo, so'ralgan qismlar soniga qarab davom eting).
+
+Javobing to'g'ridan-to'g'ri ssenariy bilan boshlanishi kerak."""
+
+    # 1. Gemini orqali urinish
+    for _ in range(2):
+        gemini_key = km.get_gemini_key()
+        if not gemini_key: break
+        try:
+            import google.generativeai as genai
+            os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = os.path.join(os.path.dirname(__file__), "service_account.json")
+            genai.configure()
+            model = genai.GenerativeModel("gemini-1.5-pro") # Ssenariy uchun aqlliroq model kerak
+            response = model.generate_content(prompt)
+            if response.text:
+                return response.text.strip()
+        except Exception:
+            pass
+
+    # 2. Zaxira Groq
+    for _ in range(3):
+        groq_key = km.get_groq_key()
+        if not groq_key: break
+        try:
+            import requests
+            url = "https://api.groq.com/openai/v1/chat/completions"
+            headers = {"Authorization": f"Bearer {groq_key}", "Content-Type": "application/json"}
+            payload = {"model": "llama-3.3-70b-versatile", "messages": [{"role": "user", "content": prompt}]}
+            response = requests.post(url, headers=headers, json=payload, timeout=15)
+            if response.status_code == 200:
+                return response.json()["choices"][0]["message"]["content"].strip()
+        except Exception:
+            pass
+
+    return "⚠️ Ssenariy yaratishda xatolik yuz berdi. AI serverlari band bo'lishi mumkin."

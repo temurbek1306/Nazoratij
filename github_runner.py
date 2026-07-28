@@ -5,11 +5,19 @@ from instagram_api import InstagramAPI
 import requests
 
 def send_alert(msg):
+    import requests
     token = os.getenv("TELEGRAM_BOT_TOKEN")
     chat_id = os.getenv("TELEGRAM_ADMIN_ID")
     if token and chat_id:
         url = f"https://api.telegram.org/bot{token}/sendMessage"
-        requests.post(url, data={"chat_id": chat_id, "text": msg, "parse_mode": "HTML"})
+        try:
+            res = requests.post(url, data={"chat_id": chat_id, "text": msg, "parse_mode": "HTML"})
+            if res.status_code != 200:
+                print(f"⚠️ Telegram (HTML) yuborishda xatolik: {res.text}")
+                # Agar HTML taglarda xato bo'lsa (masalan <HttpError>), parse_mode siz qayta yuboramiz
+                requests.post(url, data={"chat_id": chat_id, "text": msg})
+        except Exception as e:
+            print(f"⚠️ Telegramga yuborishda xatolik: {e}")
 
 def run():
     print("🚀 GitHub Actions: Avtomatik Video Yuklash boshlandi...")
@@ -80,15 +88,15 @@ def run():
             else:
                 manual_caption += "\n\n" + global_tags
             
+        try:
+            first_comment = ai_assistant.get_standard_comment(manual_caption)
+        except:
+            first_comment = "👇 Fikringizni izohlarda yozib qoldiring!"
+            
         if platform in ["ig", "both"]:
             print(f"📝 Instagramga joylanmoqda (Qo'lda yozilgan)...")
             ig_media_id = post_to_instagram(url, manual_caption, video_name)
             
-            try:
-                first_comment = ai_assistant.get_standard_comment(manual_caption)
-            except:
-                first_comment = "👇 Fikringizni izohlarda yozib qoldiring!"
-                
             if ig_media_id:
                 from agent_tools import post_ig_comment
                 post_ig_comment(ig_media_id, first_comment)

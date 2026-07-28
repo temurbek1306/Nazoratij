@@ -235,6 +235,12 @@ def run():
             
         import video_generator
         video_generator.generate(prompt_text, ratio)
+    elif command == "generate_scenario":
+        text = payload.get("prompt", "")
+        send_telegram_msg("🎬 Pro+++ Max Ssenariy yozilmoqda. Qattiq kuting, bu juda daxshatli bo'ladi! (10-20 soniya)...")
+        import ai_assistant
+        scenario = ai_assistant.generate_pro_max_scenario(text)
+        send_telegram_msg(scenario)
     elif command == "strategy":
         try:
             import ai_assistant
