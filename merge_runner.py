@@ -49,14 +49,14 @@ def main():
         output = subprocess.check_output(cmd).decode('utf-8').strip()
         durations.append(float(output))
     
-    crossfade_duration = 1.0
+    crossfade_duration = 0.3
     output_video = "merged_high_res.mp4"
     
     if len(input_files) == 2:
         offset = durations[0] - crossfade_duration
         if offset < 0: offset = 0
         
-        filter_str = f"[0:v]format=yuv420p[v0];[1:v]format=yuv420p[v1];[v0][v1]xfade=transition=fade:duration={crossfade_duration}:offset={offset}[v];[0:a][1:a]acrossfade=d={crossfade_duration}[a]"
+        filter_str = f"[0:v]format=yuv420p[v0];[1:v]format=yuv420p[v1];[v0][v1]xfade=transition=fade:duration={crossfade_duration}:offset={offset}[v];[0:a][1:a]acrossfade=d={crossfade_duration}:curve1=nofade:curve2=nofade[a]"
         
         cmd = [
             "ffmpeg", "-y",
