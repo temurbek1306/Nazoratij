@@ -64,6 +64,7 @@ def main():
             "-i", input_files[1],
             "-filter_complex", filter_str,
             "-map", "[v]", "-map", "[a]",
+            "-c:v", "libx264", "-pix_fmt", "yuv420p", "-c:a", "aac",
             output_video
         ]
         print(f"Running ffmpeg (2 videos): {' '.join(cmd)}")
@@ -76,7 +77,8 @@ def main():
         
         cmd = [
             "ffmpeg", "-y", "-f", "concat", "-safe", "0",
-            "-i", "concat_list.txt", "-c", "copy",
+            "-i", "concat_list.txt", 
+            "-c:v", "libx264", "-pix_fmt", "yuv420p", "-c:a", "aac",
             output_video
         ]
         subprocess.run(cmd, check=True)
@@ -84,7 +86,7 @@ def main():
     preview_video = "merged_preview.mp4"
     cmd = [
         "ffmpeg", "-y", "-i", output_video,
-        "-vf", "scale=480:-2", "-c:v", "libx264", "-crf", "28",
+        "-vf", "scale=480:-2,format=yuv420p", "-c:v", "libx264", "-crf", "28", "-pix_fmt", "yuv420p",
         "-c:a", "aac", "-b:a", "64k",
         preview_video
     ]
