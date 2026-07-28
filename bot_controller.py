@@ -8,16 +8,22 @@ def send_telegram_msg(text, reply_markup=None):
     tg_admin = os.getenv("TELEGRAM_ADMIN_ID")
     if tg_token and tg_admin:
         try:
-            data = {
-                "chat_id": tg_admin,
-                "text": text,
-                "parse_mode": "HTML"
-            }
-            if reply_markup:
-                data["reply_markup"] = reply_markup
-            requests.post(f"https://api.telegram.org/bot{tg_token}/sendMessage", data=data)
+            # Telegram xabar chegarasi 4096 belgi. Biz 4000 tadan bo'lib yuboramiz.
+            max_len = 4000
+            for i in range(0, len(text), max_len):
+                chunk = text[i:i+max_len]
+                data = {
+                    "chat_id": tg_admin,
+                    "text": chunk,
+                    "parse_mode": "HTML"
+                }
+                if reply_markup and (i + max_len >= len(text)): # Keyboard faqat eng oxirgi qismga qoshiladi
+                    data["reply_markup"] = reply_markup
+                res = requests.post(f"https://api.telegram.org/bot{tg_token}/sendMessage", data=data)
+                if res.status_code != 200:
+                    print("Telegram xatosi:", res.text)
         except Exception as e:
-            print(f"Telegram xatosi: {e}")
+            print(f"Telegram tarmog'i xatosi: {e}")
 
 def handle_list():
     import datetime
