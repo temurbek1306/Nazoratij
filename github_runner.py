@@ -19,6 +19,84 @@ def send_alert(msg):
         except Exception as e:
             print(f"⚠️ Telegramga yuborishda xatolik: {e}")
 
+def post_to_platforms(platforms_str, local_video_path, url, caption, first_comment, video_name):
+    import os
+    platforms = platforms_str.split(',') if platforms_str else ["ig", "yt", "fb", "tg"]
+    status_messages = []
+    
+    # --- INSTAGRAM ---
+    if "ig" in platforms or "both" in platforms:
+        print(f"📝 Instagramga joylanmoqda...")
+        from agent_tools import post_to_instagram, post_ig_comment
+        ig_media_id = post_to_instagram(url, caption, video_name)
+        if ig_media_id:
+            status_messages.append("✅ Instagram")
+            try:
+                post_ig_comment(ig_media_id, first_comment)
+            except: pass
+        else:
+            status_messages.append("❌ Instagram")
+    else:
+        status_messages.append("⏭ Instagram: Tanlanmagan")
+
+    # --- YOUTUBE SHORTS ---
+    if "yt" in platforms or "both" in platforms:
+        yt_client_id = os.getenv("YOUTUBE_CLIENT_ID")
+        yt_client_secret = os.getenv("YOUTUBE_CLIENT_SECRET")
+        yt_refresh_token = os.getenv("YOUTUBE_REFRESH_TOKEN")
+        if yt_client_id and yt_client_secret and yt_refresh_token:
+            try:
+                print("📺 YouTubega joylanmoqda...")
+                from youtube_api import YouTubeAPI
+                yt_api = YouTubeAPI(yt_client_id, yt_client_secret, yt_refresh_token)
+                title = caption.split('\n')[0][:100]
+                if os.path.exists(local_video_path):
+                    yt_video_id = yt_api.upload_shorts(local_video_path, title, caption)
+                    if yt_video_id:
+                        status_messages.append("✅ YouTube")
+                        try:
+                            yt_api.post_comment(yt_video_id, first_comment)
+                        except: pass
+                    else:
+                        status_messages.append("❌ YouTube (Fayl topilmadi)")
+            except Exception as e:
+                status_messages.append(f"❌ YouTube Xatolik: {str(e)[:50]}")
+        else:
+            status_messages.append("⚠️ YouTube API kalitlar kiritilmagan")
+    else:
+        status_messages.append("⏭ YouTube: Tanlanmagan")
+
+    # --- TELEGRAM CHANNEL ---
+    if "tg" in platforms:
+        from agent_tools import post_to_telegram
+        if os.path.exists(local_video_path):
+            if post_to_telegram(local_video_path, caption):
+                status_messages.append("✅ Telegram Channel")
+            else:
+                status_messages.append("❌ Telegram Channel")
+        else:
+            status_messages.append("❌ Telegram Channel: Fayl topilmadi")
+            
+    # --- FACEBOOK REELS ---
+    if "fb" in platforms:
+        fb_page_id = os.getenv("FB_PAGE_ID")
+        fb_page_token = os.getenv("FB_PAGE_ACCESS_TOKEN")
+        if fb_page_id and fb_page_token:
+            try:
+                from facebook_api import FacebookReelsAPI
+                fb_api = FacebookReelsAPI(fb_page_id, fb_page_token)
+                if os.path.exists(local_video_path):
+                    if fb_api.upload_reel(local_video_path, caption):
+                        status_messages.append("✅ Facebook")
+                    else:
+                        status_messages.append("❌ Facebook")
+            except Exception as e:
+                status_messages.append(f"❌ Facebook Xatolik: {str(e)[:50]}")
+        else:
+            status_messages.append("⚠️ Facebook API kalitlar yo'q")
+
+    return "\n".join(status_messages)
+
 def run():
     print("🚀 GitHub Actions: Avtomatik Video Yuklash boshlandi...")
     
@@ -93,47 +171,12 @@ def run():
         except:
             first_comment = "👇 Fikringizni izohlarda yozib qoldiring!"
             
-        if platform in ["ig", "both"]:
-            print(f"📝 Instagramga joylanmoqda (Qo'lda yozilgan)...")
-            ig_media_id = post_to_instagram(url, manual_caption, video_name)
-            
-            if ig_media_id:
-                from agent_tools import post_ig_comment
-                post_ig_comment(ig_media_id, first_comment)
-        else:
-            print("⏭ Instagram tanlanmagan, tashlab o'tilmoqda...")
-            try:
-                first_comment = ai_assistant.get_standard_comment(manual_caption)
-            except:
-                first_comment = "👇 Fikringizni izohlarda yozib qoldiring!"
-            
-        if platform in ["yt", "both"]:
-            print(f"📺 YouTubega joylanmoqda (Qo'lda yozilgan)...")
-            from youtube_api import YouTubeAPI
-            yt_client_id = os.getenv("YOUTUBE_CLIENT_ID")
-            yt_client_secret = os.getenv("YOUTUBE_CLIENT_SECRET")
-            yt_refresh_token = os.getenv("YOUTUBE_REFRESH_TOKEN")
-            
-            yt_status_msg = ""
-            if yt_client_id and yt_client_secret and yt_refresh_token:
-                try:
-                    yt_api = YouTubeAPI(yt_client_id, yt_client_secret, yt_refresh_token)
-                    final_video_path = f"videos/pending/{video_name}"
-                    if os.path.exists(final_video_path):
-                        yt_video_id = yt_api.upload_shorts(final_video_path, manual_caption.split('\n')[0][:100], manual_caption)
-                        if yt_video_id:
-                            yt_status_msg = "✅ YouTube: Joylandi"
-                            yt_api.post_comment(yt_video_id, first_comment)
-                    else:
-                        yt_status_msg = "❌ YouTube: Lokal video topilmadi"
-                except Exception as e:
-                    yt_status_msg = f"❌ YouTube Xatolik: {e}"
-            else:
-                yt_status_msg = "⚠️ YouTube: API kalitlar to'liq kiritilmagan"
-        else:
-            yt_status_msg = "⏭ YouTube: Tanlanmagan"
-                
-        send_alert(f"✅ Boss, video holati (Qo'lda yozilgan izoh bilan):\n\nVideo: {video_name}\n\n{yt_status_msg}")
+        status_str = post_to_platforms(platform, local_video_path, url, manual_caption, first_comment, video_name)
+        send_alert(f"✅ Boss, video holati (Qo'lda yozilgan izoh bilan):
+
+Video: {video_name}
+
+{status_str}")
         os.remove(txt_file)
         
         from video_manager import VideoManager
@@ -293,50 +336,12 @@ CAPTION_A: (videoga to'liq mos yozilgan caption)"""
     except:
         first_comment = "👇 Fikringizni izohlarda yozib qoldiring!"
 
-    if platform in ["ig", "both"]:
-        print(f"📝 Instagramga joylanmoqda (Zaxira rejim)...")
-        ig_media_id = post_to_instagram(url, final_fallback_caption, video_name)
-        
-        if ig_media_id:
-            from agent_tools import post_ig_comment
-            post_ig_comment(ig_media_id, first_comment)
-    else:
-        print("⏭ Instagram tanlanmagan (Zaxira rejimda tashlab o'tilmoqda)...")
-    
-    yt_status_msg = ""
-    if platform in ["yt", "both"]:
-        print(f"📺 YouTubega joylanmoqda (Zaxira rejim)...")
-        from youtube_api import YouTubeAPI
-        yt_client_id = os.getenv("YOUTUBE_CLIENT_ID")
-        yt_client_secret = os.getenv("YOUTUBE_CLIENT_SECRET")
-        yt_refresh_token = os.getenv("YOUTUBE_REFRESH_TOKEN")
-        
-        if yt_client_id and yt_client_secret and yt_refresh_token:
-            try:
-                yt_api = YouTubeAPI(yt_client_id, yt_client_secret, yt_refresh_token)
-                final_video_path = f"videos/pending/{video_name}"
-                if os.path.exists(final_video_path):
-                    yt_video_id = yt_api.upload_shorts(final_video_path, final_fallback_caption.split('\n')[0][:100], final_fallback_caption)
-                    if yt_video_id:
-                        yt_status_msg = "✅ YouTube: Muvaffaqiyatli joylandi!"
-                        try:
-                            yt_api.post_comment(yt_video_id, first_comment)
-                        except:
-                            pass
-                else:
-                    yt_status_msg = "❌ YouTube: Lokal video topilmadi"
-            except Exception as e:
-                yt_status_msg = f"❌ YouTube Xatolik: {e}"
-        else:
-            yt_status_msg = "⚠️ YouTube: API kalitlar kiritilmagan!"
-    else:
-        yt_status_msg = "⏭ YouTube: Tanlanmagan"
-            
-    # Delete the video from pending since everything is done
-    from video_manager import VideoManager
-    VideoManager().mark_as_posted(video_name)
-    
-    send_alert(f"📋 <b>Yangi video yakuniy hisoboti!</b>\n\nNomi: <code>{video_name}</code>\n\n{yt_status_msg}")
+    status_str = post_to_platforms(platform, local_video_path, url, final_fallback_caption, first_comment, video_name)
+    send_alert(f"📋 <b>Yangi video yakuniy hisoboti!</b>
+
+Nomi: <code>{video_name}</code>
+
+{status_str}")
 
 if __name__ == "__main__":
     run()
