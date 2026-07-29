@@ -3,7 +3,10 @@ import json
 from google_auth_oauthlib.flow import InstalledAppFlow
 
 # YouTube Data API upload va o'qish uchun ruxsatlar
-SCOPES = ["https://www.googleapis.com/auth/youtube.upload"]
+SCOPES = [
+    "https://www.googleapis.com/auth/youtube.upload",
+    "https://www.googleapis.com/auth/youtube.readonly"
+]
 
 def main():
     print("="*50)
