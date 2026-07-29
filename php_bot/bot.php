@@ -74,7 +74,8 @@ if (isset($update['message'])) {
                     "inline_keyboard" => [
                         [["text" => "📸 Instagram", "callback_data" => "platform_ig"]],
                         [["text" => "📺 YouTube", "callback_data" => "platform_yt"]],
-                        [["text" => "📸+📺 Ikkalasiga ham", "callback_data" => "platform_both"]]
+                        [["text" => "🔵 Facebook", "callback_data" => "platform_fb"]],
+                        [["text" => "🚀 Barchasiga (IG, YT, FB, TG)", "callback_data" => "platform_ig,yt,fb,tg"]]
                     ]
                 ]);
                 sendMessage($chat_id, "🎬 Video qabul qilindi! Nomi: <b>$video_name_custom</b>\n\nQaysi tarmoqqa joylaymiz?", $keyboard);
@@ -99,7 +100,14 @@ if (isset($update['message'])) {
             file_put_contents("state.txt", "none");
             
             if (file_exists("platforms_" . $chat_id . ".json")) unlink("platforms_" . $chat_id . ".json");
-            $keyboard = get_platforms_keyboard($chat_id);
+            $keyboard = json_encode([
+                "inline_keyboard" => [
+                    [["text" => "📸 Instagram", "callback_data" => "platform_ig"]],
+                    [["text" => "📺 YouTube", "callback_data" => "platform_yt"]],
+                    [["text" => "🔵 Facebook", "callback_data" => "platform_fb"]],
+                    [["text" => "🚀 Barchasiga (IG, YT, FB, TG)", "callback_data" => "platform_ig,yt,fb,tg"]]
+                ]
+            ]);
             sendMessage($chat_id, "✅ Videoga <b>$video_name_custom</b> deb nom berildi!\n\nQaysi tarmoqqa joylaymiz?", $keyboard);
             exit;
         }
@@ -530,7 +538,14 @@ if (isset($update['callback_query'])) {
     if ($data == "skip_naming") {
         file_put_contents("state.txt", "none");
         if (file_exists("platforms_" . $chat_id . ".json")) unlink("platforms_" . $chat_id . ".json");
-        $keyboard = get_platforms_keyboard($chat_id);
+        $keyboard = json_encode([
+            "inline_keyboard" => [
+                [["text" => "📸 Instagram", "callback_data" => "platform_ig"]],
+                [["text" => "📺 YouTube", "callback_data" => "platform_yt"]],
+                [["text" => "🔵 Facebook", "callback_data" => "platform_fb"]],
+                [["text" => "🚀 Barchasiga (IG, YT, FB, TG)", "callback_data" => "platform_ig,yt,fb,tg"]]
+            ]
+        ]);
         sendMessage($chat_id, "✅ Faylga avtomatik nom beriladi.\n\nQaysi tarmoqqa joylaymiz?", $keyboard);
         $url = "https://api.telegram.org/bot" . $TELEGRAM_TOKEN . "/editMessageReplyMarkup";
         file_get_contents($url . "?chat_id=$chat_id&message_id=$message_id&reply_markup=" . json_encode(["inline_keyboard" => []]));
