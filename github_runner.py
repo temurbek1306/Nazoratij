@@ -6,6 +6,7 @@ import requests
 
 def send_alert(msg):
     import requests
+    import html
     token = os.getenv("TELEGRAM_BOT_TOKEN")
     chat_id = os.getenv("TELEGRAM_ADMIN_ID")
     if token and chat_id:
@@ -14,8 +15,11 @@ def send_alert(msg):
             res = requests.post(url, data={"chat_id": chat_id, "text": msg, "parse_mode": "HTML"})
             if res.status_code != 200:
                 print(f"⚠️ Telegram (HTML) yuborishda xatolik: {res.text}")
-                # Agar HTML taglarda xato bo'lsa (masalan <HttpError>), parse_mode siz qayta yuboramiz
-                requests.post(url, data={"chat_id": chat_id, "text": msg})
+                # Agar HTML taglarda xato bo'lsa (masalan <HttpError>), parse_mode siz yoki qochirib yuboramiz
+                safe_msg = html.escape(msg).replace('&lt;b&gt;', '<b>').replace('&lt;/b&gt;', '</b>').replace('&lt;code&gt;', '<code>').replace('&lt;/code&gt;', '</code>')
+                res2 = requests.post(url, data={"chat_id": chat_id, "text": safe_msg, "parse_mode": "HTML"})
+                if res2.status_code != 200:
+                    requests.post(url, data={"chat_id": chat_id, "text": msg})
         except Exception as e:
             print(f"⚠️ Telegramga yuborishda xatolik: {e}")
 
