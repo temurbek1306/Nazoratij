@@ -20,8 +20,9 @@ def send_alert(msg):
             print(f"⚠️ Telegramga yuborishda xatolik: {e}")
 
 def post_to_platforms(platforms_str, local_video_path, url, caption, first_comment, video_name):
-    import os
     platforms = platforms_str.split(',') if platforms_str else ["ig", "yt", "fb", "tg"]
+    if "both" in platforms:
+        platforms = ["ig", "yt", "fb", "tg"]
     status_messages = []
     
     # --- INSTAGRAM ---
