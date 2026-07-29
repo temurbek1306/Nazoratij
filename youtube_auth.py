@@ -2,10 +2,9 @@ import os
 import json
 from google_auth_oauthlib.flow import InstalledAppFlow
 
-# YouTube Data API upload va o'qish uchun ruxsatlar
+# YouTube Data API uchun to'liq (full access) ruxsat
 SCOPES = [
-    "https://www.googleapis.com/auth/youtube.upload",
-    "https://www.googleapis.com/auth/youtube.readonly"
+    "https://www.googleapis.com/auth/youtube"
 ]
 
 def main():
