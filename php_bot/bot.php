@@ -484,7 +484,7 @@ if (isset($update['callback_query'])) {
             file_put_contents("state.txt", "none");
             
             $url = "https://api.telegram.org/bot" . $TELEGRAM_TOKEN . "/editMessageReplyMarkup";
-            file_get_contents($url . "?chat_id=$chat_id&message_id=$message_id&reply_markup=" . json_encode(["inline_keyboard" => []]));
+            file_get_contents($url . "?chat_id=$chat_id&message_id=$message_id&reply_markup=" . urlencode(json_encode(["inline_keyboard" => []])));
             
             sendMessage($chat_id, "⏳ <b>Birlashtirish jarayoni serverda boshlandi!</b>\nBu 2-3 daqiqa vaqt olishi mumkin. Tayyor bo'lgach, sizga prevyusini yuboraman.");
             
@@ -502,7 +502,7 @@ if (isset($update['callback_query'])) {
         file_put_contents("state.txt", "waiting_for_video_name");
         
         $url = "https://api.telegram.org/bot" . $TELEGRAM_TOKEN . "/editMessageReplyMarkup";
-        file_get_contents($url . "?chat_id=$chat_id&message_id=$message_id&reply_markup=" . json_encode(["inline_keyboard" => []]));
+        file_get_contents($url . "?chat_id=$chat_id&message_id=$message_id&reply_markup=" . urlencode(json_encode(["inline_keyboard" => []])));
         
         $keyboard = json_encode([
             "inline_keyboard" => [
@@ -515,7 +515,7 @@ if (isset($update['callback_query'])) {
     
     if (strpos($data, "delete_merged_") === 0) {
         $url = "https://api.telegram.org/bot" . $TELEGRAM_TOKEN . "/editMessageReplyMarkup";
-        file_get_contents($url . "?chat_id=$chat_id&message_id=$message_id&reply_markup=" . json_encode(["inline_keyboard" => []]));
+        file_get_contents($url . "?chat_id=$chat_id&message_id=$message_id&reply_markup=" . urlencode(json_encode(["inline_keyboard" => []])));
         
         sendMessage($chat_id, "🗑 Video bekor qilindi va o'chirildi.");
         exit;
@@ -527,7 +527,7 @@ if (isset($update['callback_query'])) {
         $keyboard = get_platforms_keyboard($chat_id);
         sendMessage($chat_id, "✅ Faylga avtomatik nom beriladi.\n\nQaysi tarmoqqa joylaymiz?", $keyboard);
         $url = "https://api.telegram.org/bot" . $TELEGRAM_TOKEN . "/editMessageReplyMarkup";
-        file_get_contents($url . "?chat_id=$chat_id&message_id=$message_id&reply_markup=" . json_encode(["inline_keyboard" => []]));
+        file_get_contents($url . "?chat_id=$chat_id&message_id=$message_id&reply_markup=" . urlencode(json_encode(["inline_keyboard" => []])));
         exit;
     }
     
@@ -541,7 +541,7 @@ if (isset($update['callback_query'])) {
         
         $keyboard = get_platforms_keyboard($chat_id);
         $url = "https://api.telegram.org/bot" . $TELEGRAM_TOKEN . "/editMessageReplyMarkup";
-        file_get_contents($url . "?chat_id=$chat_id&message_id=$message_id&reply_markup=" . $keyboard);
+        file_get_contents($url . "?chat_id=$chat_id&message_id=$message_id&reply_markup=" . urlencode($keyboard));
         exit;
     }
     
@@ -575,7 +575,7 @@ if (isset($update['callback_query'])) {
 
 Endi izohni kim yozadi?", $keyboard);
         $url = "https://api.telegram.org/bot" . $TELEGRAM_TOKEN . "/editMessageReplyMarkup";
-        file_get_contents($url . "?chat_id=$chat_id&message_id=$message_id&reply_markup=" . json_encode(["inline_keyboard" => []]));
+        file_get_contents($url . "?chat_id=$chat_id&message_id=$message_id&reply_markup=" . urlencode(json_encode(["inline_keyboard" => []])));
         exit;
     }
     
@@ -590,7 +590,7 @@ Endi izohni kim yozadi?", $keyboard);
         ]);
         sendMessage($chat_id, "🤖 AI yozishga tayyor!\n\nVideoni nima qilamiz?", $keyboard);
         $url = "https://api.telegram.org/bot" . $TELEGRAM_TOKEN . "/editMessageReplyMarkup";
-        file_get_contents($url . "?chat_id=$chat_id&message_id=$message_id&reply_markup=" . json_encode(["inline_keyboard" => []]));
+        file_get_contents($url . "?chat_id=$chat_id&message_id=$message_id&reply_markup=" . urlencode(json_encode(["inline_keyboard" => []])));
         exit;
     }
     
@@ -598,7 +598,7 @@ Endi izohni kim yozadi?", $keyboard);
         file_put_contents("state.txt", "waiting_for_caption");
         sendMessage($chat_id, "✍️ Iltimos, video uchun izohni (caption) jo'nating.\n\n*(Keyingi xabaringiz to'g'ridan-to'g'ri izoh sifatida qabul qilinadi)*");
         $url = "https://api.telegram.org/bot" . $TELEGRAM_TOKEN . "/editMessageReplyMarkup";
-        file_get_contents($url . "?chat_id=$chat_id&message_id=$message_id&reply_markup=" . json_encode(["inline_keyboard" => []]));
+        file_get_contents($url . "?chat_id=$chat_id&message_id=$message_id&reply_markup=" . urlencode(json_encode(["inline_keyboard" => []])));
         exit;
     }
     
@@ -614,7 +614,7 @@ Endi izohni kim yozadi?", $keyboard);
         
         sendMessage($chat_id, $msg);
         $url = "https://api.telegram.org/bot" . $TELEGRAM_TOKEN . "/editMessageReplyMarkup";
-        file_get_contents($url . "?chat_id=$chat_id&message_id=$message_id&reply_markup=" . json_encode(["inline_keyboard" => []]));
+        file_get_contents($url . "?chat_id=$chat_id&message_id=$message_id&reply_markup=" . urlencode(json_encode(["inline_keyboard" => []])));
         exit;
     }
     
@@ -667,7 +667,7 @@ Endi izohni kim yozadi?", $keyboard);
             
             // Takror bosilmasligi uchun tugmalarni o'chirib tashlash
             $url = "https://api.telegram.org/bot" . $TELEGRAM_TOKEN . "/editMessageReplyMarkup";
-            file_get_contents($url . "?chat_id=$chat_id&message_id=$message_id&reply_markup=" . json_encode(["inline_keyboard" => []]));
+            file_get_contents($url . "?chat_id=$chat_id&message_id=$message_id&reply_markup=" . urlencode(json_encode(["inline_keyboard" => []])));
         } else {
             sendMessage($chat_id, "❌ Video manzili topilmadi. Qaytadan yuboring.");
         }
@@ -677,7 +677,7 @@ Endi izohni kim yozadi?", $keyboard);
         // A, B, C matnlari tanlanganda yoki Bekor qilinganda
         triggerGitHubAction("telegram_command", array("command" => $data));
         
-        file_get_contents($url . "?chat_id=$chat_id&message_id=$message_id&reply_markup=" . json_encode(["inline_keyboard" => []]));
+        file_get_contents($url . "?chat_id=$chat_id&message_id=$message_id&reply_markup=" . urlencode(json_encode(["inline_keyboard" => []])));
         exit;
     }
     elseif (strpos($data, "scenario_parts_") === 0) {
@@ -696,7 +696,7 @@ Endi izohni kim yozadi?", $keyboard);
         
         // Takror bosilmasligi uchun tugmalarni o'chirib tashlash
         $url = "https://api.telegram.org/bot" . $TELEGRAM_TOKEN . "/editMessageReplyMarkup";
-        file_get_contents($url . "?chat_id=$chat_id&message_id=$message_id&reply_markup=" . json_encode(["inline_keyboard" => []]));
+        file_get_contents($url . "?chat_id=$chat_id&message_id=$message_id&reply_markup=" . urlencode(json_encode(["inline_keyboard" => []])));
         exit;
     }
     elseif (strpos($data, "hmod_") === 0) {
@@ -797,7 +797,7 @@ Masalan:
                 
                 // Takror bosilmasligi uchun tugmalarni o'chirib tashlash
                 $url = "https://api.telegram.org/bot" . $TELEGRAM_TOKEN . "/editMessageReplyMarkup";
-                file_get_contents($url . "?chat_id=$chat_id&message_id=$message_id&reply_markup=" . json_encode(["inline_keyboard" => []]));
+                file_get_contents($url . "?chat_id=$chat_id&message_id=$message_id&reply_markup=" . urlencode(json_encode(["inline_keyboard" => []])));
                 exit;
             }
         }
@@ -809,14 +809,14 @@ Masalan:
         sendMessage($chat_id, "🚀 <b>Videoni joylash jarayoni boshlandi!</b>\n\nNavbatdagi (Pending) video hozir tarmoqlarga joylanadi (1-2 daqiqa kuting).");
         triggerGitHubAction("telegram_post", array("video_url" => ""));
         $url = "https://api.telegram.org/bot" . $TELEGRAM_TOKEN . "/editMessageReplyMarkup";
-        file_get_contents($url . "?chat_id=$chat_id&message_id=$message_id&reply_markup=" . json_encode(["inline_keyboard" => []]));
+        file_get_contents($url . "?chat_id=$chat_id&message_id=$message_id&reply_markup=" . urlencode(json_encode(["inline_keyboard" => []])));
         exit;
     }
     elseif ($data == "confirm_clear") {
         sendMessage($chat_id, "⏳ Tozalanmoqda...");
         triggerGitHubAction("telegram_command", array("command" => "clear"));
         $url = "https://api.telegram.org/bot" . $TELEGRAM_TOKEN . "/editMessageReplyMarkup";
-        file_get_contents($url . "?chat_id=$chat_id&message_id=$message_id&reply_markup=" . json_encode(["inline_keyboard" => []]));
+        file_get_contents($url . "?chat_id=$chat_id&message_id=$message_id&reply_markup=" . urlencode(json_encode(["inline_keyboard" => []])));
         exit;
     }
     elseif ($data == "confirm_cancel") {
