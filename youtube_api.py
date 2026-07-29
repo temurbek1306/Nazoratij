@@ -9,7 +9,10 @@ class YouTubeAPI:
         self.client_id = client_id
         self.client_secret = client_secret
         self.refresh_token = refresh_token
-        self.scopes = ["https://www.googleapis.com/auth/youtube"]
+        self.scopes = [
+            "https://www.googleapis.com/auth/youtube",
+            "https://www.googleapis.com/auth/youtube.force-ssl"
+        ]
         self.youtube = self._get_authenticated_service()
 
     def _get_authenticated_service(self):
