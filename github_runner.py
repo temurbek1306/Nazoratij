@@ -19,7 +19,7 @@ def send_alert(msg):
         except Exception as e:
             print(f"⚠️ Telegramga yuborishda xatolik: {e}")
 
-def post_to_platforms(platforms_str, local_video_path, url, caption, first_comment, video_name):
+def post_to_platforms(platforms_str, local_video_path, url, caption, first_comment, video_name, base_caption=""):
     platforms = platforms_str.split(',') if platforms_str else ["ig", "yt", "fb", "tg"]
     if "both" in platforms:
         platforms = ["ig", "yt", "fb", "tg"]
@@ -71,7 +71,8 @@ def post_to_platforms(platforms_str, local_video_path, url, caption, first_comme
     if "tg" in platforms:
         from agent_tools import post_to_telegram
         if os.path.exists(local_video_path):
-            if post_to_telegram(local_video_path, caption):
+            tg_cap = base_caption + "\n\n@Temurbek_Gulboyev" if base_caption else caption
+            if post_to_telegram(local_video_path, tg_cap):
                 status_messages.append("✅ Telegram Channel")
             else:
                 status_messages.append("❌ Telegram Channel")
@@ -172,7 +173,7 @@ def run():
         except:
             first_comment = "👇 Fikringizni izohlarda yozib qoldiring!"
             
-        status_str = post_to_platforms(platform, local_video_path, url, manual_caption, first_comment, video_name)
+        status_str = post_to_platforms(platform, local_video_path, url, manual_caption, first_comment, video_name, base_caption=caption)
         send_alert(f"""✅ Boss, video holati (Qo'lda yozilgan izoh bilan):
 
 Video: {video_name}
@@ -342,7 +343,7 @@ CAPTION_A: (videoga to'liq mos yozilgan caption)"""
     except:
         first_comment = "👇 Fikringizni izohlarda yozib qoldiring!"
 
-    status_str = post_to_platforms(platform, local_video_path, url, final_fallback_caption, first_comment, video_name)
+    status_str = post_to_platforms(platform, local_video_path, url, final_fallback_caption, first_comment, video_name, base_caption=final_caption)
     send_alert(f"""📋 <b>Yangi video yakuniy hisoboti!</b>
 
 Nomi: <code>{video_name}</code>
