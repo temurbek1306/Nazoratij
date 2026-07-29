@@ -172,11 +172,11 @@ def run():
             first_comment = "👇 Fikringizni izohlarda yozib qoldiring!"
             
         status_str = post_to_platforms(platform, local_video_path, url, manual_caption, first_comment, video_name)
-        send_alert(f"✅ Boss, video holati (Qo'lda yozilgan izoh bilan):
+        send_alert(f"""✅ Boss, video holati (Qo'lda yozilgan izoh bilan):
 
 Video: {video_name}
 
-{status_str}")
+{status_str}""")
         os.remove(txt_file)
         
         from video_manager import VideoManager
@@ -342,11 +342,11 @@ CAPTION_A: (videoga to'liq mos yozilgan caption)"""
         first_comment = "👇 Fikringizni izohlarda yozib qoldiring!"
 
     status_str = post_to_platforms(platform, local_video_path, url, final_fallback_caption, first_comment, video_name)
-    send_alert(f"📋 <b>Yangi video yakuniy hisoboti!</b>
+    send_alert(f"""📋 <b>Yangi video yakuniy hisoboti!</b>
 
 Nomi: <code>{video_name}</code>
 
-{status_str}")
+{status_str}""")
 
 if __name__ == "__main__":
     run()
