@@ -198,8 +198,13 @@ Video: {video_name}
         try:
             import google.generativeai as genai
             print(f"🧠 Gemini AI ishga tushmoqda (Urinish {attempt+1})...")
-            os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = os.path.join(os.path.dirname(__file__), "service_account.json")
-            genai.configure()
+            if gemini_key == "SERVICE_ACCOUNT_AUTH":
+                os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = os.path.join(os.path.dirname(__file__), "service_account.json")
+                genai.configure()
+            else:
+                if "GOOGLE_APPLICATION_CREDENTIALS" in os.environ:
+                    del os.environ["GOOGLE_APPLICATION_CREDENTIALS"]
+                genai.configure(api_key=gemini_key)
             
             print(f"📤 Video Gemini serveriga yuklanmoqda: {local_video_path}")
             video_file = genai.upload_file(path=local_video_path)

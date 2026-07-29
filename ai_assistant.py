@@ -30,7 +30,13 @@ class KeyManager:
         self.current_or_index = 0
         
     def get_gemini_key(self):
-        # We now use multiple Service Account JSONs.
+        # Oldin API kalitlarni tekshiramiz
+        if self.keys.get("gemini") and len(self.keys["gemini"]) > 0:
+            key = self.keys["gemini"][self.current_gemini_index]
+            self.current_gemini_index = (self.current_gemini_index + 1) % len(self.keys["gemini"])
+            return key
+            
+        # Agar API kalitlar bo'lmasa, Service Account orqali ulanish
         if self.service_accounts and len(self.service_accounts) > 0:
             sa = self.service_accounts[self.current_sa_index]
             self.current_sa_index = (self.current_sa_index + 1) % len(self.service_accounts)
