@@ -350,5 +350,8 @@ Nomi: <code>{video_name}</code>
 
 {status_str}""")
 
+    from video_manager import VideoManager
+    VideoManager().mark_as_posted(video_name)
+
 if __name__ == "__main__":
     run()
