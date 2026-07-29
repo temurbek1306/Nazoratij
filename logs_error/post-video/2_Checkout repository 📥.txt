@@ -1,0 +1,74 @@
+﻿2026-07-29T20:21:12.2652019Z Node 20 is being deprecated. This workflow is running with Node 24 by default. If you need to temporarily use Node 20, you can set the ACTIONS_ALLOW_USE_UNSECURE_NODE_VERSION=true environment variable. For more information see: https://github.blog/changelog/2025-09-19-deprecation-of-node-20-on-github-actions-runners/
+2026-07-29T20:21:12.2660515Z ##[group***Run actions/checkout@v4
+2026-07-29T20:21:12.2661339Z with:
+2026-07-29T20:21:12.2661876Z   repository: temurbek1306/InstagaramAvtoReels
+2026-07-29T20:21:12.2664781Z   token: ***
+2026-07-29T20:21:12.2665262Z   ssh-strict: true
+2026-07-29T20:21:12.2665743Z   ssh-user: git
+2026-07-29T20:21:12.2666217Z   persist-credentials: true
+2026-07-29T20:21:12.2667090Z   clean: true
+2026-07-29T20:21:12.2667600Z   sparse-checkout-cone-mode: true
+2026-07-29T20:21:12.2668155Z   fetch-depth: 1
+2026-07-29T20:21:12.2668636Z   fetch-tags: false
+2026-07-29T20:21:12.2669126Z   show-progress: true
+2026-07-29T20:21:12.2669646Z   lfs: false
+2026-07-29T20:21:12.2670104Z   submodules: false
+2026-07-29T20:21:12.2670616Z   set-safe-directory: true
+2026-07-29T20:21:12.2671144Z   allow-unsafe-pr-checkout: false
+2026-07-29T20:21:12.2672036Z ##[endgroup***
+2026-07-29T20:21:12.3895721Z Syncing repository: temurbek1306/InstagaramAvtoReels
+2026-07-29T20:21:12.3899189Z ##[group***Getting Git version info
+2026-07-29T20:21:12.3900547Z Working directory is '/home/runner/work/InstagaramAvtoReels/InstagaramAvtoReels'
+2026-07-29T20:21:12.3902502Z [command***/usr/bin/git version
+2026-07-29T20:21:12.3903420Z git version 2.54.0
+2026-07-29T20:21:12.3941929Z ##[endgroup***
+2026-07-29T20:21:12.3971919Z Temporarily overriding HOME='/home/runner/work/_temp/ffac069e-2708-4a1f-90e9-447aa79cf08a' before making global git config changes
+2026-07-29T20:21:12.3985387Z Adding repository directory to the temporary git global config as a safe directory
+2026-07-29T20:21:12.3987840Z [command***/usr/bin/git config --global --add safe.directory /home/runner/work/InstagaramAvtoReels/InstagaramAvtoReels
+2026-07-29T20:21:12.4048498Z Deleting the contents of '/home/runner/work/InstagaramAvtoReels/InstagaramAvtoReels'
+2026-07-29T20:21:12.4050729Z ##[group***Initializing the repository
+2026-07-29T20:21:12.4059509Z [command***/usr/bin/git init /home/runner/work/InstagaramAvtoReels/InstagaramAvtoReels
+2026-07-29T20:21:12.4176695Z hint: Using 'master' as the name for the initial branch. This default branch name
+2026-07-29T20:21:12.4195774Z hint: will change to "main" in Git 3.0. To configure the initial branch name
+2026-07-29T20:21:12.4209522Z hint: to use in all of your new repositories, which will suppress this warning,
+2026-07-29T20:21:12.4211297Z hint: call:
+2026-07-29T20:21:12.4212873Z hint:
+2026-07-29T20:21:12.4217436Z hint: 	git config --global init.defaultBranch <name>
+2026-07-29T20:21:12.4219201Z hint:
+2026-07-29T20:21:12.4220596Z hint: Names commonly chosen instead of 'master' are 'main', 'trunk' and
+2026-07-29T20:21:12.4222544Z hint: 'development'. The just-created branch can be renamed via this command:
+2026-07-29T20:21:12.4224164Z hint:
+2026-07-29T20:21:12.4225592Z hint: 	git branch -m <name>
+2026-07-29T20:21:12.4227256Z hint:
+2026-07-29T20:21:12.4228932Z hint: Disable this message with "git config set advice.defaultBranchName false"
+2026-07-29T20:21:12.4232536Z Initialized empty Git repository in /home/runner/work/InstagaramAvtoReels/InstagaramAvtoReels/.git/
+2026-07-29T20:21:12.4235554Z [command***/usr/bin/git remote add origin https://github.com/temurbek1306/InstagaramAvtoReels
+2026-07-29T20:21:12.4284442Z ##[endgroup***
+2026-07-29T20:21:12.4286325Z ##[group***Disabling automatic garbage collection
+2026-07-29T20:21:12.4288491Z [command***/usr/bin/git config --local gc.auto 0
+2026-07-29T20:21:12.4385111Z ##[endgroup***
+2026-07-29T20:21:12.4408231Z ##[group***Setting up auth
+2026-07-29T20:21:12.4428575Z [command***/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+2026-07-29T20:21:12.4449948Z [command***/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+2026-07-29T20:21:12.4844792Z [command***/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+2026-07-29T20:21:12.5322304Z [command***/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+2026-07-29T20:21:12.5389237Z [command***/usr/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+2026-07-29T20:21:12.5408753Z [command***/usr/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+2026-07-29T20:21:12.5582105Z [command***/usr/bin/git config --local http.https://github.com/.extraheader AUTHORIZATION: basic ***
+2026-07-29T20:21:12.5626150Z ##[endgroup***
+2026-07-29T20:21:12.5628882Z ##[group***Fetching the repository
+2026-07-29T20:21:12.5638572Z [command***/usr/bin/git -c protocol.version=2 fetch --no-tags --prune --no-recurse-submodules --depth=1 origin +f74ccd28e3339e0bcd268b46c998b7ddbd30bc40:refs/remotes/origin/main
+2026-07-29T20:21:18.4947887Z From https://github.com/temurbek1306/InstagaramAvtoReels
+2026-07-29T20:21:18.4951507Z  * [new ref***         f74ccd28e3339e0bcd268b46c998b7ddbd30bc40 -> origin/main
+2026-07-29T20:21:18.5008193Z ##[endgroup***
+2026-07-29T20:21:18.5028344Z ##[group***Determining the checkout info
+2026-07-29T20:21:18.5048147Z ##[endgroup***
+2026-07-29T20:21:18.5067638Z [command***/usr/bin/git sparse-checkout disable
+2026-07-29T20:21:18.5103723Z [command***/usr/bin/git config --local --unset-all extensions.worktreeConfig
+2026-07-29T20:21:18.5148465Z ##[group***Checking out the ref
+2026-07-29T20:21:18.5167619Z [command***/usr/bin/git checkout --progress --force -B main refs/remotes/origin/main
+2026-07-29T20:21:18.6769063Z Switched to a new branch 'main'
+2026-07-29T20:21:18.6789134Z branch 'main' set up to track 'origin/main'.
+2026-07-29T20:21:18.6837162Z ##[endgroup***
+2026-07-29T20:21:18.6912701Z [command***/usr/bin/git log -1 --format=%H
+2026-07-29T20:21:18.6957247Z f74ccd28e3339e0bcd268b46c998b7ddbd30bc40

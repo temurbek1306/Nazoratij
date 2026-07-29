@@ -5,7 +5,7 @@
 
 $TELEGRAM_TOKEN = "8674470670:AAER3Y3EfZ44eFUhxKTpsGX_X_Vg6LvKYOQ";
 $ADMIN_ID = 5701828462;
-$GITHUB_PAT = "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";
+$GITHUB_PAT = "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";
 $GITHUB_REPO = "temurbek1306/InstagaramAvtoReels";
 
 $update = json_decode(file_get_contents('php://input'), TRUE);

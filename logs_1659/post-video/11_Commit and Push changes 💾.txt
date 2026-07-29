@@ -1,0 +1,33 @@
+﻿2026-07-29T17:01:55.0284479Z ##[group***Run git config --local user.email "bot@temurbek.dev"
+2026-07-29T17:01:55.0285184Z [36;1mgit config --local user.email "bot@temurbek.dev"[0m
+2026-07-29T17:01:55.0285758Z [36;1mgit config --local user.name "AutoReels Bot"[0m
+2026-07-29T17:01:55.0286401Z [36;1m# Check if there are any changes (like video moved to posted folder)[0m
+2026-07-29T17:01:55.0287082Z [36;1mif [[ -n "$(git status --porcelain)" ***; then[0m
+2026-07-29T17:01:55.0287614Z [36;1m  git add -A videos/[0m
+2026-07-29T17:01:55.0288630Z [36;1m  git commit -m "🤖 Bot: Bitta video Instagramga joylandi va papkasi o'zgartirildi"[0m
+2026-07-29T17:01:55.0289575Z [36;1m  git pull --rebase --autostash origin main || true[0m
+2026-07-29T17:01:55.0290105Z [36;1m  git push[0m
+2026-07-29T17:01:55.0290483Z [36;1melse[0m
+2026-07-29T17:01:55.0291002Z [36;1m  echo "Hech qanday o'zgarish yo'q (Video joylanmadi yoki qolmadi)."[0m
+2026-07-29T17:01:55.0291586Z [36;1mfi[0m
+2026-07-29T17:01:55.0337300Z shell: /usr/bin/bash -e ***0***
+2026-07-29T17:01:55.0338168Z env:
+2026-07-29T17:01:55.0338572Z   TARGET_VIDEO: zz_tg_video_30473288460.mp4
+2026-07-29T17:01:55.0339134Z   pythonLocation: /opt/hostedtoolcache/Python/3.10.20/x64
+2026-07-29T17:01:55.0339784Z   PKG_CONFIG_PATH: /opt/hostedtoolcache/Python/3.10.20/x64/lib/pkgconfig
+2026-07-29T17:01:55.0340442Z   Python_ROOT_DIR: /opt/hostedtoolcache/Python/3.10.20/x64
+2026-07-29T17:01:55.0341039Z   Python2_ROOT_DIR: /opt/hostedtoolcache/Python/3.10.20/x64
+2026-07-29T17:01:55.0341635Z   Python3_ROOT_DIR: /opt/hostedtoolcache/Python/3.10.20/x64
+2026-07-29T17:01:55.0342237Z   LD_LIBRARY_PATH: /opt/hostedtoolcache/Python/3.10.20/x64/lib
+2026-07-29T17:01:55.0342772Z ##[endgroup***
+2026-07-29T17:01:55.6369779Z [main c9d1931*** 🤖 Bot: Bitta video Instagramga joylandi va papkasi o'zgartirildi
+2026-07-29T17:01:55.6379045Z  2 files changed, 1 insertion(+)
+2026-07-29T17:01:55.6382187Z  create mode 100644 videos/pending/zz_tg_video_30473288460.mp4
+2026-07-29T17:01:55.6383858Z  create mode 100644 videos/pending/zz_tg_video_30473288460.platform.txt
+2026-07-29T17:01:55.9162012Z From https://github.com/temurbek1306/InstagaramAvtoReels
+2026-07-29T17:01:55.9163508Z  * branch            main       -> FETCH_HEAD
+2026-07-29T17:01:55.9165066Z    e649a76..721373b  main       -> origin/main
+2026-07-29T17:01:55.9464235Z Rebasing (1/1)
+2026-07-29T17:01:55.9465504Z Successfully rebased and updated refs/heads/main.
+2026-07-29T17:01:57.7933860Z To https://github.com/temurbek1306/InstagaramAvtoReels
+2026-07-29T17:01:57.7935562Z    721373b..71c0aeb  main -> main

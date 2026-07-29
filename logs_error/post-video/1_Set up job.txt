@@ -1,0 +1,32 @@
+﻿2026-07-29T20:21:09.0472818Z Current runner version: '2.336.0'
+2026-07-29T20:21:09.0555286Z ##[group***Runner Image Provisioner
+2026-07-29T20:21:09.0578466Z Hosted Compute Agent
+2026-07-29T20:21:09.0580660Z Version: 20260707.563
+2026-07-29T20:21:09.0583079Z Commit: 02667638d2b423fbc733a8e32a88b44996a3ba6e
+2026-07-29T20:21:09.0585541Z Build Date: 2026-07-07T19:33:50Z
+2026-07-29T20:21:09.0588246Z Worker ID: ***d832a5f1-43c8-4bd3-9c2e-f8c429ff421a***
+2026-07-29T20:21:09.0590928Z Azure Region: northcentralus
+2026-07-29T20:21:09.0593228Z ##[endgroup***
+2026-07-29T20:21:09.0616970Z ##[group***Operating System
+2026-07-29T20:21:09.0619294Z Ubuntu
+2026-07-29T20:21:09.0621273Z 24.04.4
+2026-07-29T20:21:09.0623210Z LTS
+2026-07-29T20:21:09.0625294Z ##[endgroup***
+2026-07-29T20:21:09.0628018Z ##[group***Runner Image
+2026-07-29T20:21:09.0630293Z Image: ubuntu-24.04
+2026-07-29T20:21:09.0632607Z Version: 20260720.247.2
+2026-07-29T20:21:09.0635875Z Included Software: https://github.com/actions/runner-images/blob/ubuntu24/20260720.247/images/ubuntu/Ubuntu2404-Readme.md
+2026-07-29T20:21:09.0650859Z Image Release: https://github.com/actions/runner-images/releases/tag/ubuntu24%2F20260720.247
+2026-07-29T20:21:09.0654004Z ##[endgroup***
+2026-07-29T20:21:09.0657995Z ##[group***GITHUB_TOKEN Permissions
+2026-07-29T20:21:09.0662446Z Contents: write
+2026-07-29T20:21:09.0664525Z Metadata: read
+2026-07-29T20:21:09.0687214Z ##[endgroup***
+2026-07-29T20:21:09.0691570Z Secret source: Actions
+2026-07-29T20:21:09.0695119Z Prepare workflow directory
+2026-07-29T20:21:09.1204161Z Prepare all required actions
+2026-07-29T20:21:09.1278842Z Getting action download info
+2026-07-29T20:21:09.3592169Z Download action repository 'actions/checkout@v4' (SHA:11d5960a326750d5838078e36cf38b85af677262)
+2026-07-29T20:21:09.7382132Z Download action repository 'dawidd6/action-download-artifact@v3' (SHA:09f2f74827fd3a8607589e5ad7f9398816f540fe)
+2026-07-29T20:21:11.9973161Z Download action repository 'actions/setup-python@v5' (SHA:a26af69be951a213d495a4c3e4e4022e16d87065)
+2026-07-29T20:21:12.1850007Z Complete job name: post-video

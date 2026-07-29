@@ -4,7 +4,7 @@
 // ==========================================
 
 $CONFIG_FILE = 'config.json';
-$GITHUB_PAT = "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"; // O'zgartirish shart emas (hozircha)
+$GITHUB_PAT = "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"; // O'zgartirish shart emas (hozircha)
 $GITHUB_REPO = "temurbek1306/InstagaramAvtoReels";
 
 // 1️⃣ ANIQ VAQTGA BELGILANGAN VIDEOLARNI O'QISH VA HIMOYA QILISH
