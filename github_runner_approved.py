@@ -33,7 +33,7 @@ def run():
             
         # Platformani tekshirish
         base_name = os.path.splitext(video_name)[0]
-        platforms = ["ig", "yt", "tg", "fb", "tt"] # Default if not set
+        platforms = ["ig", "yt", "tg", "fb"] # Default if not set
         platform_file = f"videos/pending/{base_name}.platform.txt"
         if os.path.exists(platform_file):
             with open(platform_file, "r", encoding="utf-8") as f:
@@ -111,25 +111,6 @@ def run():
                     status_messages.append(f"❌ Facebook ({str(e)[:50]})")
             else:
                 status_messages.append("⚠️ Facebook (API kalitlar yo'q)")
-
-        # --- TIKTOK ---
-        if "tt" in platforms:
-            tt_client_key = os.getenv("TIKTOK_CLIENT_KEY")
-            tt_client_secret = os.getenv("TIKTOK_CLIENT_SECRET")
-            tt_refresh_token = os.getenv("TIKTOK_REFRESH_TOKEN")
-            if tt_client_key and tt_client_secret and tt_refresh_token:
-                try:
-                    from tiktok_api import TikTokAPI
-                    tt_api = TikTokAPI(tt_client_key, tt_client_secret, tt_refresh_token)
-                    if os.path.exists(local_video_path):
-                        if tt_api.upload_video(local_video_path, caption):
-                            status_messages.append("✅ TikTok")
-                        else:
-                            status_messages.append("❌ TikTok")
-                except Exception as e:
-                    status_messages.append(f"❌ TikTok ({str(e)[:50]})")
-            else:
-                status_messages.append("⚠️ TikTok (API kalitlar yo'q)")
 
         # # --- TELEGRAM HISOBOT ---
         tg_token = os.getenv("TELEGRAM_BOT_TOKEN")
