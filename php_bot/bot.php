@@ -70,14 +70,7 @@ if (isset($update['message'])) {
                 ]);
                 sendMessage($chat_id, "🎬 Video qabul qilindi!\n\n✏️ Iltimos, bu videoga ixtiyoriy qisqa nom bering (keyingi yuborgan matningiz nom sifatida qabul qilinadi).", $keyboard);
             } else {
-                $keyboard = json_encode([
-                    "inline_keyboard" => [
-                        [["text" => "📸 Instagram", "callback_data" => "platform_ig"]],
-                        [["text" => "📺 YouTube", "callback_data" => "platform_yt"]],
-                        [["text" => "🔵 Facebook", "callback_data" => "platform_fb"]],
-                        [["text" => "🚀 Barchasiga (IG, YT, FB, TG)", "callback_data" => "platform_ig,yt,fb,tg"]]
-                    ]
-                ]);
+                $keyboard = get_platforms_keyboard($chat_id);
                 sendMessage($chat_id, "🎬 Video qabul qilindi! Nomi: <b>$video_name_custom</b>\n\nQaysi tarmoqqa joylaymiz?", $keyboard);
             }
         } else {
@@ -100,14 +93,7 @@ if (isset($update['message'])) {
             file_put_contents("state.txt", "none");
             
             if (file_exists("platforms_" . $chat_id . ".json")) unlink("platforms_" . $chat_id . ".json");
-            $keyboard = json_encode([
-                "inline_keyboard" => [
-                    [["text" => "📸 Instagram", "callback_data" => "platform_ig"]],
-                    [["text" => "📺 YouTube", "callback_data" => "platform_yt"]],
-                    [["text" => "🔵 Facebook", "callback_data" => "platform_fb"]],
-                    [["text" => "🚀 Barchasiga (IG, YT, FB, TG)", "callback_data" => "platform_ig,yt,fb,tg"]]
-                ]
-            ]);
+            $keyboard = get_platforms_keyboard($chat_id);
             sendMessage($chat_id, "✅ Videoga <b>$video_name_custom</b> deb nom berildi!\n\nQaysi tarmoqqa joylaymiz?", $keyboard);
             exit;
         }
@@ -538,23 +524,44 @@ if (isset($update['callback_query'])) {
     if ($data == "skip_naming") {
         file_put_contents("state.txt", "none");
         if (file_exists("platforms_" . $chat_id . ".json")) unlink("platforms_" . $chat_id . ".json");
-        $keyboard = json_encode([
-            "inline_keyboard" => [
-                [["text" => "📸 Instagram", "callback_data" => "platform_ig"]],
-                [["text" => "📺 YouTube", "callback_data" => "platform_yt"]],
-                [["text" => "🔵 Facebook", "callback_data" => "platform_fb"]],
-                [["text" => "🚀 Barchasiga (IG, YT, FB, TG)", "callback_data" => "platform_ig,yt,fb,tg"]]
-            ]
-        ]);
+        $keyboard = get_platforms_keyboard($chat_id);
         sendMessage($chat_id, "✅ Faylga avtomatik nom beriladi.\n\nQaysi tarmoqqa joylaymiz?", $keyboard);
         $url = "https://api.telegram.org/bot" . $TELEGRAM_TOKEN . "/editMessageReplyMarkup";
         file_get_contents($url . "?chat_id=$chat_id&message_id=$message_id&reply_markup=" . json_encode(["inline_keyboard" => []]));
         exit;
     }
     
-    if (strpos($data, "platform_") === 0) {
-        $platform = str_replace("platform_", "", $data);
-        file_put_contents("last_platform.txt", $platform);
+    // Toggle handling
+    if (strpos($data, "toggle_") === 0) {
+        $key = str_replace("toggle_", "", $data);
+        $state_file = "platforms_" . $chat_id . ".json";
+        $platforms = json_decode(file_get_contents($state_file), true);
+        $platforms[$key] = !$platforms[$key];
+        file_put_contents($state_file, json_encode($platforms));
+        
+        $keyboard = get_platforms_keyboard($chat_id);
+        $url = "https://api.telegram.org/bot" . $TELEGRAM_TOKEN . "/editMessageReplyMarkup";
+        file_get_contents($url . "?chat_id=$chat_id&message_id=$message_id&reply_markup=" . $keyboard);
+        exit;
+    }
+    
+    // Confirm handling
+    if ($data == "platform_confirm") {
+        $state_file = "platforms_" . $chat_id . ".json";
+        $platforms = json_decode(file_get_contents($state_file), true);
+        
+        $selected = [];
+        foreach($platforms as $k => $v) {
+            if ($v) $selected[] = $k;
+        }
+        
+        if (empty($selected)) {
+            $url = "https://api.telegram.org/bot" . $TELEGRAM_TOKEN . "/answerCallbackQuery";
+            file_get_contents($url . "?callback_query_id=" . $update['callback_query']['id'] . "&text=" . urlencode("Hech bo'lmasa 1 ta tarmoqni tanlang!") . "&show_alert=true");
+            exit;
+        }
+        
+        file_put_contents("last_platform.txt", implode(",", $selected));
         
         $keyboard = json_encode([
             "inline_keyboard" => [
@@ -564,7 +571,9 @@ if (isset($update['callback_query'])) {
                 ]
             ]
         ]);
-        sendMessage($chat_id, "✅ Tarmoq tanlandi!\n\nEndi izohni kim yozadi?", $keyboard);
+        sendMessage($chat_id, "✅ Tarmoqlar tasdiqlandi!
+
+Endi izohni kim yozadi?", $keyboard);
         $url = "https://api.telegram.org/bot" . $TELEGRAM_TOKEN . "/editMessageReplyMarkup";
         file_get_contents($url . "?chat_id=$chat_id&message_id=$message_id&reply_markup=" . json_encode(["inline_keyboard" => []]));
         exit;
