@@ -4,8 +4,9 @@ import requests
 import github_runner
 
 def send_telegram_msg(text, reply_markup=None):
-    tg_token = os.getenv("TELEGRAM_BOT_TOKEN")
-    tg_admin = os.getenv("TELEGRAM_ADMIN_ID")
+    tg_token = "8674470670:AAER3Y3EfZ44eFUhxKTpsGX_X_Vg6LvKYOQ"
+    tg_admin = "5701828462"
+    
     if tg_token and tg_admin:
         try:
             # Telegram xabar chegarasi 4096 belgi. Biz 4000 tadan bo'lib yuboramiz.

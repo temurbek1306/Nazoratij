@@ -240,8 +240,8 @@ CAPTION_A: (videoga to'liq mos yozilgan caption)"""
                     json.dump(data, f)
                     
                 # Telegramga yuborish
-                tg_token = os.getenv("TELEGRAM_BOT_TOKEN")
-                tg_admin = os.getenv("TELEGRAM_ADMIN_ID")
+                tg_token = "8674470670:AAER3Y3EfZ44eFUhxKTpsGX_X_Vg6LvKYOQ"
+                tg_admin = "5701828462"
                 if tg_token and tg_admin:
                     import requests
                     msg = f"🎬 <b>Video tayyor: {video_name}</b>\n\nAI'lar jangi boshlandi! Qaysi matnni post qilamiz?\n\n"
