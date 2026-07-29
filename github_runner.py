@@ -343,7 +343,7 @@ CAPTION_A: (videoga to'liq mos yozilgan caption)"""
     except:
         first_comment = "👇 Fikringizni izohlarda yozib qoldiring!"
 
-    status_str = post_to_platforms(platform, local_video_path, url, final_fallback_caption, first_comment, video_name, base_caption=final_caption)
+    status_str = post_to_platforms(platform, local_video_path, url, final_fallback_caption, first_comment, video_name, base_caption=caption)
     send_alert(f"""📋 <b>Yangi video yakuniy hisoboti!</b>
 
 Nomi: <code>{video_name}</code>
