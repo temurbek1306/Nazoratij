@@ -246,73 +246,7 @@ def run():
             
         import video_generator
         video_generator.generate(prompt_text, ratio)
-    elif command == "generate_scenario":
-        send_telegram_msg("🎬 Pro+++ Max Ssenariy yozilmoqda. Qattiq kuting, bu juda daxshatli bo'ladi! (10-20 soniya)...")
-        import ai_assistant
-        scenario = ai_assistant.generate_pro_max_scenario(prompt)
-        send_telegram_msg(scenario)
     elif command == "merge_videos":
-        try:
-            video_urls_str = os.getenv("TELEGRAM_PROMPT") # Wait, bot.php sends it as "video_urls". Let's check github actions trigger
-            # In bot.php I passed it as video_urls but github action takes client_payload...
-            # I'll create a special workflow or just run a script!
-            pass
-        except Exception as e:
-            send_telegram_msg(f"Birlashtirishda xatolik: {e}")
-    elif command == "strategy":
-        try:
-            import ai_assistant
-            import requests
-            send_telegram_msg("🧠 AI Profilingizni analiz qilmoqda... (Kuting)")
-            
-            ig_token = os.getenv("IG_ACCESS_TOKEN")
-            ig_account_id = os.getenv("IG_ACCOUNT_ID")
-            
-            profile_data = "Ayni paytda Instagram hisobi ulanmagan yoki postlar yo'q."
-            trend_data = "Ayni paytda trendlarni o'qib bo'lmadi."
-            
-            if ig_token and ig_account_id:
-                try:
-                    url = f"https://graph.facebook.com/v18.0/{ig_account_id}/media?fields=caption,like_count,comments_count,media_type&limit=15&access_token={ig_token}"
-                    res = requests.get(url, timeout=15).json()
-                    if "data" in res and len(res["data"]) > 0:
-                        posts = res["data"]
-                        sorted_posts = sorted(posts, key=lambda x: x.get('like_count', 0), reverse=True)
-                        top_posts = sorted_posts[:3]
-                        profile_data = "Foydalanuvchining Instagramdagi eng omadli (Top 3) postlari:\n"
-                        for i, p in enumerate(top_posts):
-                            cpt = p.get('caption', 'Sarlavha yoq')[:150].replace('\n', ' ')
-                            lks = p.get('like_count', 0)
-                            cms = p.get('comments_count', 0)
-                            profile_data += f"{i+1}-post. Layklar: {lks}, Kommentlar: {cms}. Sarlavhasi: '{cpt}'\n"
-                except Exception as e:
-                    print("IG Profile fetch error:", e)
-                    
-                try:
-                    import random
-                    all_tags = ["biznes", "pul", "psixologiya", "faktlar", "sirlar", "qiziqarli", "motivatsiya", "foydali", "hiylalar", "internet", "texnologiya", "dasturlash", "sunniyintellekt"]
-                    chosen_tags = random.sample(all_tags, 2)
-                    trend_data = "Butun Instagramdagi ayni damdagi eng ommabop begona postlar (Trendlar):\n"
-                    for hashtag in chosen_tags:
-                        h_url = f"https://graph.facebook.com/v18.0/ig_hashtag_search?user_id={ig_account_id}&q={hashtag}&access_token={ig_token}"
-                        h_res = requests.get(h_url, timeout=15).json()
-                        if "data" in h_res and len(h_res["data"]) > 0:
-                            h_id = h_res["data"][0]["id"]
-                            top_url = f"https://graph.facebook.com/v18.0/{h_id}/top_media?user_id={ig_account_id}&fields=caption,like_count&limit=5&access_token={ig_token}"
-                            top_res = requests.get(top_url, timeout=15).json()
-                            if "data" in top_res:
-                                for idx, p in enumerate(top_res["data"]):
-                                    cpt = p.get('caption', 'Sarlavha yoq')[:150].replace('\n', ' ')
-                                    lks = p.get('like_count', 0)
-                                    trend_data += f"- #{hashtag} bo'yicha Top-{idx+1}: Layklar: {lks}, Sarlavhasi: '{cpt}'\n"
-                except Exception as e:
-                    print("IG Trend fetch error:", e)
-            
-            ai_response = ai_assistant.generate_data_driven_strategy(profile_data, trend_data)
-            if not ai_response: ai_response = "Kechirasiz, Groq ishlamadi."
-            send_telegram_msg("📊 <b>Analiz Yakunlandi! 20 Kunlik Kontent Rejangiz:</b>\n\n" + ai_response)
-        except Exception as e:
-            send_telegram_msg(f"⚠️ Xatolik: {e}")
     elif command == "brainstorm":
         if prompt.startswith("http"):
             send_telegram_msg("📥 Bu linkka o'xshaydi. Link orqali yuklab olish funksiyasi tez kunda (Keyingi qadamda) qo'shiladi!")

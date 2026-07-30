@@ -1,0 +1,9 @@
+2026-07-30T04:22:06.1830000Z Job is about to start running on the hosted runner: GitHub Actions 1000000626
+2026-07-30T04:22:06.1760000Z Evaluating post-video.if
+2026-07-30T04:22:06.1760000Z Evaluating: (success() && (((github.event_name != 'repository_dispatch') || (github.event.action == 'telegram_post'))))
+2026-07-30T04:22:06.1760000Z Expanded: (true && (('repository_dispatch' != 'repository_dispatch') || ('telegram_post' == 'telegram_post')))
+2026-07-30T04:22:06.1760000Z Result: true
+2026-07-30T04:22:06.1820000Z Job is waiting for a hosted runner to come online.
+2026-07-30T04:22:06.1780000Z Requested labels: ubuntu-latest
+2026-07-30T04:22:06.1780000Z Job defined at: temurbek1306/InstagaramAvtoReels/.github/workflows/autopost.yml@refs/heads/main
+2026-07-30T04:22:06.1780000Z Waiting for a runner to pick up this job...

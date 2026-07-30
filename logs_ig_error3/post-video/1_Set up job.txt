@@ -1,0 +1,32 @@
+﻿2026-07-30T04:22:09.0386924Z Current runner version: '2.336.0'
+2026-07-30T04:22:09.0485510Z ##[group***Runner Image Provisioner
+2026-07-30T04:22:09.0488227Z Hosted Compute Agent
+2026-07-30T04:22:09.0490347Z Version: 20260707.563
+2026-07-30T04:22:09.0492690Z Commit: 02667638d2b423fbc733a8e32a88b44996a3ba6e
+2026-07-30T04:22:09.0495444Z Build Date: 2026-07-07T19:33:50Z
+2026-07-30T04:22:09.0497926Z Worker ID: ***051332cc-553d-4b1d-aeea-1cb5fad4ac86***
+2026-07-30T04:22:09.0500647Z Azure Region: westus2
+2026-07-30T04:22:09.0503186Z ##[endgroup***
+2026-07-30T04:22:09.0507546Z ##[group***Operating System
+2026-07-30T04:22:09.0509696Z Ubuntu
+2026-07-30T04:22:09.0511837Z 24.04.4
+2026-07-30T04:22:09.0534623Z LTS
+2026-07-30T04:22:09.0536863Z ##[endgroup***
+2026-07-30T04:22:09.0539319Z ##[group***Runner Image
+2026-07-30T04:22:09.0541639Z Image: ubuntu-24.04
+2026-07-30T04:22:09.0544158Z Version: 20260720.247.2
+2026-07-30T04:22:09.0547271Z Included Software: https://github.com/actions/runner-images/blob/ubuntu24/20260720.247/images/ubuntu/Ubuntu2404-Readme.md
+2026-07-30T04:22:09.0551461Z Image Release: https://github.com/actions/runner-images/releases/tag/ubuntu24%2F20260720.247
+2026-07-30T04:22:09.0554657Z ##[endgroup***
+2026-07-30T04:22:09.0558260Z ##[group***GITHUB_TOKEN Permissions
+2026-07-30T04:22:09.0562640Z Contents: write
+2026-07-30T04:22:09.0565004Z Metadata: read
+2026-07-30T04:22:09.0567346Z ##[endgroup***
+2026-07-30T04:22:09.0571828Z Secret source: Actions
+2026-07-30T04:22:09.0576261Z Prepare workflow directory
+2026-07-30T04:22:09.0962074Z Prepare all required actions
+2026-07-30T04:22:09.1012538Z Getting action download info
+2026-07-30T04:22:09.4632351Z Download action repository 'actions/checkout@v4' (SHA:11d5960a326750d5838078e36cf38b85af677262)
+2026-07-30T04:22:10.1437618Z Download action repository 'dawidd6/action-download-artifact@v3' (SHA:09f2f74827fd3a8607589e5ad7f9398816f540fe)
+2026-07-30T04:22:12.2933216Z Download action repository 'actions/setup-python@v5' (SHA:a26af69be951a213d495a4c3e4e4022e16d87065)
+2026-07-30T04:22:12.5934467Z Complete job name: post-video

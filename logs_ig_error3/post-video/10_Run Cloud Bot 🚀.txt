@@ -1,0 +1,184 @@
+﻿2026-07-30T04:22:31.6376868Z ##[group***Run python github_runner.py
+2026-07-30T04:22:31.6377438Z [36;1mpython github_runner.py[0m
+2026-07-30T04:22:31.6422283Z shell: /usr/bin/bash -e ***0***
+2026-07-30T04:22:31.6422752Z env:
+2026-07-30T04:22:31.6423209Z   pythonLocation: /opt/hostedtoolcache/Python/3.10.20/x64
+2026-07-30T04:22:31.6424235Z   PKG_CONFIG_PATH: /opt/hostedtoolcache/Python/3.10.20/x64/lib/pkgconfig
+2026-07-30T04:22:31.6424923Z   Python_ROOT_DIR: /opt/hostedtoolcache/Python/3.10.20/x64
+2026-07-30T04:22:31.6425549Z   Python2_ROOT_DIR: /opt/hostedtoolcache/Python/3.10.20/x64
+2026-07-30T04:22:31.6426161Z   Python3_ROOT_DIR: /opt/hostedtoolcache/Python/3.10.20/x64
+2026-07-30T04:22:31.6426756Z   LD_LIBRARY_PATH: /opt/hostedtoolcache/Python/3.10.20/x64/lib
+2026-07-30T04:22:31.6428355Z   IG_ACCESS_TOKEN: ***
+2026-07-30T04:22:31.6428762Z   IG_ACCOUNT_ID: ***
+2026-07-30T04:22:31.6429263Z   NGROK_AUTHTOKEN: ***
+2026-07-30T04:22:31.6429775Z   GEMINI_API_KEY: ***
+2026-07-30T04:22:31.6437341Z   AI_KEYS_JSON: ***
+2026-07-30T04:22:31.6438011Z   YOUTUBE_CLIENT_ID: ***
+2026-07-30T04:22:31.6438505Z   YOUTUBE_CLIENT_SECRET: ***
+2026-07-30T04:22:31.6439334Z   YOUTUBE_REFRESH_TOKEN: ***
+2026-07-30T04:22:31.6439783Z   TELEGRAM_CHANNEL_ID: ***
+2026-07-30T04:22:31.6440201Z   FB_PAGE_ID: ***
+2026-07-30T04:22:31.6441672Z   FB_PAGE_ACCESS_TOKEN: ***
+2026-07-30T04:22:31.6442186Z   TELEGRAM_BOT_TOKEN: ***
+2026-07-30T04:22:31.6442601Z   TELEGRAM_ADMIN_ID: ***
+2026-07-30T04:22:31.6442999Z ##[endgroup***
+2026-07-30T04:22:34.5636438Z 🚀 GitHub Actions: Avtomatik Video Yuklash boshlandi...
+2026-07-30T04:22:34.5638031Z 🎬 Video topildi: zz_tg_video_30431864330.mp4
+2026-07-30T04:22:34.5640988Z 🌐 Lokal server va Ngrok ishga tushmoqda...
+2026-07-30T04:22:34.5642104Z [zz_tg_video_30431864330.mp4*** catbox.moe orqali ochiq URL olinmoqda...
+2026-07-30T04:22:35.2554202Z Downloading ngrok ...
+2026-07-30T04:22:35.4052604Z Downloading ngrok: 0%
+2026-07-30T04:22:35.4668833Z Downloading ngrok: 1%
+2026-07-30T04:22:35.4928184Z Downloading ngrok: 2%
+2026-07-30T04:22:35.5193939Z Downloading ngrok: 3%
+2026-07-30T04:22:35.5452121Z Downloading ngrok: 4%
+2026-07-30T04:22:35.5453158Z Downloading ngrok: 5%
+2026-07-30T04:22:35.5714657Z Downloading ngrok: 6%
+2026-07-30T04:22:35.5807985Z Downloading ngrok: 7%
+2026-07-30T04:22:35.5965480Z Downloading ngrok: 8%
+2026-07-30T04:22:35.5976805Z Downloading ngrok: 9%
+2026-07-30T04:22:35.6065533Z Downloading ngrok: 10%
+2026-07-30T04:22:35.6070921Z Downloading ngrok: 11%
+2026-07-30T04:22:35.6231987Z Downloading ngrok: 12%
+2026-07-30T04:22:35.6235224Z Downloading ngrok: 13%
+2026-07-30T04:22:35.6268562Z Downloading ngrok: 14%
+2026-07-30T04:22:35.6332224Z Downloading ngrok: 15%
+2026-07-30T04:22:35.6502065Z Downloading ngrok: 16%
+2026-07-30T04:22:35.6504448Z Downloading ngrok: 17%
+2026-07-30T04:22:35.6505716Z Downloading ngrok: 18%
+2026-07-30T04:22:35.6506666Z Downloading ngrok: 19%
+2026-07-30T04:22:35.6507581Z Downloading ngrok: 20%
+2026-07-30T04:22:35.6532403Z Downloading ngrok: 21%
+2026-07-30T04:22:35.6595230Z Downloading ngrok: 22%
+2026-07-30T04:22:35.6753997Z Downloading ngrok: 23%
+2026-07-30T04:22:35.6762076Z Downloading ngrok: 24%
+2026-07-30T04:22:35.6762917Z Downloading ngrok: 25%
+2026-07-30T04:22:35.6763947Z Downloading ngrok: 26%
+2026-07-30T04:22:35.6788310Z Downloading ngrok: 27%
+2026-07-30T04:22:35.6791329Z Downloading ngrok: 28%
+2026-07-30T04:22:35.6896180Z Downloading ngrok: 29%
+2026-07-30T04:22:35.6897520Z Downloading ngrok: 30%
+2026-07-30T04:22:35.7011488Z Downloading ngrok: 31%
+2026-07-30T04:22:35.7025585Z Downloading ngrok: 32%
+2026-07-30T04:22:35.7026500Z Downloading ngrok: 33%
+2026-07-30T04:22:35.7027280Z Downloading ngrok: 34%
+2026-07-30T04:22:35.7028117Z Downloading ngrok: 35%
+2026-07-30T04:22:35.7028941Z Downloading ngrok: 36%
+2026-07-30T04:22:35.7029711Z Downloading ngrok: 37%
+2026-07-30T04:22:35.7049846Z Downloading ngrok: 38%
+2026-07-30T04:22:35.7050663Z Downloading ngrok: 39%
+2026-07-30T04:22:35.7149744Z Downloading ngrok: 40%
+2026-07-30T04:22:35.7156472Z Downloading ngrok: 41%
+2026-07-30T04:22:35.7161089Z Downloading ngrok: 42%
+2026-07-30T04:22:35.7269413Z Downloading ngrok: 43%
+2026-07-30T04:22:35.7276557Z Downloading ngrok: 44%
+2026-07-30T04:22:35.7277822Z Downloading ngrok: 45%
+2026-07-30T04:22:35.7279993Z Downloading ngrok: 46%
+2026-07-30T04:22:35.7281107Z Downloading ngrok: 47%
+2026-07-30T04:22:35.7283323Z Downloading ngrok: 48%
+2026-07-30T04:22:35.7511863Z Downloading ngrok: 49%
+2026-07-30T04:22:35.7517677Z Downloading ngrok: 50%
+2026-07-30T04:22:35.7523385Z Downloading ngrok: 51%
+2026-07-30T04:22:35.7527255Z Downloading ngrok: 52%
+2026-07-30T04:22:35.7535753Z Downloading ngrok: 53%
+2026-07-30T04:22:35.7536522Z Downloading ngrok: 54%
+2026-07-30T04:22:35.7539538Z Downloading ngrok: 55%
+2026-07-30T04:22:35.7544489Z Downloading ngrok: 56%
+2026-07-30T04:22:35.7547400Z Downloading ngrok: 57%
+2026-07-30T04:22:35.7551588Z Downloading ngrok: 58%
+2026-07-30T04:22:35.7556213Z Downloading ngrok: 59%
+2026-07-30T04:22:35.7571546Z Downloading ngrok: 60%
+2026-07-30T04:22:35.7579809Z Downloading ngrok: 61%
+2026-07-30T04:22:35.7785663Z Downloading ngrok: 62%
+2026-07-30T04:22:35.7786558Z Downloading ngrok: 63%
+2026-07-30T04:22:35.7787333Z Downloading ngrok: 64%
+2026-07-30T04:22:35.7794273Z Downloading ngrok: 65%
+2026-07-30T04:22:35.7800513Z Downloading ngrok: 66%
+2026-07-30T04:22:35.7802267Z Downloading ngrok: 67%
+2026-07-30T04:22:35.7804868Z Downloading ngrok: 68%
+2026-07-30T04:22:35.7807822Z Downloading ngrok: 69%
+2026-07-30T04:22:35.8141916Z Downloading ngrok: 70%
+2026-07-30T04:22:35.8142832Z Downloading ngrok: 71%
+2026-07-30T04:22:35.8149132Z Downloading ngrok: 72%
+2026-07-30T04:22:35.8155135Z Downloading ngrok: 73%
+2026-07-30T04:22:35.8163452Z Downloading ngrok: 74%
+2026-07-30T04:22:35.8164564Z Downloading ngrok: 75%
+2026-07-30T04:22:35.8165359Z Downloading ngrok: 76%
+2026-07-30T04:22:35.8168832Z Downloading ngrok: 77%
+2026-07-30T04:22:35.8173189Z Downloading ngrok: 78%
+2026-07-30T04:22:35.8177482Z Downloading ngrok: 79%
+2026-07-30T04:22:35.8190735Z Downloading ngrok: 80%
+2026-07-30T04:22:35.8196395Z Downloading ngrok: 81%
+2026-07-30T04:22:35.8398698Z Downloading ngrok: 82%
+2026-07-30T04:22:35.8409239Z Downloading ngrok: 83%
+2026-07-30T04:22:35.8410313Z Downloading ngrok: 84%
+2026-07-30T04:22:35.8414827Z Downloading ngrok: 85%
+2026-07-30T04:22:35.8420394Z Downloading ngrok: 86%
+2026-07-30T04:22:35.8422043Z Downloading ngrok: 87%
+2026-07-30T04:22:35.8428735Z Downloading ngrok: 88%
+2026-07-30T04:22:35.8433433Z Downloading ngrok: 89%
+2026-07-30T04:22:35.8748679Z Downloading ngrok: 90%
+2026-07-30T04:22:35.8768970Z Downloading ngrok: 91%
+2026-07-30T04:22:35.8769932Z Downloading ngrok: 92%
+2026-07-30T04:22:35.8777327Z Downloading ngrok: 93%
+2026-07-30T04:22:35.8779394Z Downloading ngrok: 94%
+2026-07-30T04:22:35.8785403Z Downloading ngrok: 95%
+2026-07-30T04:22:35.8794461Z Downloading ngrok: 96%
+2026-07-30T04:22:35.8795452Z Downloading ngrok: 97%
+2026-07-30T04:22:35.8796631Z Downloading ngrok: 98%
+2026-07-30T04:22:35.8803836Z Downloading ngrok: 99%
+2026-07-30T04:22:35.8804931Z Downloading ngrok: 100%
+2026-07-30T04:22:35.8806449Z                                                                                                     
+2026-07-30T04:22:36.0471855Z Installing ngrok ... 
+2026-07-30T04:22:38.7982268Z /opt/hostedtoolcache/Python/3.10.20/x64/lib/python3.10/site-packages/google/api_core/_python_version_support.py:254: FutureWarning: You are using a Python version (3.10.20) which Google will stop supporting in new releases of google.api_core once it reaches its end of life (2026-10-04). Please upgrade to the latest Python version, or at least Python 3.11, to continue receiving updates for google.api_core past that date.
+2026-07-30T04:22:38.7985011Z   warnings.warn(message, FutureWarning)
+2026-07-30T04:22:39.3758722Z /home/runner/work/InstagaramAvtoReels/InstagaramAvtoReels/github_runner.py:205: FutureWarning: 
+2026-07-30T04:22:39.3760030Z 
+2026-07-30T04:22:39.3761121Z All support for the `google.generativeai` package has ended. It will no longer be receiving 
+2026-07-30T04:22:39.3762837Z updates or bug fixes. Please switch to the `google.genai` package as soon as possible.
+2026-07-30T04:22:39.3765172Z See README for more details:
+2026-07-30T04:22:39.3765859Z 
+2026-07-30T04:22:39.3766750Z https://github.com/google-gemini/deprecated-generative-ai-python/blob/main/README.md
+2026-07-30T04:22:39.3767916Z 
+2026-07-30T04:22:39.3768484Z   import google.generativeai as genai
+2026-07-30T04:23:09.9232106Z                                                                                                     
+2026-07-30T04:23:09.9233890Z [Server*** Lokal server ishga tushdi: http://localhost:8000
+2026-07-30T04:23:09.9235590Z [Server*** Ochiq URL yaratildi (Ngrok): https://amusable-raking-showcase.ngrok-free.dev
+2026-07-30T04:23:09.9237509Z 🔗 Public URL: https://amusable-raking-showcase.ngrok-free.dev/zz_tg_video_30431864330.mp4
+2026-07-30T04:23:09.9238887Z 🧠 Gemini AI ishga tushmoqda (Urinish 1)...
+2026-07-30T04:23:09.9240164Z 📤 Video Gemini serveriga yuklanmoqda: videos/pending/zz_tg_video_30431864330.mp4
+2026-07-30T04:23:09.9241099Z 
+2026-07-30T04:23:09.9245866Z ⚠️ Gemini ishlatishda xatolik yuz berdi: <HttpError 400 when requesting https://generativelanguage.googleapis.com/$discovery/rest?version=v1beta&key=AQ.Ab8RN6KVF5hnqrxD3rrAbwd74RbRXCnV27xMC_Tq7tMBJVqQHQ returned "API key not valid. Please pass a valid API key.". Details: "[***'@type': 'type.googleapis.com/google.rpc.ErrorInfo', 'reason': 'API_KEY_INVALID', 'domain': 'googleapis.com', 'metadata': ***'service': 'generativelanguage.googleapis.com'***, ***'@type': 'type.googleapis.com/google.rpc.LocalizedMessage', 'locale': 'en-US', 'message': 'API key not valid. Please pass a valid API key.'***">
+2026-07-30T04:23:09.9250444Z 🧠 Gemini AI ishga tushmoqda (Urinish 2)...
+2026-07-30T04:23:09.9251724Z 📤 Video Gemini serveriga yuklanmoqda: videos/pending/zz_tg_video_30431864330.mp4
+2026-07-30T04:23:09.9252609Z 
+2026-07-30T04:23:09.9257231Z ⚠️ Gemini ishlatishda xatolik yuz berdi: <HttpError 400 when requesting https://generativelanguage.googleapis.com/$discovery/rest?version=v1beta&key=AQ.Ab8RN6LvaXEEewfctYbaellzUEFdULOk5aUDSJhdmK1L35AZ8A returned "API key not valid. Please pass a valid API key.". Details: "[***'@type': 'type.googleapis.com/google.rpc.ErrorInfo', 'reason': 'API_KEY_INVALID', 'domain': 'googleapis.com', 'metadata': ***'service': 'generativelanguage.googleapis.com'***, ***'@type': 'type.googleapis.com/google.rpc.LocalizedMessage', 'locale': 'en-US', 'message': 'API key not valid. Please pass a valid API key.'***">
+2026-07-30T04:23:09.9261766Z 🧠 Gemini AI ishga tushmoqda (Urinish 3)...
+2026-07-30T04:23:09.9263063Z 📤 Video Gemini serveriga yuklanmoqda: videos/pending/zz_tg_video_30431864330.mp4
+2026-07-30T04:23:09.9264274Z 
+2026-07-30T04:23:09.9268735Z ⚠️ Gemini ishlatishda xatolik yuz berdi: <HttpError 400 when requesting https://generativelanguage.googleapis.com/$discovery/rest?version=v1beta&key=AQ.Ab8RN6IXPYMs2RnJFki9FJlJmH-HwoDuwWsPinx8qiLxPjh0ug returned "API key not valid. Please pass a valid API key.". Details: "[***'@type': 'type.googleapis.com/google.rpc.ErrorInfo', 'reason': 'API_KEY_INVALID', 'domain': 'googleapis.com', 'metadata': ***'service': 'generativelanguage.googleapis.com'***, ***'@type': 'type.googleapis.com/google.rpc.LocalizedMessage', 'locale': 'en-US', 'message': 'API key not valid. Please pass a valid API key.'***">
+2026-07-30T04:23:09.9272965Z 🧠 Gemini AI ishga tushmoqda (Urinish 4)...
+2026-07-30T04:23:09.9274438Z 📤 Video Gemini serveriga yuklanmoqda: videos/pending/zz_tg_video_30431864330.mp4
+2026-07-30T04:23:09.9275294Z 
+2026-07-30T04:23:09.9279433Z ⚠️ Gemini ishlatishda xatolik yuz berdi: <HttpError 400 when requesting https://generativelanguage.googleapis.com/$discovery/rest?version=v1beta&key=AQ.Ab8RN6Jh6hwXKmgMtuwZyo6O3gaV-Z6MtIFuZBVshlrxQH8nhg returned "API key not valid. Please pass a valid API key.". Details: "[***'@type': 'type.googleapis.com/google.rpc.ErrorInfo', 'reason': 'API_KEY_INVALID', 'domain': 'googleapis.com', 'metadata': ***'service': 'generativelanguage.googleapis.com'***, ***'@type': 'type.googleapis.com/google.rpc.LocalizedMessage', 'locale': 'en-US', 'message': 'API key not valid. Please pass a valid API key.'***">
+2026-07-30T04:23:09.9284571Z 🧠 Gemini AI ishga tushmoqda (Urinish 5)...
+2026-07-30T04:23:09.9285832Z 📤 Video Gemini serveriga yuklanmoqda: videos/pending/zz_tg_video_30431864330.mp4
+2026-07-30T04:23:09.9286685Z 
+2026-07-30T04:23:09.9290771Z ⚠️ Gemini ishlatishda xatolik yuz berdi: <HttpError 400 when requesting https://generativelanguage.googleapis.com/$discovery/rest?version=v1beta&key=*** returned "API key not valid. Please pass a valid API key.". Details: "[***'@type': 'type.googleapis.com/google.rpc.ErrorInfo', 'reason': 'API_KEY_INVALID', 'domain': 'googleapis.com', 'metadata': ***'service': 'generativelanguage.googleapis.com'***, ***'@type': 'type.googleapis.com/google.rpc.LocalizedMessage', 'locale': 'en-US', 'message': 'API key not valid. Please pass a valid API key.'***">
+2026-07-30T04:23:09.9294673Z 📝 Instagramga joylanmoqda...
+2026-07-30T04:23:09.9295566Z [API*** Video yuklanmoqda... Kuting.
+2026-07-30T04:23:09.9296497Z [API*** Container ID olindi: 18007958555943895
+2026-07-30T04:23:09.9297452Z [API*** Status: IN_PROGRESS (1/60)
+2026-07-30T04:23:09.9298324Z [API*** Status: ERROR (2/60)
+2026-07-30T04:23:09.9299567Z [API*** Video qayta ishlashda xato yuz berdi: ***'status_code': 'ERROR', 'id': '18007958555943895'***
+2026-07-30T04:23:09.9300780Z [Server*** Server to'xtatildi.
+2026-07-30T04:23:09.9301704Z 📺 YouTubega joylanmoqda...
+2026-07-30T04:23:09.9302630Z 🔗 YouTube API'ga ulanilmoqda...
+2026-07-30T04:23:09.9303983Z 🎬 YouTube Shorts'ga yuklanmoqda: videos/pending/zz_tg_video_30431864330.mp4
+2026-07-30T04:23:09.9305237Z ✅ Telegram kanalga muvaffaqiyatli joylandi!
+2026-07-30T04:23:09.9306524Z 📘 Facebook Reels yuklash boshlanmoqda: videos/pending/zz_tg_video_30431864330.mp4
+2026-07-30T04:23:09.9307786Z ✅ Upload session ochildi. Video ID: 1001379856058083
+2026-07-30T04:23:09.9308853Z ✅ Fayl serverga muvaffaqiyatli yuklandi.
+2026-07-30T04:23:09.9309891Z ✅ Facebook Reels muvaffaqiyatli e'lon qilindi!
+2026-07-30T04:23:09.9311777Z ⚠️ Telegram (HTML) yuborishda xatolik: ***"ok":false,"error_code":400,"description":"Bad Request: can't parse entities: Unsupported start tag \"httperror\" at byte offset 126"***
+2026-07-30T04:23:09.9314203Z [VideoManager*** 'zz_tg_video_30431864330' nomli video va uning barcha qoldiq fayllari (txt, json, platform) butunlay o'chirildi (Xotira tozalandi).

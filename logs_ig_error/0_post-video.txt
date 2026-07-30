@@ -1,0 +1,566 @@
+﻿2026-07-30T02:22:07.7413652Z Current runner version: '2.336.0'
+2026-07-30T02:22:07.7495834Z ##[group***Runner Image Provisioner
+2026-07-30T02:22:07.7498499Z Hosted Compute Agent
+2026-07-30T02:22:07.7500790Z Version: 20260707.563
+2026-07-30T02:22:07.7503466Z Commit: 02667638d2b423fbc733a8e32a88b44996a3ba6e
+2026-07-30T02:22:07.7506150Z Build Date: 2026-07-07T19:33:50Z
+2026-07-30T02:22:07.7508689Z Worker ID: ***e3744815-b279-4833-bf75-dcc0f515fa50***
+2026-07-30T02:22:07.7531743Z Azure Region: eastus
+2026-07-30T02:22:07.7534190Z ##[endgroup***
+2026-07-30T02:22:07.7538052Z ##[group***Operating System
+2026-07-30T02:22:07.7540256Z Ubuntu
+2026-07-30T02:22:07.7542713Z 24.04.4
+2026-07-30T02:22:07.7544706Z LTS
+2026-07-30T02:22:07.7546827Z ##[endgroup***
+2026-07-30T02:22:07.7549042Z ##[group***Runner Image
+2026-07-30T02:22:07.7571835Z Image: ubuntu-24.04
+2026-07-30T02:22:07.7574070Z Version: 20260720.247.2
+2026-07-30T02:22:07.7577435Z Included Software: https://github.com/actions/runner-images/blob/ubuntu24/20260720.247/images/ubuntu/Ubuntu2404-Readme.md
+2026-07-30T02:22:07.7602212Z Image Release: https://github.com/actions/runner-images/releases/tag/ubuntu24%2F20260720.247
+2026-07-30T02:22:07.7605439Z ##[endgroup***
+2026-07-30T02:22:07.7609373Z ##[group***GITHUB_TOKEN Permissions
+2026-07-30T02:22:07.7613819Z Contents: write
+2026-07-30T02:22:07.7615964Z Metadata: read
+2026-07-30T02:22:07.7618041Z ##[endgroup***
+2026-07-30T02:22:07.7642648Z Secret source: Actions
+2026-07-30T02:22:07.7646106Z Prepare workflow directory
+2026-07-30T02:22:07.8563599Z Prepare all required actions
+2026-07-30T02:22:07.8638517Z Getting action download info
+2026-07-30T02:22:08.0526596Z Download action repository 'actions/checkout@v4' (SHA:11d5960a326750d5838078e36cf38b85af677262)
+2026-07-30T02:22:08.2795356Z Download action repository 'dawidd6/action-download-artifact@v3' (SHA:09f2f74827fd3a8607589e5ad7f9398816f540fe)
+2026-07-30T02:22:11.4915814Z Download action repository 'actions/setup-python@v5' (SHA:a26af69be951a213d495a4c3e4e4022e16d87065)
+2026-07-30T02:22:11.6820887Z Complete job name: post-video
+2026-07-30T02:22:11.7625658Z Node 20 is being deprecated. This workflow is running with Node 24 by default. If you need to temporarily use Node 20, you can set the ACTIONS_ALLOW_USE_UNSECURE_NODE_VERSION=true environment variable. For more information see: https://github.blog/changelog/2025-09-19-deprecation-of-node-20-on-github-actions-runners/
+2026-07-30T02:22:11.7634315Z ##[group***Run actions/checkout@v4
+2026-07-30T02:22:11.7635115Z with:
+2026-07-30T02:22:11.7635638Z   repository: temurbek1306/InstagaramAvtoReels
+2026-07-30T02:22:11.7638601Z   token: ***
+2026-07-30T02:22:11.7639068Z   ssh-strict: true
+2026-07-30T02:22:11.7639536Z   ssh-user: git
+2026-07-30T02:22:11.7640021Z   persist-credentials: true
+2026-07-30T02:22:11.7640542Z   clean: true
+2026-07-30T02:22:11.7641243Z   sparse-checkout-cone-mode: true
+2026-07-30T02:22:11.7641813Z   fetch-depth: 1
+2026-07-30T02:22:11.7642300Z   fetch-tags: false
+2026-07-30T02:22:11.7642792Z   show-progress: true
+2026-07-30T02:22:11.7643289Z   lfs: false
+2026-07-30T02:22:11.7643810Z   submodules: false
+2026-07-30T02:22:11.7644513Z   set-safe-directory: true
+2026-07-30T02:22:11.7645134Z   allow-unsafe-pr-checkout: false
+2026-07-30T02:22:11.7646062Z ##[endgroup***
+2026-07-30T02:22:11.8818987Z Syncing repository: temurbek1306/InstagaramAvtoReels
+2026-07-30T02:22:11.8822093Z ##[group***Getting Git version info
+2026-07-30T02:22:11.8823434Z Working directory is '/home/runner/work/InstagaramAvtoReels/InstagaramAvtoReels'
+2026-07-30T02:22:11.8829332Z [command***/usr/bin/git version
+2026-07-30T02:22:11.8966449Z git version 2.54.0
+2026-07-30T02:22:11.9032947Z ##[endgroup***
+2026-07-30T02:22:11.9059075Z Temporarily overriding HOME='/home/runner/work/_temp/979a5000-da71-47bc-b71e-bd1416863098' before making global git config changes
+2026-07-30T02:22:11.9061536Z Adding repository directory to the temporary git global config as a safe directory
+2026-07-30T02:22:11.9063630Z [command***/usr/bin/git config --global --add safe.directory /home/runner/work/InstagaramAvtoReels/InstagaramAvtoReels
+2026-07-30T02:22:11.9129356Z Deleting the contents of '/home/runner/work/InstagaramAvtoReels/InstagaramAvtoReels'
+2026-07-30T02:22:11.9132011Z ##[group***Initializing the repository
+2026-07-30T02:22:11.9133754Z [command***/usr/bin/git init /home/runner/work/InstagaramAvtoReels/InstagaramAvtoReels
+2026-07-30T02:22:11.9271919Z hint: Using 'master' as the name for the initial branch. This default branch name
+2026-07-30T02:22:11.9278067Z hint: will change to "main" in Git 3.0. To configure the initial branch name
+2026-07-30T02:22:11.9279905Z hint: to use in all of your new repositories, which will suppress this warning,
+2026-07-30T02:22:11.9282161Z hint: call:
+2026-07-30T02:22:11.9283193Z hint:
+2026-07-30T02:22:11.9284373Z hint: 	git config --global init.defaultBranch <name>
+2026-07-30T02:22:11.9285672Z hint:
+2026-07-30T02:22:11.9286980Z hint: Names commonly chosen instead of 'master' are 'main', 'trunk' and
+2026-07-30T02:22:11.9288679Z hint: 'development'. The just-created branch can be renamed via this command:
+2026-07-30T02:22:11.9290047Z hint:
+2026-07-30T02:22:11.9291347Z hint: 	git branch -m <name>
+2026-07-30T02:22:11.9292540Z hint:
+2026-07-30T02:22:11.9293788Z hint: Disable this message with "git config set advice.defaultBranchName false"
+2026-07-30T02:22:11.9295744Z Initialized empty Git repository in /home/runner/work/InstagaramAvtoReels/InstagaramAvtoReels/.git/
+2026-07-30T02:22:11.9342654Z [command***/usr/bin/git remote add origin https://github.com/temurbek1306/InstagaramAvtoReels
+2026-07-30T02:22:11.9388039Z ##[endgroup***
+2026-07-30T02:22:11.9389786Z ##[group***Disabling automatic garbage collection
+2026-07-30T02:22:11.9391492Z [command***/usr/bin/git config --local gc.auto 0
+2026-07-30T02:22:11.9453137Z ##[endgroup***
+2026-07-30T02:22:11.9455677Z ##[group***Setting up auth
+2026-07-30T02:22:11.9457641Z [command***/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+2026-07-30T02:22:11.9516981Z [command***/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+2026-07-30T02:22:12.0114265Z [command***/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+2026-07-30T02:22:12.0205151Z [command***/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+2026-07-30T02:22:12.0455687Z [command***/usr/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+2026-07-30T02:22:12.0497277Z [command***/usr/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+2026-07-30T02:22:12.0746640Z [command***/usr/bin/git config --local http.https://github.com/.extraheader AUTHORIZATION: basic ***
+2026-07-30T02:22:12.0789170Z ##[endgroup***
+2026-07-30T02:22:12.0791614Z ##[group***Fetching the repository
+2026-07-30T02:22:12.0802605Z [command***/usr/bin/git -c protocol.version=2 fetch --no-tags --prune --no-recurse-submodules --depth=1 origin +ebb34497adf42844201b8c17feaf9754c284d6b7:refs/remotes/origin/main
+2026-07-30T02:22:14.7398213Z From https://github.com/temurbek1306/InstagaramAvtoReels
+2026-07-30T02:22:14.7409039Z  * [new ref***         ebb34497adf42844201b8c17feaf9754c284d6b7 -> origin/main
+2026-07-30T02:22:14.7446177Z ##[endgroup***
+2026-07-30T02:22:14.7448138Z ##[group***Determining the checkout info
+2026-07-30T02:22:14.7450092Z ##[endgroup***
+2026-07-30T02:22:14.7453394Z [command***/usr/bin/git sparse-checkout disable
+2026-07-30T02:22:14.7522926Z [command***/usr/bin/git config --local --unset-all extensions.worktreeConfig
+2026-07-30T02:22:14.7602736Z ##[group***Checking out the ref
+2026-07-30T02:22:14.7622460Z [command***/usr/bin/git checkout --progress --force -B main refs/remotes/origin/main
+2026-07-30T02:22:14.8613978Z Switched to a new branch 'main'
+2026-07-30T02:22:14.8619423Z branch 'main' set up to track 'origin/main'.
+2026-07-30T02:22:14.8653760Z ##[endgroup***
+2026-07-30T02:22:14.8762696Z [command***/usr/bin/git log -1 --format=%H
+2026-07-30T02:22:14.8810307Z ebb34497adf42844201b8c17feaf9754c284d6b7
+2026-07-30T02:22:14.9195899Z ##[group***Run CUSTOM_NAME=""
+2026-07-30T02:22:14.9196471Z [36;1mCUSTOM_NAME=""[0m
+2026-07-30T02:22:14.9196938Z [36;1mif [ -n "$CUSTOM_NAME" ***; then[0m
+2026-07-30T02:22:14.9197506Z [36;1m  BASE_NAME="$***CUSTOM_NAME***_30508255965"[0m
+2026-07-30T02:22:14.9198008Z [36;1melse[0m
+2026-07-30T02:22:14.9198414Z [36;1m  BASE_NAME="zz_tg_video_30508255965"[0m
+2026-07-30T02:22:14.9198887Z [36;1mfi[0m
+2026-07-30T02:22:14.9199258Z [36;1mPLATFORM=""[0m
+2026-07-30T02:22:14.9199681Z [36;1mif [ -n "$PLATFORM" ***; then[0m
+2026-07-30T02:22:14.9200261Z [36;1m  echo "$PLATFORM" > "videos/pending/$BASE_NAME.platform.txt"[0m
+2026-07-30T02:22:14.9200804Z [36;1mfi[0m
+2026-07-30T02:22:14.9247796Z shell: /usr/bin/bash -e ***0***
+2026-07-30T02:22:14.9248287Z ##[endgroup***
+2026-07-30T02:22:14.9448249Z Node 20 is being deprecated. This workflow is running with Node 24 by default. If you need to temporarily use Node 20, you can set the ACTIONS_ALLOW_USE_UNSECURE_NODE_VERSION=true environment variable. For more information see: https://github.blog/changelog/2025-09-19-deprecation-of-node-20-on-github-actions-runners/
+2026-07-30T02:22:14.9450124Z ##[group***Run actions/setup-python@v5
+2026-07-30T02:22:14.9450621Z with:
+2026-07-30T02:22:14.9451251Z   python-version: 3.10
+2026-07-30T02:22:14.9451684Z   check-latest: false
+2026-07-30T02:22:14.9454423Z   token: ***
+2026-07-30T02:22:14.9454826Z   update-environment: true
+2026-07-30T02:22:14.9455261Z   allow-prereleases: false
+2026-07-30T02:22:14.9455692Z   freethreaded: false
+2026-07-30T02:22:14.9456112Z ##[endgroup***
+2026-07-30T02:22:15.0856068Z ##[group***Installed versions
+2026-07-30T02:22:15.1002343Z (node:1995) [DEP0040*** DeprecationWarning: The `punycode` module is deprecated. Please use a userland alternative instead.
+2026-07-30T02:22:15.1003830Z Successfully set up CPython (3.10.20)
+2026-07-30T02:22:15.1004925Z (Use `node --trace-deprecation ...` to show where the warning was created)
+2026-07-30T02:22:15.1015779Z ##[endgroup***
+2026-07-30T02:22:15.1283718Z ##[group***Run python -m pip install --upgrade pip
+2026-07-30T02:22:15.1284702Z [36;1mpython -m pip install --upgrade pip[0m
+2026-07-30T02:22:15.1285555Z [36;1mpip install -r requirements.txt[0m
+2026-07-30T02:22:15.1286375Z [36;1mpip install pyngrok python-dotenv[0m
+2026-07-30T02:22:15.1379940Z shell: /usr/bin/bash -e ***0***
+2026-07-30T02:22:15.1380698Z env:
+2026-07-30T02:22:15.1381643Z   pythonLocation: /opt/hostedtoolcache/Python/3.10.20/x64
+2026-07-30T02:22:15.1382782Z   PKG_CONFIG_PATH: /opt/hostedtoolcache/Python/3.10.20/x64/lib/pkgconfig
+2026-07-30T02:22:15.1383879Z   Python_ROOT_DIR: /opt/hostedtoolcache/Python/3.10.20/x64
+2026-07-30T02:22:15.1384888Z   Python2_ROOT_DIR: /opt/hostedtoolcache/Python/3.10.20/x64
+2026-07-30T02:22:15.1385900Z   Python3_ROOT_DIR: /opt/hostedtoolcache/Python/3.10.20/x64
+2026-07-30T02:22:15.1386941Z   LD_LIBRARY_PATH: /opt/hostedtoolcache/Python/3.10.20/x64/lib
+2026-07-30T02:22:15.1387847Z ##[endgroup***
+2026-07-30T02:22:18.4770061Z Requirement already satisfied: pip in /opt/hostedtoolcache/Python/3.10.20/x64/lib/python3.10/site-packages (26.1.2)
+2026-07-30T02:22:18.5825958Z Collecting pip
+2026-07-30T02:22:18.6336369Z   Downloading pip-26.2-py3-none-any.whl.metadata (4.6 kB)
+2026-07-30T02:22:18.6419134Z Downloading pip-26.2-py3-none-any.whl (1.8 MB)
+2026-07-30T02:22:18.6833221Z    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 1.8/1.8 MB 121.3 MB/s  0:00:00
+2026-07-30T02:22:18.7712151Z Installing collected packages: pip
+2026-07-30T02:22:18.7713607Z   Attempting uninstall: pip
+2026-07-30T02:22:18.7722113Z     Found existing installation: pip 26.1.2
+2026-07-30T02:22:18.8517138Z     Uninstalling pip-26.1.2:
+2026-07-30T02:22:18.8590282Z       Successfully uninstalled pip-26.1.2
+2026-07-30T02:22:19.6589872Z Successfully installed pip-26.2
+2026-07-30T02:22:20.1828879Z Collecting requests (from -r requirements.txt (line 1))
+2026-07-30T02:22:20.2350625Z   Downloading requests-2.34.2-py3-none-any.whl.metadata (4.8 kB)
+2026-07-30T02:22:20.2672084Z Collecting python-dotenv (from -r requirements.txt (line 2))
+2026-07-30T02:22:20.2711598Z   Downloading python_dotenv-1.2.2-py3-none-any.whl.metadata (27 kB)
+2026-07-30T02:22:20.2904875Z Collecting schedule (from -r requirements.txt (line 3))
+2026-07-30T02:22:20.2940291Z   Downloading schedule-1.2.2-py3-none-any.whl.metadata (3.8 kB)
+2026-07-30T02:22:20.3133930Z Collecting pyngrok (from -r requirements.txt (line 4))
+2026-07-30T02:22:20.3227366Z   Downloading pyngrok-8.1.2-py3-none-any.whl.metadata (8.6 kB)
+2026-07-30T02:22:20.3370271Z Collecting google-generativeai (from -r requirements.txt (line 5))
+2026-07-30T02:22:20.3407544Z   Downloading google_generativeai-0.8.6-py3-none-any.whl.metadata (3.9 kB)
+2026-07-30T02:22:20.4028592Z Collecting google-api-python-client (from -r requirements.txt (line 6))
+2026-07-30T02:22:20.4067674Z   Downloading google_api_python_client-2.198.0-py3-none-any.whl.metadata (7.0 kB)
+2026-07-30T02:22:20.4228159Z Collecting google-auth-oauthlib (from -r requirements.txt (line 7))
+2026-07-30T02:22:20.4276341Z   Downloading google_auth_oauthlib-1.4.0-py3-none-any.whl.metadata (2.6 kB)
+2026-07-30T02:22:20.4394448Z Collecting google-auth-httplib2 (from -r requirements.txt (line 8))
+2026-07-30T02:22:20.4445254Z   Downloading google_auth_httplib2-0.4.0-py3-none-any.whl.metadata (3.0 kB)
+2026-07-30T02:22:20.4732365Z Collecting google-genai (from -r requirements.txt (line 9))
+2026-07-30T02:22:20.4768408Z   Downloading google_genai-2.15.0-py3-none-any.whl.metadata (55 kB)
+2026-07-30T02:22:20.6126637Z Collecting charset_normalizer<4,>=2 (from requests->-r requirements.txt (line 1))
+2026-07-30T02:22:20.6190817Z   Downloading charset_normalizer-3.4.9-cp310-cp310-manylinux2014_x86_64.manylinux_2_17_x86_64.manylinux_2_28_x86_64.whl.metadata (41 kB)
+2026-07-30T02:22:20.6357256Z Collecting idna<4,>=2.5 (from requests->-r requirements.txt (line 1))
+2026-07-30T02:22:20.6397234Z   Downloading idna-3.18-py3-none-any.whl.metadata (6.1 kB)
+2026-07-30T02:22:20.6655816Z Collecting urllib3<3,>=1.26 (from requests->-r requirements.txt (line 1))
+2026-07-30T02:22:20.6695644Z   Downloading urllib3-2.7.0-py3-none-any.whl.metadata (6.9 kB)
+2026-07-30T02:22:20.6904157Z Collecting certifi>=2023.5.7 (from requests->-r requirements.txt (line 1))
+2026-07-30T02:22:20.6939522Z   Downloading certifi-2026.7.22-py3-none-any.whl.metadata (2.5 kB)
+2026-07-30T02:22:20.7379181Z Collecting PyYAML>=5.1 (from pyngrok->-r requirements.txt (line 4))
+2026-07-30T02:22:20.7416187Z   Downloading pyyaml-6.0.3-cp310-cp310-manylinux2014_x86_64.manylinux_2_17_x86_64.manylinux_2_28_x86_64.whl.metadata (2.4 kB)
+2026-07-30T02:22:20.7569254Z Collecting google-ai-generativelanguage==0.6.15 (from google-generativeai->-r requirements.txt (line 5))
+2026-07-30T02:22:20.7608079Z   Downloading google_ai_generativelanguage-0.6.15-py3-none-any.whl.metadata (5.7 kB)
+2026-07-30T02:22:20.7985067Z Collecting google-api-core (from google-generativeai->-r requirements.txt (line 5))
+2026-07-30T02:22:20.8024567Z   Downloading google_api_core-2.33.0-py3-none-any.whl.metadata (3.2 kB)
+2026-07-30T02:22:20.8416660Z Collecting google-auth>=2.15.0 (from google-generativeai->-r requirements.txt (line 5))
+2026-07-30T02:22:20.8459365Z   Downloading google_auth-2.56.2-py3-none-any.whl.metadata (6.0 kB)
+2026-07-30T02:22:21.0642925Z Collecting protobuf (from google-generativeai->-r requirements.txt (line 5))
+2026-07-30T02:22:21.0682192Z   Downloading protobuf-7.35.1-cp310-abi3-manylinux2014_x86_64.whl.metadata (595 bytes)
+2026-07-30T02:22:21.2016236Z Collecting pydantic (from google-generativeai->-r requirements.txt (line 5))
+2026-07-30T02:22:21.2056612Z   Downloading pydantic-2.13.4-py3-none-any.whl.metadata (109 kB)
+2026-07-30T02:22:21.2449850Z Collecting tqdm (from google-generativeai->-r requirements.txt (line 5))
+2026-07-30T02:22:21.2487445Z   Downloading tqdm-4.70.0-py3-none-any.whl.metadata (57 kB)
+2026-07-30T02:22:21.2715811Z Collecting typing-extensions (from google-generativeai->-r requirements.txt (line 5))
+2026-07-30T02:22:21.2754491Z   Downloading typing_extensions-4.16.0-py3-none-any.whl.metadata (3.3 kB)
+2026-07-30T02:22:21.3178773Z Collecting proto-plus<2.0.0dev,>=1.22.3 (from google-ai-generativelanguage==0.6.15->google-generativeai->-r requirements.txt (line 5))
+2026-07-30T02:22:21.3223144Z   Downloading proto_plus-1.28.2-py3-none-any.whl.metadata (2.2 kB)
+2026-07-30T02:22:21.3467645Z Collecting protobuf (from google-generativeai->-r requirements.txt (line 5))
+2026-07-30T02:22:21.3505921Z   Downloading protobuf-5.29.6-cp38-abi3-manylinux2014_x86_64.whl.metadata (592 bytes)
+2026-07-30T02:22:21.3706433Z Collecting googleapis-common-protos<2.0.0,>=1.63.2 (from google-api-core->google-generativeai->-r requirements.txt (line 5))
+2026-07-30T02:22:21.3758361Z   Downloading googleapis_common_protos-1.75.0-py3-none-any.whl.metadata (8.6 kB)
+2026-07-30T02:22:22.0444040Z Collecting grpcio<2.0.0,>=1.41.0 (from google-api-core[grpc***!=2.0.*,!=2.1.*,!=2.10.*,!=2.2.*,!=2.3.*,!=2.4.*,!=2.5.*,!=2.6.*,!=2.7.*,!=2.8.*,!=2.9.*,<3.0.0dev,>=1.34.1->google-ai-generativelanguage==0.6.15->google-generativeai->-r requirements.txt (line 5))
+2026-07-30T02:22:22.0508084Z   Downloading grpcio-1.83.0-cp310-cp310-manylinux2014_x86_64.manylinux_2_17_x86_64.whl.metadata (3.7 kB)
+2026-07-30T02:22:22.0895502Z Collecting grpcio-status<2.0.0,>=1.41.0 (from google-api-core[grpc***!=2.0.*,!=2.1.*,!=2.10.*,!=2.2.*,!=2.3.*,!=2.4.*,!=2.5.*,!=2.6.*,!=2.7.*,!=2.8.*,!=2.9.*,<3.0.0dev,>=1.34.1->google-ai-generativelanguage==0.6.15->google-generativeai->-r requirements.txt (line 5))
+2026-07-30T02:22:22.0933340Z   Downloading grpcio_status-1.83.0-py3-none-any.whl.metadata (1.2 kB)
+2026-07-30T02:22:22.1144390Z Collecting pyasn1-modules>=0.2.1 (from google-auth>=2.15.0->google-generativeai->-r requirements.txt (line 5))
+2026-07-30T02:22:22.1179192Z   Downloading pyasn1_modules-0.4.2-py3-none-any.whl.metadata (3.5 kB)
+2026-07-30T02:22:22.3562494Z Collecting cryptography>=38.0.3 (from google-auth>=2.15.0->google-generativeai->-r requirements.txt (line 5))
+2026-07-30T02:22:22.3611742Z   Downloading cryptography-49.0.0-cp39-abi3-manylinux_2_34_x86_64.whl.metadata (4.3 kB)
+2026-07-30T02:22:22.3832802Z INFO: pip is looking at multiple versions of grpcio-status to determine which version is compatible with other requirements. This could take a while.
+2026-07-30T02:22:22.3842655Z Collecting grpcio-status<2.0.0,>=1.41.0 (from google-api-core[grpc***!=2.0.*,!=2.1.*,!=2.10.*,!=2.2.*,!=2.3.*,!=2.4.*,!=2.5.*,!=2.6.*,!=2.7.*,!=2.8.*,!=2.9.*,<3.0.0dev,>=1.34.1->google-ai-generativelanguage==0.6.15->google-generativeai->-r requirements.txt (line 5))
+2026-07-30T02:22:22.3898081Z   Downloading grpcio_status-1.82.1-py3-none-any.whl.metadata (1.2 kB)
+2026-07-30T02:22:22.4064667Z   Downloading grpcio_status-1.81.1-py3-none-any.whl.metadata (1.2 kB)
+2026-07-30T02:22:22.4140808Z   Downloading grpcio_status-1.81.0-py3-none-any.whl.metadata (1.2 kB)
+2026-07-30T02:22:22.4213071Z   Downloading grpcio_status-1.80.0-py3-none-any.whl.metadata (1.3 kB)
+2026-07-30T02:22:22.4390010Z   Downloading grpcio_status-1.78.0-py3-none-any.whl.metadata (1.3 kB)
+2026-07-30T02:22:22.4467291Z   Downloading grpcio_status-1.76.0-py3-none-any.whl.metadata (1.1 kB)
+2026-07-30T02:22:22.4542930Z   Downloading grpcio_status-1.75.1-py3-none-any.whl.metadata (1.1 kB)
+2026-07-30T02:22:22.4578057Z INFO: pip is still looking at multiple versions of grpcio-status to determine which version is compatible with other requirements. This could take a while.
+2026-07-30T02:22:22.4626836Z   Downloading grpcio_status-1.75.0-py3-none-any.whl.metadata (1.1 kB)
+2026-07-30T02:22:22.4697981Z   Downloading grpcio_status-1.74.0-py3-none-any.whl.metadata (1.1 kB)
+2026-07-30T02:22:22.4780243Z   Downloading grpcio_status-1.73.1-py3-none-any.whl.metadata (1.1 kB)
+2026-07-30T02:22:22.4927692Z   Downloading grpcio_status-1.73.0-py3-none-any.whl.metadata (1.1 kB)
+2026-07-30T02:22:22.5006295Z   Downloading grpcio_status-1.72.2-py3-none-any.whl.metadata (1.1 kB)
+2026-07-30T02:22:22.5039735Z INFO: This is taking longer than usual. You might need to provide the dependency resolver with stricter constraints to reduce runtime. See https://pip.pypa.io/warnings/backtracking for guidance. If you want to abort this run, press Ctrl + C.
+2026-07-30T02:22:22.5088152Z   Downloading grpcio_status-1.72.1-py3-none-any.whl.metadata (1.1 kB)
+2026-07-30T02:22:22.5160811Z   Downloading grpcio_status-1.71.2-py3-none-any.whl.metadata (1.1 kB)
+2026-07-30T02:22:22.5504335Z Collecting httplib2<1.0.0,>=0.19.0 (from google-api-python-client->-r requirements.txt (line 6))
+2026-07-30T02:22:22.5596292Z   Downloading httplib2-0.32.0-py3-none-any.whl.metadata (2.2 kB)
+2026-07-30T02:22:22.5806403Z Collecting uritemplate<5,>=3.0.1 (from google-api-python-client->-r requirements.txt (line 6))
+2026-07-30T02:22:22.5849046Z   Downloading uritemplate-4.2.0-py3-none-any.whl.metadata (2.6 kB)
+2026-07-30T02:22:22.6152575Z Collecting pyparsing<4,>=3.1 (from httplib2<1.0.0,>=0.19.0->google-api-python-client->-r requirements.txt (line 6))
+2026-07-30T02:22:22.6197215Z   Downloading pyparsing-3.3.2-py3-none-any.whl.metadata (5.8 kB)
+2026-07-30T02:22:22.6497238Z Collecting requests-oauthlib>=0.7.0 (from google-auth-oauthlib->-r requirements.txt (line 7))
+2026-07-30T02:22:22.6544222Z   Downloading requests_oauthlib-2.0.0-py2.py3-none-any.whl.metadata (11 kB)
+2026-07-30T02:22:22.6773278Z Collecting anyio<5.0.0,>=4.8.0 (from google-genai->-r requirements.txt (line 9))
+2026-07-30T02:22:22.6816724Z   Downloading anyio-4.14.2-py3-none-any.whl.metadata (4.6 kB)
+2026-07-30T02:22:22.7052450Z Collecting httpx<1.0.0,>=0.28.1 (from google-genai->-r requirements.txt (line 9))
+2026-07-30T02:22:22.7089706Z   Downloading httpx-0.28.1-py3-none-any.whl.metadata (7.1 kB)
+2026-07-30T02:22:22.7354573Z Collecting tenacity<9.2.0,>=8.2.3 (from google-genai->-r requirements.txt (line 9))
+2026-07-30T02:22:22.7395049Z   Downloading tenacity-9.1.4-py3-none-any.whl.metadata (1.2 kB)
+2026-07-30T02:22:22.8561793Z Collecting websockets<17.0,>=13.0.0 (from google-genai->-r requirements.txt (line 9))
+2026-07-30T02:22:22.8603581Z   Downloading websockets-16.1.1-cp310-cp310-manylinux1_x86_64.manylinux_2_28_x86_64.manylinux_2_5_x86_64.whl.metadata (6.8 kB)
+2026-07-30T02:22:22.8740631Z Collecting distro<2,>=1.7.0 (from google-genai->-r requirements.txt (line 9))
+2026-07-30T02:22:22.8777815Z   Downloading distro-1.9.0-py3-none-any.whl.metadata (6.8 kB)
+2026-07-30T02:22:22.8892164Z Collecting sniffio (from google-genai->-r requirements.txt (line 9))
+2026-07-30T02:22:22.8923280Z   Downloading sniffio-1.3.1-py3-none-any.whl.metadata (3.9 kB)
+2026-07-30T02:22:22.9063301Z Collecting exceptiongroup>=1.0.2 (from anyio<5.0.0,>=4.8.0->google-genai->-r requirements.txt (line 9))
+2026-07-30T02:22:22.9101761Z   Downloading exceptiongroup-1.3.1-py3-none-any.whl.metadata (6.7 kB)
+2026-07-30T02:22:22.9369146Z Collecting httpcore==1.* (from httpx<1.0.0,>=0.28.1->google-genai->-r requirements.txt (line 9))
+2026-07-30T02:22:22.9407746Z   Downloading httpcore-1.0.9-py3-none-any.whl.metadata (21 kB)
+2026-07-30T02:22:22.9547444Z Collecting h11>=0.16 (from httpcore==1.*->httpx<1.0.0,>=0.28.1->google-genai->-r requirements.txt (line 9))
+2026-07-30T02:22:22.9587049Z   Downloading h11-0.16.0-py3-none-any.whl.metadata (8.3 kB)
+2026-07-30T02:22:22.9695457Z Collecting annotated-types>=0.6.0 (from pydantic->google-generativeai->-r requirements.txt (line 5))
+2026-07-30T02:22:22.9735566Z   Downloading annotated_types-0.8.0-py3-none-any.whl.metadata (15 kB)
+2026-07-30T02:22:23.8358404Z Collecting pydantic-core==2.46.4 (from pydantic->google-generativeai->-r requirements.txt (line 5))
+2026-07-30T02:22:23.8398909Z   Downloading pydantic_core-2.46.4-cp310-cp310-manylinux_2_17_x86_64.manylinux2014_x86_64.whl.metadata (6.6 kB)
+2026-07-30T02:22:23.8525990Z Collecting typing-inspection>=0.4.2 (from pydantic->google-generativeai->-r requirements.txt (line 5))
+2026-07-30T02:22:23.8565236Z   Downloading typing_inspection-0.4.2-py3-none-any.whl.metadata (2.6 kB)
+2026-07-30T02:22:23.9865370Z Collecting cffi>=2.0.0 (from cryptography>=38.0.3->google-auth>=2.15.0->google-generativeai->-r requirements.txt (line 5))
+2026-07-30T02:22:23.9907392Z   Downloading cffi-2.1.0-cp310-cp310-manylinux2014_x86_64.manylinux_2_17_x86_64.whl.metadata (2.5 kB)
+2026-07-30T02:22:24.0054762Z Collecting pycparser (from cffi>=2.0.0->cryptography>=38.0.3->google-auth>=2.15.0->google-generativeai->-r requirements.txt (line 5))
+2026-07-30T02:22:24.0091109Z   Downloading pycparser-3.0-py3-none-any.whl.metadata (8.2 kB)
+2026-07-30T02:22:24.0360415Z Collecting pyasn1<0.7.0,>=0.6.1 (from pyasn1-modules>=0.2.1->google-auth>=2.15.0->google-generativeai->-r requirements.txt (line 5))
+2026-07-30T02:22:24.0399349Z   Downloading pyasn1-0.6.4-py3-none-any.whl.metadata (8.4 kB)
+2026-07-30T02:22:24.0551526Z Collecting oauthlib>=3.0.0 (from requests-oauthlib>=0.7.0->google-auth-oauthlib->-r requirements.txt (line 7))
+2026-07-30T02:22:24.0587019Z   Downloading oauthlib-3.3.1-py3-none-any.whl.metadata (7.9 kB)
+2026-07-30T02:22:24.0751829Z Downloading requests-2.34.2-py3-none-any.whl (73 kB)
+2026-07-30T02:22:24.0812222Z Downloading charset_normalizer-3.4.9-cp310-cp310-manylinux2014_x86_64.manylinux_2_17_x86_64.manylinux_2_28_x86_64.whl (223 kB)
+2026-07-30T02:22:24.0895553Z Downloading idna-3.18-py3-none-any.whl (65 kB)
+2026-07-30T02:22:24.0955923Z Downloading urllib3-2.7.0-py3-none-any.whl (131 kB)
+2026-07-30T02:22:24.1024390Z Downloading python_dotenv-1.2.2-py3-none-any.whl (22 kB)
+2026-07-30T02:22:24.1076560Z Downloading schedule-1.2.2-py3-none-any.whl (12 kB)
+2026-07-30T02:22:24.1136904Z Downloading pyngrok-8.1.2-py3-none-any.whl (25 kB)
+2026-07-30T02:22:24.1233031Z Downloading google_generativeai-0.8.6-py3-none-any.whl (155 kB)
+2026-07-30T02:22:24.1318034Z Downloading google_ai_generativelanguage-0.6.15-py3-none-any.whl (1.3 MB)
+2026-07-30T02:22:24.1482487Z    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 1.3/1.3 MB 92.2 MB/s  0:00:00
+2026-07-30T02:22:24.1523052Z Downloading google_api_core-2.33.0-py3-none-any.whl (176 kB)
+2026-07-30T02:22:24.1594134Z Downloading google_auth-2.56.2-py3-none-any.whl (258 kB)
+2026-07-30T02:22:24.1660496Z Downloading googleapis_common_protos-1.75.0-py3-none-any.whl (300 kB)
+2026-07-30T02:22:24.1730849Z Downloading grpcio-1.83.0-cp310-cp310-manylinux2014_x86_64.manylinux_2_17_x86_64.whl (7.1 MB)
+2026-07-30T02:22:24.2024199Z    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 7.1/7.1 MB 260.9 MB/s  0:00:00
+2026-07-30T02:22:24.2066474Z Downloading grpcio_status-1.71.2-py3-none-any.whl (14 kB)
+2026-07-30T02:22:24.2122345Z Downloading proto_plus-1.28.2-py3-none-any.whl (50 kB)
+2026-07-30T02:22:24.2206367Z Downloading protobuf-5.29.6-cp38-abi3-manylinux2014_x86_64.whl (320 kB)
+2026-07-30T02:22:24.2268287Z Downloading typing_extensions-4.16.0-py3-none-any.whl (45 kB)
+2026-07-30T02:22:24.2327305Z Downloading google_api_python_client-2.198.0-py3-none-any.whl (15.6 MB)
+2026-07-30T02:22:24.2852292Z    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 15.6/15.6 MB 311.1 MB/s  0:00:00
+2026-07-30T02:22:24.2895513Z Downloading google_auth_httplib2-0.4.0-py3-none-any.whl (9.5 kB)
+2026-07-30T02:22:24.3014602Z Downloading httplib2-0.32.0-py3-none-any.whl (93 kB)
+2026-07-30T02:22:24.3082359Z Downloading pyparsing-3.3.2-py3-none-any.whl (122 kB)
+2026-07-30T02:22:24.3140463Z Downloading uritemplate-4.2.0-py3-none-any.whl (11 kB)
+2026-07-30T02:22:24.3196051Z Downloading google_auth_oauthlib-1.4.0-py3-none-any.whl (19 kB)
+2026-07-30T02:22:24.3262134Z Downloading google_genai-2.15.0-py3-none-any.whl (1.0 MB)
+2026-07-30T02:22:24.3325821Z    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 1.0/1.0 MB 205.2 MB/s  0:00:00
+2026-07-30T02:22:24.3361823Z Downloading anyio-4.14.2-py3-none-any.whl (125 kB)
+2026-07-30T02:22:24.3419207Z Downloading distro-1.9.0-py3-none-any.whl (20 kB)
+2026-07-30T02:22:24.3517258Z Downloading httpx-0.28.1-py3-none-any.whl (73 kB)
+2026-07-30T02:22:24.3587561Z Downloading httpcore-1.0.9-py3-none-any.whl (78 kB)
+2026-07-30T02:22:24.3670951Z Downloading pydantic-2.13.4-py3-none-any.whl (472 kB)
+2026-07-30T02:22:24.3773558Z Downloading pydantic_core-2.46.4-cp310-cp310-manylinux_2_17_x86_64.manylinux2014_x86_64.whl (2.1 MB)
+2026-07-30T02:22:24.3877999Z    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 2.1/2.1 MB 274.6 MB/s  0:00:00
+2026-07-30T02:22:24.3907669Z Downloading tenacity-9.1.4-py3-none-any.whl (28 kB)
+2026-07-30T02:22:24.3995094Z Downloading websockets-16.1.1-cp310-cp310-manylinux1_x86_64.manylinux_2_28_x86_64.manylinux_2_5_x86_64.whl (186 kB)
+2026-07-30T02:22:24.4064468Z Downloading annotated_types-0.8.0-py3-none-any.whl (13 kB)
+2026-07-30T02:22:24.4126700Z Downloading certifi-2026.7.22-py3-none-any.whl (136 kB)
+2026-07-30T02:22:24.4192248Z Downloading cryptography-49.0.0-cp39-abi3-manylinux_2_34_x86_64.whl (4.7 MB)
+2026-07-30T02:22:24.4383426Z    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 4.7/4.7 MB 291.3 MB/s  0:00:00
+2026-07-30T02:22:24.4426433Z Downloading cffi-2.1.0-cp310-cp310-manylinux2014_x86_64.manylinux_2_17_x86_64.whl (218 kB)
+2026-07-30T02:22:24.4486262Z Downloading exceptiongroup-1.3.1-py3-none-any.whl (16 kB)
+2026-07-30T02:22:24.4540605Z Downloading h11-0.16.0-py3-none-any.whl (37 kB)
+2026-07-30T02:22:24.4595884Z Downloading pyasn1_modules-0.4.2-py3-none-any.whl (181 kB)
+2026-07-30T02:22:24.4658561Z Downloading pyasn1-0.6.4-py3-none-any.whl (84 kB)
+2026-07-30T02:22:24.4734607Z Downloading pyyaml-6.0.3-cp310-cp310-manylinux2014_x86_64.manylinux_2_17_x86_64.manylinux_2_28_x86_64.whl (770 kB)
+2026-07-30T02:22:24.4790077Z    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 770.3/770.3 kB 161.2 MB/s  0:00:00
+2026-07-30T02:22:24.4825731Z Downloading requests_oauthlib-2.0.0-py2.py3-none-any.whl (24 kB)
+2026-07-30T02:22:24.4879666Z Downloading oauthlib-3.3.1-py3-none-any.whl (160 kB)
+2026-07-30T02:22:24.4937784Z Downloading typing_inspection-0.4.2-py3-none-any.whl (14 kB)
+2026-07-30T02:22:24.4993758Z Downloading pycparser-3.0-py3-none-any.whl (48 kB)
+2026-07-30T02:22:24.5054086Z Downloading sniffio-1.3.1-py3-none-any.whl (10 kB)
+2026-07-30T02:22:24.5107761Z Downloading tqdm-4.70.0-py3-none-any.whl (80 kB)
+2026-07-30T02:22:24.7672546Z Installing collected packages: websockets, urllib3, uritemplate, typing-extensions, tqdm, tenacity, sniffio, schedule, PyYAML, python-dotenv, pyparsing, pycparser, pyasn1, protobuf, oauthlib, idna, h11, distro, charset_normalizer, certifi, annotated-types, typing-inspection, requests, pyngrok, pydantic-core, pyasn1-modules, proto-plus, httplib2, httpcore, grpcio, googleapis-common-protos, exceptiongroup, cffi, requests-oauthlib, pydantic, grpcio-status, cryptography, anyio, httpx, google-auth, google-auth-oauthlib, google-auth-httplib2, google-api-core, google-genai, google-api-python-client, google-ai-generativelanguage, google-generativeai
+2026-07-30T02:22:28.9991684Z 
+2026-07-30T02:22:29.0057273Z Successfully installed PyYAML-6.0.3 annotated-types-0.8.0 anyio-4.14.2 certifi-2026.7.22 cffi-2.1.0 charset_normalizer-3.4.9 cryptography-49.0.0 distro-1.9.0 exceptiongroup-1.3.1 google-ai-generativelanguage-0.6.15 google-api-core-2.33.0 google-api-python-client-2.198.0 google-auth-2.56.2 google-auth-httplib2-0.4.0 google-auth-oauthlib-1.4.0 google-genai-2.15.0 google-generativeai-0.8.6 googleapis-common-protos-1.75.0 grpcio-1.83.0 grpcio-status-1.71.2 h11-0.16.0 httpcore-1.0.9 httplib2-0.32.0 httpx-0.28.1 idna-3.18 oauthlib-3.3.1 proto-plus-1.28.2 protobuf-5.29.6 pyasn1-0.6.4 pyasn1-modules-0.4.2 pycparser-3.0 pydantic-2.13.4 pydantic-core-2.46.4 pyngrok-8.1.2 pyparsing-3.3.2 python-dotenv-1.2.2 requests-2.34.2 requests-oauthlib-2.0.0 schedule-1.2.2 sniffio-1.3.1 tenacity-9.1.4 tqdm-4.70.0 typing-extensions-4.16.0 typing-inspection-0.4.2 uritemplate-4.2.0 urllib3-2.7.0 websockets-16.1.1
+2026-07-30T02:22:29.4864460Z Requirement already satisfied: pyngrok in /opt/hostedtoolcache/Python/3.10.20/x64/lib/python3.10/site-packages (8.1.2)
+2026-07-30T02:22:29.4894300Z Requirement already satisfied: python-dotenv in /opt/hostedtoolcache/Python/3.10.20/x64/lib/python3.10/site-packages (1.2.2)
+2026-07-30T02:22:29.4906068Z Requirement already satisfied: PyYAML>=5.1 in /opt/hostedtoolcache/Python/3.10.20/x64/lib/python3.10/site-packages (from pyngrok) (6.0.3)
+2026-07-30T02:22:29.6157410Z ##[group***Run python github_runner.py
+2026-07-30T02:22:29.6158029Z [36;1mpython github_runner.py[0m
+2026-07-30T02:22:29.6203255Z shell: /usr/bin/bash -e ***0***
+2026-07-30T02:22:29.6203717Z env:
+2026-07-30T02:22:29.6204168Z   pythonLocation: /opt/hostedtoolcache/Python/3.10.20/x64
+2026-07-30T02:22:29.6204832Z   PKG_CONFIG_PATH: /opt/hostedtoolcache/Python/3.10.20/x64/lib/pkgconfig
+2026-07-30T02:22:29.6205483Z   Python_ROOT_DIR: /opt/hostedtoolcache/Python/3.10.20/x64
+2026-07-30T02:22:29.6206065Z   Python2_ROOT_DIR: /opt/hostedtoolcache/Python/3.10.20/x64
+2026-07-30T02:22:29.6206650Z   Python3_ROOT_DIR: /opt/hostedtoolcache/Python/3.10.20/x64
+2026-07-30T02:22:29.6207237Z   LD_LIBRARY_PATH: /opt/hostedtoolcache/Python/3.10.20/x64/lib
+2026-07-30T02:22:29.6208791Z   IG_ACCESS_TOKEN: ***
+2026-07-30T02:22:29.6209204Z   IG_ACCOUNT_ID: ***
+2026-07-30T02:22:29.6209717Z   NGROK_AUTHTOKEN: ***
+2026-07-30T02:22:29.6210228Z   GEMINI_API_KEY: ***
+2026-07-30T02:22:29.6217602Z   AI_KEYS_JSON: ***
+2026-07-30T02:22:29.6218230Z   YOUTUBE_CLIENT_ID: ***
+2026-07-30T02:22:29.6218742Z   YOUTUBE_CLIENT_SECRET: ***
+2026-07-30T02:22:29.6219564Z   YOUTUBE_REFRESH_TOKEN: ***
+2026-07-30T02:22:29.6220015Z   TELEGRAM_CHANNEL_ID: ***
+2026-07-30T02:22:29.6220434Z   FB_PAGE_ID: ***
+2026-07-30T02:22:29.6221955Z   FB_PAGE_ACCESS_TOKEN: ***
+2026-07-30T02:22:29.6222480Z   TELEGRAM_BOT_TOKEN: ***
+2026-07-30T02:22:29.6222890Z   TELEGRAM_ADMIN_ID: ***
+2026-07-30T02:22:29.6223284Z ##[endgroup***
+2026-07-30T02:22:29.9030095Z 🚀 GitHub Actions: Avtomatik Video Yuklash boshlandi...
+2026-07-30T02:22:29.9031985Z 🎬 Video topildi: TTpapaBOT_30431078098.mp4
+2026-07-30T02:22:29.9033460Z 🌐 Lokal server va Ngrok ishga tushmoqda...
+2026-07-30T02:22:30.3205678Z Downloading ngrok ...
+2026-07-30T02:22:30.3591510Z Downloading ngrok: 0%
+2026-07-30T02:22:30.3931622Z Downloading ngrok: 1%
+2026-07-30T02:22:30.4126310Z Downloading ngrok: 2%
+2026-07-30T02:22:30.4320461Z Downloading ngrok: 3%
+2026-07-30T02:22:30.4515243Z Downloading ngrok: 4%
+2026-07-30T02:22:30.4708667Z Downloading ngrok: 5%
+2026-07-30T02:22:30.4748520Z Downloading ngrok: 6%
+2026-07-30T02:22:30.4944974Z Downloading ngrok: 7%
+2026-07-30T02:22:30.5098334Z Downloading ngrok: 8%
+2026-07-30T02:22:30.5099613Z Downloading ngrok: 9%
+2026-07-30T02:22:30.5290111Z Downloading ngrok: 10%
+2026-07-30T02:22:30.5296776Z Downloading ngrok: 11%
+2026-07-30T02:22:30.5487278Z Downloading ngrok: 12%
+2026-07-30T02:22:30.5488758Z Downloading ngrok: 13%
+2026-07-30T02:22:30.5490650Z Downloading ngrok: 14%
+2026-07-30T02:22:30.5526969Z Downloading ngrok: 15%
+2026-07-30T02:22:30.5679109Z Downloading ngrok: 16%
+2026-07-30T02:22:30.5690105Z Downloading ngrok: 17%
+2026-07-30T02:22:30.5692787Z Downloading ngrok: 18%
+2026-07-30T02:22:30.5722175Z Downloading ngrok: 19%
+2026-07-30T02:22:30.5726089Z Downloading ngrok: 20%
+2026-07-30T02:22:30.5875218Z Downloading ngrok: 21%
+2026-07-30T02:22:30.5882429Z Downloading ngrok: 22%
+2026-07-30T02:22:30.5911453Z Downloading ngrok: 23%
+2026-07-30T02:22:30.5921264Z Downloading ngrok: 24%
+2026-07-30T02:22:30.5921999Z Downloading ngrok: 25%
+2026-07-30T02:22:30.6064012Z Downloading ngrok: 26%
+2026-07-30T02:22:30.6067133Z Downloading ngrok: 27%
+2026-07-30T02:22:30.6080272Z Downloading ngrok: 28%
+2026-07-30T02:22:30.6105347Z Downloading ngrok: 29%
+2026-07-30T02:22:30.6116744Z Downloading ngrok: 30%
+2026-07-30T02:22:30.6117447Z Downloading ngrok: 31%
+2026-07-30T02:22:30.6118119Z Downloading ngrok: 32%
+2026-07-30T02:22:30.6118782Z Downloading ngrok: 33%
+2026-07-30T02:22:30.6254959Z Downloading ngrok: 34%
+2026-07-30T02:22:30.6258926Z Downloading ngrok: 35%
+2026-07-30T02:22:30.6271051Z Downloading ngrok: 36%
+2026-07-30T02:22:30.6337973Z Downloading ngrok: 37%
+2026-07-30T02:22:30.6339053Z Downloading ngrok: 38%
+2026-07-30T02:22:30.6340118Z Downloading ngrok: 39%
+2026-07-30T02:22:30.6341291Z Downloading ngrok: 40%
+2026-07-30T02:22:30.6342251Z Downloading ngrok: 41%
+2026-07-30T02:22:30.6343923Z Downloading ngrok: 42%
+2026-07-30T02:22:30.6346234Z Downloading ngrok: 43%
+2026-07-30T02:22:30.6348825Z Downloading ngrok: 44%
+2026-07-30T02:22:30.6452280Z Downloading ngrok: 45%
+2026-07-30T02:22:30.6453969Z Downloading ngrok: 46%
+2026-07-30T02:22:30.6456371Z Downloading ngrok: 47%
+2026-07-30T02:22:30.6472898Z Downloading ngrok: 48%
+2026-07-30T02:22:30.6473864Z Downloading ngrok: 49%
+2026-07-30T02:22:30.6530615Z Downloading ngrok: 50%
+2026-07-30T02:22:30.6531763Z Downloading ngrok: 51%
+2026-07-30T02:22:30.6532860Z Downloading ngrok: 52%
+2026-07-30T02:22:30.6534921Z Downloading ngrok: 53%
+2026-07-30T02:22:30.6536536Z Downloading ngrok: 54%
+2026-07-30T02:22:30.6643495Z Downloading ngrok: 55%
+2026-07-30T02:22:30.6646831Z Downloading ngrok: 56%
+2026-07-30T02:22:30.6650349Z Downloading ngrok: 57%
+2026-07-30T02:22:30.6651539Z Downloading ngrok: 58%
+2026-07-30T02:22:30.6653589Z Downloading ngrok: 59%
+2026-07-30T02:22:30.6654917Z Downloading ngrok: 60%
+2026-07-30T02:22:30.6657468Z Downloading ngrok: 61%
+2026-07-30T02:22:30.6659727Z Downloading ngrok: 62%
+2026-07-30T02:22:30.6715067Z Downloading ngrok: 63%
+2026-07-30T02:22:30.6719697Z Downloading ngrok: 64%
+2026-07-30T02:22:30.6733290Z Downloading ngrok: 65%
+2026-07-30T02:22:30.6743993Z Downloading ngrok: 66%
+2026-07-30T02:22:30.6744876Z Downloading ngrok: 67%
+2026-07-30T02:22:30.6745779Z Downloading ngrok: 68%
+2026-07-30T02:22:30.6746669Z Downloading ngrok: 69%
+2026-07-30T02:22:30.6747564Z Downloading ngrok: 70%
+2026-07-30T02:22:30.6748444Z Downloading ngrok: 71%
+2026-07-30T02:22:30.6749300Z Downloading ngrok: 72%
+2026-07-30T02:22:30.6750160Z Downloading ngrok: 73%
+2026-07-30T02:22:30.6751242Z Downloading ngrok: 74%
+2026-07-30T02:22:30.6751925Z Downloading ngrok: 75%
+2026-07-30T02:22:30.6752456Z Downloading ngrok: 76%
+2026-07-30T02:22:30.6752995Z Downloading ngrok: 77%
+2026-07-30T02:22:30.6753515Z Downloading ngrok: 78%
+2026-07-30T02:22:30.6836836Z Downloading ngrok: 79%
+2026-07-30T02:22:30.6839828Z Downloading ngrok: 80%
+2026-07-30T02:22:30.6843564Z Downloading ngrok: 81%
+2026-07-30T02:22:30.6854851Z Downloading ngrok: 82%
+2026-07-30T02:22:30.6859402Z Downloading ngrok: 83%
+2026-07-30T02:22:30.6860209Z Downloading ngrok: 84%
+2026-07-30T02:22:30.6860868Z Downloading ngrok: 85%
+2026-07-30T02:22:30.6861574Z Downloading ngrok: 86%
+2026-07-30T02:22:30.6861973Z Downloading ngrok: 87%
+2026-07-30T02:22:30.6910313Z Downloading ngrok: 88%
+2026-07-30T02:22:30.6919609Z Downloading ngrok: 89%
+2026-07-30T02:22:30.6922931Z Downloading ngrok: 90%
+2026-07-30T02:22:30.6925551Z Downloading ngrok: 91%
+2026-07-30T02:22:30.6927559Z Downloading ngrok: 92%
+2026-07-30T02:22:30.6928573Z Downloading ngrok: 93%
+2026-07-30T02:22:30.6929458Z Downloading ngrok: 94%
+2026-07-30T02:22:30.6932080Z Downloading ngrok: 95%
+2026-07-30T02:22:30.6932969Z Downloading ngrok: 96%
+2026-07-30T02:22:30.6934109Z Downloading ngrok: 97%
+2026-07-30T02:22:30.6937128Z Downloading ngrok: 98%
+2026-07-30T02:22:30.6948145Z Downloading ngrok: 99%
+2026-07-30T02:22:30.6948963Z Downloading ngrok: 100%
+2026-07-30T02:22:30.6949969Z                                                                                                     
+2026-07-30T02:22:30.8596744Z Installing ngrok ... 
+2026-07-30T02:22:33.3896439Z /opt/hostedtoolcache/Python/3.10.20/x64/lib/python3.10/site-packages/google/api_core/_python_version_support.py:254: FutureWarning: You are using a Python version (3.10.20) which Google will stop supporting in new releases of google.api_core once it reaches its end of life (2026-10-04). Please upgrade to the latest Python version, or at least Python 3.11, to continue receiving updates for google.api_core past that date.
+2026-07-30T02:22:33.3900037Z   warnings.warn(message, FutureWarning)
+2026-07-30T02:22:33.9537040Z /home/runner/work/InstagaramAvtoReels/InstagaramAvtoReels/github_runner.py:205: FutureWarning: 
+2026-07-30T02:22:33.9538624Z 
+2026-07-30T02:22:33.9539628Z All support for the `google.generativeai` package has ended. It will no longer be receiving 
+2026-07-30T02:22:33.9541828Z updates or bug fixes. Please switch to the `google.genai` package as soon as possible.
+2026-07-30T02:22:33.9543267Z See README for more details:
+2026-07-30T02:22:33.9544848Z 
+2026-07-30T02:22:33.9548911Z https://github.com/google-gemini/deprecated-generative-ai-python/blob/main/README.md
+2026-07-30T02:22:33.9550050Z 
+2026-07-30T02:22:33.9550624Z   import google.generativeai as genai
+2026-07-30T02:23:04.6272491Z                                                                                                     
+2026-07-30T02:23:04.6274008Z [Server*** Lokal server ishga tushdi: http://localhost:8000
+2026-07-30T02:23:04.6275346Z [Server*** Ochiq URL yaratildi (Ngrok): https://amusable-raking-showcase.ngrok-free.dev
+2026-07-30T02:23:04.6277125Z 🔗 Public URL: https://amusable-raking-showcase.ngrok-free.dev/TTpapaBOT_30431078098.mp4
+2026-07-30T02:23:04.6280721Z 🧠 Gemini AI ishga tushmoqda (Urinish 1)...
+2026-07-30T02:23:04.6282611Z 📤 Video Gemini serveriga yuklanmoqda: videos/pending/TTpapaBOT_30431078098.mp4
+2026-07-30T02:23:04.6283476Z 
+2026-07-30T02:23:04.6287733Z ⚠️ Gemini ishlatishda xatolik yuz berdi: <HttpError 400 when requesting https://generativelanguage.googleapis.com/$discovery/rest?version=v1beta&key=AQ.Ab8RN6KVF5hnqrxD3rrAbwd74RbRXCnV27xMC_Tq7tMBJVqQHQ returned "API key not valid. Please pass a valid API key.". Details: "[***'@type': 'type.googleapis.com/google.rpc.ErrorInfo', 'reason': 'API_KEY_INVALID', 'domain': 'googleapis.com', 'metadata': ***'service': 'generativelanguage.googleapis.com'***, ***'@type': 'type.googleapis.com/google.rpc.LocalizedMessage', 'locale': 'en-US', 'message': 'API key not valid. Please pass a valid API key.'***">
+2026-07-30T02:23:04.6292212Z 🧠 Gemini AI ishga tushmoqda (Urinish 2)...
+2026-07-30T02:23:04.6293439Z 📤 Video Gemini serveriga yuklanmoqda: videos/pending/TTpapaBOT_30431078098.mp4
+2026-07-30T02:23:04.6294280Z 
+2026-07-30T02:23:04.6298395Z ⚠️ Gemini ishlatishda xatolik yuz berdi: <HttpError 400 when requesting https://generativelanguage.googleapis.com/$discovery/rest?version=v1beta&key=AQ.Ab8RN6LvaXEEewfctYbaellzUEFdULOk5aUDSJhdmK1L35AZ8A returned "API key not valid. Please pass a valid API key.". Details: "[***'@type': 'type.googleapis.com/google.rpc.ErrorInfo', 'reason': 'API_KEY_INVALID', 'domain': 'googleapis.com', 'metadata': ***'service': 'generativelanguage.googleapis.com'***, ***'@type': 'type.googleapis.com/google.rpc.LocalizedMessage', 'locale': 'en-US', 'message': 'API key not valid. Please pass a valid API key.'***">
+2026-07-30T02:23:04.6302819Z 🧠 Gemini AI ishga tushmoqda (Urinish 3)...
+2026-07-30T02:23:04.6304094Z 📤 Video Gemini serveriga yuklanmoqda: videos/pending/TTpapaBOT_30431078098.mp4
+2026-07-30T02:23:04.6304946Z 
+2026-07-30T02:23:04.6309064Z ⚠️ Gemini ishlatishda xatolik yuz berdi: <HttpError 400 when requesting https://generativelanguage.googleapis.com/$discovery/rest?version=v1beta&key=AQ.Ab8RN6IXPYMs2RnJFki9FJlJmH-HwoDuwWsPinx8qiLxPjh0ug returned "API key not valid. Please pass a valid API key.". Details: "[***'@type': 'type.googleapis.com/google.rpc.ErrorInfo', 'reason': 'API_KEY_INVALID', 'domain': 'googleapis.com', 'metadata': ***'service': 'generativelanguage.googleapis.com'***, ***'@type': 'type.googleapis.com/google.rpc.LocalizedMessage', 'locale': 'en-US', 'message': 'API key not valid. Please pass a valid API key.'***">
+2026-07-30T02:23:04.6313385Z 🧠 Gemini AI ishga tushmoqda (Urinish 4)...
+2026-07-30T02:23:04.6314587Z 📤 Video Gemini serveriga yuklanmoqda: videos/pending/TTpapaBOT_30431078098.mp4
+2026-07-30T02:23:04.6315392Z 
+2026-07-30T02:23:04.6319248Z ⚠️ Gemini ishlatishda xatolik yuz berdi: <HttpError 400 when requesting https://generativelanguage.googleapis.com/$discovery/rest?version=v1beta&key=AQ.Ab8RN6Jh6hwXKmgMtuwZyo6O3gaV-Z6MtIFuZBVshlrxQH8nhg returned "API key not valid. Please pass a valid API key.". Details: "[***'@type': 'type.googleapis.com/google.rpc.ErrorInfo', 'reason': 'API_KEY_INVALID', 'domain': 'googleapis.com', 'metadata': ***'service': 'generativelanguage.googleapis.com'***, ***'@type': 'type.googleapis.com/google.rpc.LocalizedMessage', 'locale': 'en-US', 'message': 'API key not valid. Please pass a valid API key.'***">
+2026-07-30T02:23:04.6326162Z 🧠 Gemini AI ishga tushmoqda (Urinish 5)...
+2026-07-30T02:23:04.6327404Z 📤 Video Gemini serveriga yuklanmoqda: videos/pending/TTpapaBOT_30431078098.mp4
+2026-07-30T02:23:04.6328199Z 
+2026-07-30T02:23:04.6332441Z ⚠️ Gemini ishlatishda xatolik yuz berdi: <HttpError 400 when requesting https://generativelanguage.googleapis.com/$discovery/rest?version=v1beta&key=*** returned "API key not valid. Please pass a valid API key.". Details: "[***'@type': 'type.googleapis.com/google.rpc.ErrorInfo', 'reason': 'API_KEY_INVALID', 'domain': 'googleapis.com', 'metadata': ***'service': 'generativelanguage.googleapis.com'***, ***'@type': 'type.googleapis.com/google.rpc.LocalizedMessage', 'locale': 'en-US', 'message': 'API key not valid. Please pass a valid API key.'***">
+2026-07-30T02:23:04.6336525Z 📝 Instagramga joylanmoqda...
+2026-07-30T02:23:04.6337380Z [API*** Video yuklanmoqda... Kuting.
+2026-07-30T02:23:04.6338252Z [API*** Container ID olindi: 18007944545943895
+2026-07-30T02:23:04.6339156Z [API*** Status: IN_PROGRESS (1/60)
+2026-07-30T02:23:04.6340030Z [API*** Status: ERROR (2/60)
+2026-07-30T02:23:04.6341425Z [API*** Video qayta ishlashda xato yuz berdi: ***'status_code': 'ERROR', 'id': '18007944545943895'***
+2026-07-30T02:23:04.6342571Z [Server*** Server to'xtatildi.
+2026-07-30T02:23:04.6343489Z 📺 YouTubega joylanmoqda...
+2026-07-30T02:23:04.6344384Z 🔗 YouTube API'ga ulanilmoqda...
+2026-07-30T02:23:04.6345519Z 🎬 YouTube Shorts'ga yuklanmoqda: videos/pending/TTpapaBOT_30431078098.mp4
+2026-07-30T02:23:04.6346678Z ✅ Telegram kanalga muvaffaqiyatli joylandi!
+2026-07-30T02:23:04.6347895Z 📘 Facebook Reels yuklash boshlanmoqda: videos/pending/TTpapaBOT_30431078098.mp4
+2026-07-30T02:23:04.6349128Z ✅ Upload session ochildi. Video ID: 1020374544320901
+2026-07-30T02:23:04.6350136Z ✅ Fayl serverga muvaffaqiyatli yuklandi.
+2026-07-30T02:23:04.6351318Z ✅ Facebook Reels muvaffaqiyatli e'lon qilindi!
+2026-07-30T02:23:04.6353199Z ⚠️ Telegram (HTML) yuborishda xatolik: ***"ok":false,"error_code":400,"description":"Bad Request: can't parse entities: Unsupported start tag \"httperror\" at byte offset 124"***
+2026-07-30T02:23:04.6355693Z [VideoManager*** 'TTpapaBOT_30431078098' nomli video va uning barcha qoldiq fayllari (txt, json, platform) butunlay o'chirildi (Xotira tozalandi).
+2026-07-30T02:23:04.7149254Z ##[group***Run git config --local user.email "bot@temurbek.dev"
+2026-07-30T02:23:04.7149960Z [36;1mgit config --local user.email "bot@temurbek.dev"[0m
+2026-07-30T02:23:04.7150542Z [36;1mgit config --local user.name "AutoReels Bot"[0m
+2026-07-30T02:23:04.7151484Z [36;1m# Check if there are any changes (like video moved to posted folder)[0m
+2026-07-30T02:23:04.7152162Z [36;1mif [[ -n "$(git status --porcelain)" ***; then[0m
+2026-07-30T02:23:04.7152692Z [36;1m  git add -A videos/[0m
+2026-07-30T02:23:04.7153318Z [36;1m  git commit -m "🤖 Bot: Bitta video Instagramga joylandi va papkasi o'zgartirildi"[0m
+2026-07-30T02:23:04.7154045Z [36;1m  git pull --rebase --autostash origin main || true[0m
+2026-07-30T02:23:04.7154588Z [36;1m  git push[0m
+2026-07-30T02:23:04.7154970Z [36;1melse[0m
+2026-07-30T02:23:04.7155475Z [36;1m  echo "Hech qanday o'zgarish yo'q (Video joylanmadi yoki qolmadi)."[0m
+2026-07-30T02:23:04.7156040Z [36;1mfi[0m
+2026-07-30T02:23:04.7201521Z shell: /usr/bin/bash -e ***0***
+2026-07-30T02:23:04.7201978Z env:
+2026-07-30T02:23:04.7202426Z   pythonLocation: /opt/hostedtoolcache/Python/3.10.20/x64
+2026-07-30T02:23:04.7203079Z   PKG_CONFIG_PATH: /opt/hostedtoolcache/Python/3.10.20/x64/lib/pkgconfig
+2026-07-30T02:23:04.7203714Z   Python_ROOT_DIR: /opt/hostedtoolcache/Python/3.10.20/x64
+2026-07-30T02:23:04.7204298Z   Python2_ROOT_DIR: /opt/hostedtoolcache/Python/3.10.20/x64
+2026-07-30T02:23:04.7204876Z   Python3_ROOT_DIR: /opt/hostedtoolcache/Python/3.10.20/x64
+2026-07-30T02:23:04.7205464Z   LD_LIBRARY_PATH: /opt/hostedtoolcache/Python/3.10.20/x64/lib
+2026-07-30T02:23:04.7205991Z ##[endgroup***
+2026-07-30T02:23:04.9501884Z [main 59b65ab*** 🤖 Bot: Bitta video Instagramga joylandi va papkasi o'zgartirildi
+2026-07-30T02:23:04.9503693Z  2 files changed, 1 deletion(-)
+2026-07-30T02:23:04.9504841Z  delete mode 100644 videos/pending/TTpapaBOT_30431078098.mp4
+2026-07-30T02:23:04.9506214Z  delete mode 100644 videos/pending/TTpapaBOT_30431078098.platform.txt
+2026-07-30T02:23:05.1266127Z From https://github.com/temurbek1306/InstagaramAvtoReels
+2026-07-30T02:23:05.1282675Z  * branch            main       -> FETCH_HEAD
+2026-07-30T02:23:05.1371413Z Current branch main is up to date.
+2026-07-30T02:23:06.1848620Z To https://github.com/temurbek1306/InstagaramAvtoReels
+2026-07-30T02:23:06.1872058Z    ebb3449..59b65ab  main -> main
+2026-07-30T02:23:06.2002779Z Node 20 is being deprecated. This workflow is running with Node 24 by default. If you need to temporarily use Node 20, you can set the ACTIONS_ALLOW_USE_UNSECURE_NODE_VERSION=true environment variable. For more information see: https://github.blog/changelog/2025-09-19-deprecation-of-node-20-on-github-actions-runners/
+2026-07-30T02:23:06.2004285Z Post job cleanup.
+2026-07-30T02:23:06.3269495Z (node:2187) [DEP0040*** DeprecationWarning: The `punycode` module is deprecated. Please use a userland alternative instead.
+2026-07-30T02:23:06.3271907Z (Use `node --trace-deprecation ...` to show where the warning was created)
+2026-07-30T02:23:06.3584025Z Node 20 is being deprecated. This workflow is running with Node 24 by default. If you need to temporarily use Node 20, you can set the ACTIONS_ALLOW_USE_UNSECURE_NODE_VERSION=true environment variable. For more information see: https://github.blog/changelog/2025-09-19-deprecation-of-node-20-on-github-actions-runners/
+2026-07-30T02:23:06.3586521Z Post job cleanup.
+2026-07-30T02:23:06.4668593Z [command***/usr/bin/git version
+2026-07-30T02:23:06.4735797Z git version 2.54.0
+2026-07-30T02:23:06.4789271Z Temporarily overriding HOME='/home/runner/work/_temp/bb3fc652-9eba-48fe-b0f9-d3b0696dafd7' before making global git config changes
+2026-07-30T02:23:06.4812220Z Adding repository directory to the temporary git global config as a safe directory
+2026-07-30T02:23:06.4814388Z [command***/usr/bin/git config --global --add safe.directory /home/runner/work/InstagaramAvtoReels/InstagaramAvtoReels
+2026-07-30T02:23:06.4877002Z [command***/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+2026-07-30T02:23:06.4952758Z [command***/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+2026-07-30T02:23:06.5672437Z [command***/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+2026-07-30T02:23:06.5752093Z http.https://github.com/.extraheader
+2026-07-30T02:23:06.5792178Z [command***/usr/bin/git config --local --unset-all http.https://github.com/.extraheader
+2026-07-30T02:23:06.5892923Z [command***/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+2026-07-30T02:23:06.6671828Z [command***/usr/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+2026-07-30T02:23:06.6787689Z [command***/usr/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+2026-07-30T02:23:06.7495893Z Cleaning up orphan processes
+2026-07-30T02:23:06.7888257Z ##[warning***Node.js 20 is deprecated. The following actions target Node.js 20 but are being forced to run on Node.js 24: actions/checkout@v4, actions/setup-python@v5. For more information see: https://github.blog/changelog/2025-09-19-deprecation-of-node-20-on-github-actions-runners/

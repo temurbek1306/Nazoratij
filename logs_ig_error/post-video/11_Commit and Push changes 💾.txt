@@ -1,0 +1,30 @@
+﻿2026-07-30T02:23:04.7149240Z ##[group***Run git config --local user.email "bot@temurbek.dev"
+2026-07-30T02:23:04.7149957Z [36;1mgit config --local user.email "bot@temurbek.dev"[0m
+2026-07-30T02:23:04.7150539Z [36;1mgit config --local user.name "AutoReels Bot"[0m
+2026-07-30T02:23:04.7151480Z [36;1m# Check if there are any changes (like video moved to posted folder)[0m
+2026-07-30T02:23:04.7152159Z [36;1mif [[ -n "$(git status --porcelain)" ***; then[0m
+2026-07-30T02:23:04.7152689Z [36;1m  git add -A videos/[0m
+2026-07-30T02:23:04.7153314Z [36;1m  git commit -m "🤖 Bot: Bitta video Instagramga joylandi va papkasi o'zgartirildi"[0m
+2026-07-30T02:23:04.7154042Z [36;1m  git pull --rebase --autostash origin main || true[0m
+2026-07-30T02:23:04.7154585Z [36;1m  git push[0m
+2026-07-30T02:23:04.7154968Z [36;1melse[0m
+2026-07-30T02:23:04.7155472Z [36;1m  echo "Hech qanday o'zgarish yo'q (Video joylanmadi yoki qolmadi)."[0m
+2026-07-30T02:23:04.7156038Z [36;1mfi[0m
+2026-07-30T02:23:04.7201476Z shell: /usr/bin/bash -e ***0***
+2026-07-30T02:23:04.7201976Z env:
+2026-07-30T02:23:04.7202423Z   pythonLocation: /opt/hostedtoolcache/Python/3.10.20/x64
+2026-07-30T02:23:04.7203076Z   PKG_CONFIG_PATH: /opt/hostedtoolcache/Python/3.10.20/x64/lib/pkgconfig
+2026-07-30T02:23:04.7203711Z   Python_ROOT_DIR: /opt/hostedtoolcache/Python/3.10.20/x64
+2026-07-30T02:23:04.7204295Z   Python2_ROOT_DIR: /opt/hostedtoolcache/Python/3.10.20/x64
+2026-07-30T02:23:04.7204874Z   Python3_ROOT_DIR: /opt/hostedtoolcache/Python/3.10.20/x64
+2026-07-30T02:23:04.7205455Z   LD_LIBRARY_PATH: /opt/hostedtoolcache/Python/3.10.20/x64/lib
+2026-07-30T02:23:04.7205988Z ##[endgroup***
+2026-07-30T02:23:04.9501834Z [main 59b65ab*** 🤖 Bot: Bitta video Instagramga joylandi va papkasi o'zgartirildi
+2026-07-30T02:23:04.9503683Z  2 files changed, 1 deletion(-)
+2026-07-30T02:23:04.9504835Z  delete mode 100644 videos/pending/TTpapaBOT_30431078098.mp4
+2026-07-30T02:23:04.9506208Z  delete mode 100644 videos/pending/TTpapaBOT_30431078098.platform.txt
+2026-07-30T02:23:05.1266044Z From https://github.com/temurbek1306/InstagaramAvtoReels
+2026-07-30T02:23:05.1282645Z  * branch            main       -> FETCH_HEAD
+2026-07-30T02:23:05.1371375Z Current branch main is up to date.
+2026-07-30T02:23:06.1848574Z To https://github.com/temurbek1306/InstagaramAvtoReels
+2026-07-30T02:23:06.1872037Z    ebb3449..59b65ab  main -> main
