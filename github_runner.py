@@ -45,7 +45,7 @@ def post_to_platforms(platforms_str, local_video_path, url, caption, first_comme
         status_messages.append("⏭ Instagram: Tanlanmagan")
 
     # --- YOUTUBE SHORTS ---
-    if False and ("yt" in platforms or "both" in platforms): # Vaqtinchalik o'chirildi
+    if "yt" in platforms or "both" in platforms:
         yt_client_id = os.getenv("YOUTUBE_CLIENT_ID")
         yt_client_secret = os.getenv("YOUTUBE_CLIENT_SECRET")
         yt_refresh_token = os.getenv("YOUTUBE_REFRESH_TOKEN")
