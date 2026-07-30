@@ -30,6 +30,11 @@ class KeyManager:
         self.current_or_index = 0
         
     def get_gemini_key(self):
+        # Local .env dagi GEMINI_API_KEY ni birinchi navbatda tekshiramiz
+        env_key = os.getenv("GEMINI_API_KEY")
+        if env_key:
+            return env_key
+            
         # Oldin API kalitlarni tekshiramiz
         if self.keys.get("gemini") and len(self.keys["gemini"]) > 0:
             key = self.keys["gemini"][self.current_gemini_index]
