@@ -306,7 +306,7 @@ def run():
             
             ai_response = ai_assistant.generate_data_driven_strategy(profile_data, trend_data)
             if not ai_response: ai_response = "Kechirasiz, Groq ishlamadi."
-            send_telegram_msg("📊 <b>Analiz Yakunlandi! 30 Kunlik Kontent Rejangiz:</b>\n\n" + ai_response)
+            send_telegram_msg("📊 <b>Analiz Yakunlandi! 20 Kunlik Kontent Rejangiz:</b>\n\n" + ai_response)
         except Exception as e:
             send_telegram_msg(f"⚠️ Xatolik: {e}")
     elif command == "brainstorm":

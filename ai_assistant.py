@@ -322,25 +322,25 @@ def generate_data_driven_strategy(profile_data, trend_data):
 
 (Tasodifiy generatsiya kodi: {random.randint(1000,99999)} / Vaqt: {time.time()})
 
-VAZIFA: Menga 30 KUNLIK SUPER-VIRAL, MIYANI PORTLATADIGAN video ssenariylar jadvalini yozib ber. 
+VAZIFA: Menga 20 KUNLIK SUPER-VIRAL, MIYANI PORTLATADIGAN batafsil video ssenariylar jadvalini yozib ber. 
 Foydalanuvchi ma'lumotlari (profil yo'nalishi): {profile_data}
 Hozirgi Trendlar (Insta, YouTube, FB): {trend_data}
 
 🔥 QOIDALAR (PRO +++MAX QOIDASI):
-1. 30 KUN UCHUN 30 TA MUTLAQO HAR XIL MAVZU: Hech qachon bir xil mavzuni (masalan, faqat futbol, sayohat, komediya yoki bodybuilding deb) qayta-qayta yozib, siklga (tsiklga) tushib qolma! 30 kunning har bir kuni bir-biridan 100% mutlaqo farq qiladigan g'oyalar bo'lishi SHART! 
+1. 20 KUN UCHUN 20 TA MUTLAQO HAR XIL MAVZU: Hech qachon bir xil mavzuni qayta-qayta yozib, siklga tushib qolma! 20 kunning har biri bir-biridan 100% mutlaqo farq qiladigan g'oyalar bo'lishi SHART! 
 2. ERKAKLAR PSIXOLOGIYASI VA ABSURD: Ssenariylarga dark psixologiya, pul ishlash sirlari, xavfli manipulyatsiyalar, do'stlik (bro-culture) va epik kutilmagan vaziyatlarni (plot twist) qo'sh!
 3. BOMBA HOOK (1-soniya): Tomoshabinning miyasini chalg'itadigan vahimali yoki jozibali 1 ta qisqa jumla. Oddiy gaplashish bo'lmasin!
-4. 10s SSENARIY VA MATN XILMAXILLIGI: Har bir kunning ssenariysi mutlaqo har xil gap tuzilishi bilan yozilsin! Hech qachon "X haqiqati" yoki "[Kadrda: X ramzi ochilib, ichidan Y chiqadi]" kabi axmoqona shablonlarni umuman ishlatma! Qandaydir "ramzlar" emas, balki jonli harakatlar (ko'cha, ofis, yuz ifodasi, janjal, tabassum, qo'l harakati) tasvirlansin.
-5. PLATFORMALAR: Instagram, YouTube, Facebook uchun eng mos formatlarni aralashtirib yoz.
+4. BATAFSIL SSENARIY VA MATN XILMAXILLIGI: Har bir kunning ssenariysini juda batafsil qilib 2-3 ta gapda yozib ber (kamera qayerdan keladi, odam qanday harakat qiladi, qanday ovoz eshitiladi). Hech qachon "X haqiqati" kabi axmoqona shablonlarni umuman ishlatma! Qandaydir mavhum "ramzlar" emas, balki jonli, real harakatlar (ko'cha, ofis, mashina, janjal) tasvirlansin.
+5. XULOSA/MA'NO: Har bir video tomoshabinga qanday yashirin ma'no yoki hissiyot berishi kerakligini qisqacha qo'sh.
+6. PLATFORMALAR: Instagram, YouTube, Facebook uchun eng mos formatlarni aralashtirib yoz.
 
 NAMUNA (Aynan shu jadval formatida yoz):
-| Hafta/Kun | Viral Video Mavzusi | Bomba Hook (1-soniya) | 10s Ssenariy (Harakat + Ovoz) | Format |
-| --- | --- | --- | --- | --- |
-| 1-kun | Do'stlik siri (Bro-Code) | "Haqiqiy do'st yordam bermaydi..." | [Kadrda: Sportzal. Yigit qiynalyapti, sherigi yordam o'rniga qulog'iga pichirlaydi, u shtangani otib yuboradi] Ovoz: Epik Phonk musiqasi! | Instagram Reels |
-| 2-kun | Ko'rinmas qopqon (Motivatsiya)| "Biz komfort zonaga keldik. Orqaga qaytamiz!" | [Kadrda: Tungi trassa. Mashina keskin tormoz beradi va 180 gradusga burilib orqaga uchadi] Ovoz: Shinalar chirillashi, yurak urishi. | YouTube Shorts |
-| 3-kun | Qahva va qasos (Karyera) | "Unga bu ishlashini aytishmagandi..." | [Kadrda: Ofis. Xodim qog'ozni yirtib, stoldan sakrab o'tib Boss xonasiga kiradi] Ovoz: Matrix bass effekti | Facebook Reels |
+| Hafta/Kun | Viral Video Mavzusi | Bomba Hook (1-soniya) | Batafsil Ssenariy (Kadrlar + Ovoz) | Xulosa/Ma'no | Format |
+| --- | --- | --- | --- | --- | --- |
+| 1-kun | Do'stlik siri (Bro-Code) | "Haqiqiy do'st senga yordam bermaydi..." | [Kadr: Qorong'i sportzal. Yigit katta og'irlik ko'tarolmay qiynalyapti. Sherigi yordam berish o'rniga uning qulog'iga nimadir pichirlaydi. Yigitning ko'zlari kattalashib, shtangani osmonga otib yuboradi!] Ovoz: Sekin boshlanib, portlovchi Phonk musiqasi. | Tomoshabinda g'azab aralash ulkan motivatsiya uyg'onadi. | Instagram Reels |
+| 2-kun | Ko'rinmas qopqon (Xavf)| "Biz komfort zonaga keldik. Endi orqaga qaytamiz!" | [Kadr: Yomg'irli tungi trassa. Mashina katta tezlikda ketyapti. Birdan haydovchi keskin tormoz beradi va rulni qayirib, mashinani orqaga uchiradi.] Ovoz: Shinalar chirillashi, kuchli yurak urishi. | Komfort zonaning aslida qanchalik xavfli ekanligini anglash. | YouTube Shorts |
 
-DIQQAT: 3-kundan boshlab to 30-kungacha O'ZING mutlaqo yangi, takrorlanmas, har xil ssenariylar o'ylab top! Hech qachon shablon ishlatma, ramzlar haqida yozma, faqat REAL KINOMATOGRAFIK KADRLAR bo'lsin! Faqat jadvalni qaytar!"""
+DIQQAT ENGIN ENG MUHIM QOIDA: Namunadagi "Do'stlik siri" va "Ko'rinmas qopqon" mavzularini UMMUMAN jadvalga qo'shma!!! Ular faqat men senga tushuntirishim uchun yozilgan misol! Sen 1-kundan boshlab o'zingning 20 ta mutlaqo yangi, takrorlanmas ssenariylaringni yozasan! Hech qanday shablonlarsiz! Faqat jadvalni qaytar!"""
     
     # 1. Gemini orqali urinish (agar ishlasa)
     for _ in range(2):
