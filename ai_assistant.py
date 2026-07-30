@@ -319,7 +319,7 @@ def generate_data_driven_strategy(profile_data, trend_data):
     import time
     km = KeyManager()
     prompt = f"""# VAZIFA VA ROLING:
-Sen 2026-yilning eng kuchli, kreativ Ssenariynavisisan. Sening vazifang 20 kunlik HAYOTIY, MANTIQIY va mutlaqo TAKRORLANMAS kontent reja yozish. 
+Sen 2026-yilning eng kuchli, kreativ Ssenariynavisisan. Sening vazifang 5 kunlik HAYOTIY, MANTIQIY va mutlaqo TAKRORLANMAS kontent reja yozish. 
 
 # INPUT (KIRITUVCHI MA'LUMOTLAR):
 - Profil yo'nalishi (Mavzu): {profile_data}
@@ -327,11 +327,11 @@ Sen 2026-yilning eng kuchli, kreativ Ssenariynavisisan. Sening vazifang 20 kunli
 (Tasodifiy kodi: {random.randint(1000,99999)})
 
 # 🚫 ANTI-LOOP QOIDASI (ENG MUHIM QOIDA):
-Men sening eng katta zaifligingni bilaman! Sen bitta shablon tuzib olib, (Masalan: "X ning usuli nima? X ning usuli - X-dir, lekin ba'zilar tushunmaydi") 20 marta faqat so'zlarni o'zgartirib nusxalaysan! 
+Men sening eng katta zaifligingni bilaman! Sen bitta shablon tuzib olib, (Masalan: "X ning usuli nima? X ning usuli - X-dir, lekin ba'zilar tushunmaydi") 5 marta faqat so'zlarni o'zgartirib nusxalaysan! 
 QAT'IY TAQIQLANADI: 
 1. Ikkita kunning ssenariysi yoki gapi bir-biriga 1% ham o'xshamasligi shart!
-2. Har bir videoning Hook (ilgak) qismi turli xil hissiyotda boshlansin: 1-kun "Qo'rqinchli", 2-kun "Kulguli savol", 3-kun "Fakt", 4-kun "Kinoya".
-3. "Lekin ba'zilar tushunmaydi", "Eng yaxshi usuli" degan shablon so'zlarni UMUMAN ISHLATMA! 
+2. Har bir videoning Hook (ilgak) qismi turli xil hissiyotda boshlansin: 1-kun "Qo'rqinchli", 2-kun "Kulguli savol", 3-kun "Fakt", 4-kun "Kinoya", 5-kun "Absurd".
+3. "Lekin ba'zilar tushunmaydi", "Eng yaxshi usuli nima" degan shablon so'zlarni UMUMAN ISHLATMA! 
 
 # 🔥 QAT'IY QOIDALAR (BUZILMASIN):
 1. FANTASTIKA VA ABSTRAKT YUKLAMALAR TAQIQLANADI. "Hayot bu - yorug'lik", "Sevgi bu - do'stlik" kabi arzon va ma'nosiz falsafani yozma! Ssenariy faqat real voqea (pul yo'qotish, asabiylashish, qimmat narsa sotib olish, do'stni aldash) asosida bo'lsin.
@@ -352,7 +352,7 @@ QAT'IY TAQIQLANADI:
 🧠 XULOSA/MANTIQ: O'zbekona g'urur ba'zan cho'ntakka eng katta zarba beradi.
 
 # ENDI SENING NAVBATING:
-Yozgan har bir kuningni tekshiraman! Agar yana "Shablon" ishlatsang yoki falsafa sotsang, nol baho olasan. Yuqoridagi 2 ta namuna kabi HAYOTIY, mantiqan kuchli, mutlaqo turli xil harakatlar va ziddiyatlarga boy 20 KUNLIK JADVAL tuz!"""
+Yozgan har bir kuningni qattiq tekshiraman! Agar yana "Shablon" ishlatsang yoki falsafa sotsang, nol baho olasan. Yuqoridagi 2 ta namuna kabi HAYOTIY, mantiqan kuchli, mutlaqo turli xil harakatlar va ziddiyatlarga boy 5 KUNLIK JADVAL tuz!"""
     
     # 1. Gemini orqali urinish (agar ishlasa)
     for _ in range(2):
