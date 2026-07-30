@@ -425,7 +425,7 @@ Umumiy vaqt: [Masalan, 30 soniya]
 👁 Kadr (Vizual): [Absurd vaziyat, kutilmagan holat, kamera harakatlari]
 🎵 Ovoz: [Musiqa, Bass drop yoki ovoz effektlari]
 🗣 Yozuv/Diktor (Max 25 so'z): "[Diqqatni tortuvchi so'zlar]"
-🤖 AI Video Prompt (Eng): [Shu kadrni AI videoga aylantirish uchun Runway/Sora/Midjourney dasturlariga mos toza ingliz tilidagi prompt. Hech qanday emoji yoki ssenariy qoliplarisiz. Masalan: "Cinematic shot of a young man in a dark room..."]
+🤖 AI Video Prompt (Eng): [Shu kadrni AI videoga aylantirish uchun Runway/Sora/Midjourney dasturlariga mos toza ingliz tilidagi prompt. DIQQAT: Prompt ichida albatta "Uzbek character" va "speaking in Uzbek language, realistic lip movement" degan so'zlar bo'lishi shart! Hech qanday emoji yoki ssenariy qoliplarisiz yoz. Masalan: "Cinematic shot of a young Uzbek man in a dark room, speaking in Uzbek language..."]
 
 🔥 2-QISM (0:10 - 0:20) - BURILISH (TWIST)
 👁 Kadr (Vizual): [Shok qiluvchi burilish, syujetning kutilmagan tomonga ketishi]
