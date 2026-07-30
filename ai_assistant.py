@@ -318,8 +318,8 @@ def generate_data_driven_strategy(profile_data, trend_data):
     import random
     import time
     km = KeyManager()
-    prompt = f"""# SENING ROLING VA DARAJANG (2026-YIL STANDARTI):
-Sen oddiy AI emassan. Sen 2026-yilgi ijtimoiy tarmoqlar (Spatial Reels, TikTok X, YouTube Shorts V2) algoritmalarini buzib tashlaydigan, inson psixologiyasi va neyromarketingni eng chuqur his qiladigan №1 Viral Kontent Prodyuserisan! Sening vazifang menga 20 kunlik shunday AI-videolar jadvalini yozib berishki, uni o'qigan odamning dofamin retseptorlari portlab ketsin!
+    prompt = f"""# VAZIFA VA ROLING:
+Sen 2026-yilgi ijtimoiy tarmoqlar algoritmalarini boshqaruvchi №1 Viral Ssenariynavissan. Maqsading — 200%+ Retention beruvchi, vizual jihatdan 100% REAL VA HAYOTIY bo'lgan viral ssenariylar yaratish. Sening vazifang menga 20 kunlik shunday AI-videolar jadvalini yozib berishki, uni o'qigan odamning dofamin retseptorlari portlab ketsin!
 
 # INPUT (KIRITUVCHI MA'LUMOTLAR):
 - Profil yo'nalishi (Mavzu): {profile_data}
@@ -327,22 +327,27 @@ Sen oddiy AI emassan. Sen 2026-yilgi ijtimoiy tarmoqlar (Spatial Reels, TikTok X
 
 (Tasodifiy kodi: {random.randint(1000,99999)})
 
-# ⚠️ 2026-YIL QAT'IY QOIDALARI (BUZISH TAQIQLANADI):
-1. 20 KUN = 20 TA MUTLAQO HAR XIL OLAM! Hech qachon bir xil mavzuni, bir xil mantiqni yoki bir xil xulosani qaytara ko'rma! Siklga (loop) tushish umuman mumkin emas. Har bir kun mutlaqo yangi bir fojia, komediya yoki psixologik twist bo'lishi shart.
-2. 100% HAYOTIY VA NEURAL-RELATABLE: Syujetlar osmondan olinmasin! Odamlar ko'rganda "Iye, bu aniq men-ku!" deb do'stlariga yuborishga majbur bo'lsin. Mavhum, ma'nosiz shablonlardan qat'iyan qoch! Har bir syujet real hayotdagi aniq bir muammo yoki kulguli mantiqqa (paradoksga) asoslanishi SHART.
-3. BOMBA HOOK (1-SONIYA): 2026-yilda odamlarning e'tibori millisoniyalarda o'lchanadi. Videoning birinchi soniyasidayoq tomoshabin miyasini chalg'itadigan vahimali, absurd yoki vizual-shok qatnashgan 1 ta qisqa jumla yoz! "Bilasizmi...", "Sizga bitta sir ochaman" degan eski musur so'zlarni UMUMAN ISHLATMA! 
-4. VIZUAL SSENARIY (2026 KINO VA AI DARAJASIDA): Menga "oldi-qochdi" gaplar yozma! Har bir kunning ssenariysini 2-3 ta gapda shunday tasvirlaki: 6D Kamera rakursi qayerdan olyapti? Ob'ektlar fizikasi qanday? Atrofda qanday harakat va orqa fonda qanday Spatial 3D ovoz bor? Barchasi aniq, jonli (ko'cha, oshxona, ofis, mashina ichi) bo'lsin.
-5. KUCHLI XULOSA: Har bir videoning oxirida tomoshabinni o'ylantirib qo'yadigan yoki daxshatli mantiq orqali kulgidan yiqitadigan, psixologik nokaut (xulosa) bo'lishi shart.
+# 🔥 QAT'IY QOIDALAR (BUZILMASIN):
+1. NO-FANTASY RULE (FANTASTIKA UMUMAN TAQIQLANADI): "Odamning boshi ochilishi", "miya chaqnashi", "qorong'i xonada yorug'lik chiqishi" kabi ma'nosiz, abstrakt va g'alati narsalarni YOZMA! Hamma narsa 100% REAL HAYOTDA (Oshxona, kafelar, mashina ichi, ofis, ko'cha) bo'lsin.
+2. TAKRORLANMASIN: 20 kun — 20 ta MUTLAQO boshqa mavzu! Bitta g'oyani 2-marta ishlatsang, vazifani barbod qilgan bo'lasan.
+3. FALSAFA EMAS, HARAKAT: "Sevgi bu qalb darvozasi" degan arzon statuslarni yig'ishtir! Erkaklar, do'stlar, ayollar o'rtasidagi real muammolarni (pul, qarz, o'yin, ovqatlanish, bahonalar) yoz!
 
-# NATIJANI CHIQARISH FORMATI:
-Har bir kun uchun AYNAN SHU STRUKTURA bo'yicha javob ber (Jadval qilib chizma, ro'yxat qilib yoz):
+# 💎 MANA SENGA NAMUNA (SHU STILDA VA SHU MANTIQDA YOZASAN):
 
-📅 [KUN]: [Videoning jozibali nomi] | Platforma: [TikTok X / Spatial Reels / Shorts V2]
-🪝 HOOK: [1-soniyadagi portlovchi neyro-jumla]
-🎬 SSENARIY (AI VISUALS): [6D Kamera harakati, aniq fizik harakatlar, mimika va 3D ovozlar - batafsil 3 ta gapda]
-🧠 XULOSA/MANTIQ: [Tomoshabin oladigan aniq hissiyot yoki mantiqiy burilish]
+[NAMUNA 1 - Iqtisodiy mantiq]
+📅 KUN 1: "Zal mantiqi" | Platforma: Reels
+🪝 HOOK: "Dunyodagi eng qimmat sport turi nima bilasizmi? 1 yillik abonoment olib, uyda yotish!"
+🎬 SSENARIY: Qahvaxona. Yigit do'stiga maqtanib, 3 millionga olingan VIP zal kartasini ko'rsatyapti ("Oyiga arzon tushadi!"). Kadr o'zgaradi: 6 oydan keyin o'sha yigit divanda qorni chiqib, chips yeb yotibdi. Do'sti telefonda hisoblayapti: "Demak, 6 oyda 2 marta borgansan. Bitta trenirovkang senga 1.5 millionga tushibdi-da?"
+🧠 XULOSA/MANTIQ: Matematika hech qachon aldamaydi, iqtisod qilaman deb asabni buzmang.
 
-🔥 Qani ketdik, 2026-yilgi butun AI kreativini ishga sol va menga hech qanday "suvsiz", internetni portlatadigan 20 kunlik jadvalni yaratib ber!"""
+[NAMUNA 2 - Erkaklar muammosi]
+📅 KUN 2: "Usta chaqirmaymiz" | Platforma: TikTok
+🪝 HOOK: "Erkak kishi usta chaqirishni g'ururiga ep ko'rmasa nima bo'ladi?"
+🎬 SSENARIY: Uy ichi. Yigit rozetkani tuzatmoqchi, og'zida fonarik tishlab olgan, Youtubedan hindcha videodars ko'ryapti. Kadr birdan chaqnaydi: uy qop-qora tutun, yigitning sochlari tok urganidan tikka bo'lib qolgan. U qo'lidagi erigan simni ushlab, xotirjam deydi: "Asosiysi usta pulini tejadik brat!"
+🧠 XULOSA/MANTIQ: Erkaklar mantig'i: 20 ming so'mlik usta chaqirmaslik uchun, 2 millionlik remontga tushish.
+
+# ENDI SENING NAVBATING:
+Yuqoridagi namunalar qanchalik REAL HAYOTIY, MANTIQIY va QIZIQARLI ekanini ko'rdingmi? Hech qanday "bosh ochilishi" yo'q! Endi xuddi shu formatda, shu stilda, shunday kuchli mantiqiy paradokslar bilan 20 KUNLIK JADVALNI tuzib chiq. Qani, real hayotni ko'rsat menga!"""
     
     # 1. Gemini orqali urinish (agar ishlasa)
     for _ in range(2):
