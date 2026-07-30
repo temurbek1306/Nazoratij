@@ -319,34 +319,32 @@ def generate_data_driven_strategy(profile_data, trend_data):
     import time
     km = KeyManager()
     prompt = f"""# VAZIFA VA ROLING:
-Sen axloq darsi o'tadigan o'qituvchi emassan! Sen asabiy, reallikni boricha (achchiq va kulguli qilib) ko'rsatadigan "Stand-up" komiki va xit ssenariynavissan. Sening yagona maqsading 5 kunlik shunday ssenariylar yozishki, unda odamlar o'zining ahmoqona xatolarini ko'rib kulishsin. 
+Sen Gollivud darajasidagi ssenarist va eng kuchli O'zbek tili mutaxassisisan! Sening vazifang 5 kunlik HAYOTIY, MANTIQIY va mutlaqo TAKRORLANMAS kontent reja yozish. 
 
 # INPUT (KIRITUVCHI MA'LUMOTLAR):
 - Profil yo'nalishi (Mavzu): {profile_data}
 - Hozirgi Trendlar: {trend_data}
 (Tasodifiy kodi: {random.randint(1000,99999)})
 
-# 🚫 QAT'IY TAQIQLANGAN SO'ZLAR (BAN LIST) VA ANTI-LOOP:
-Quyidagi so'zlar va mantiqlarni ishlatish QAT'IYAN TAQIQLANADI. Agar bittasini ishlatsang ham, vazifani barbod qilgan bo'lasan:
-- "Hayotning ma'nosi", "Qaror qabul qilish", "Pulni boshqarish", "Sevgi bu..."
-- "Ular buni anglab yetishadi", "Muhim rol o'ynaydi", "Tushunish kerak", "Lekin ba'zilar tushunmaydi", "Eng yaxshi usuli"
-Bu kabi zerikarli va maktab darsliklaridagi gaplarni umuman YOZMA! Men senga insho yozishni emas, HAYOTIY KOMEDIYA/FOJIA yozishni buyuryapman!
-TAKRORLANMASIN: 5 marta faqat so'zlarni o'zgartirib nusxalama. 5 ta kunning ssenariysi bir-biriga 1% ham o'xshamasligi shart! Hooklar: 1-kun "Qo'rqinchli", 2-kun "Kulguli", 3-kun "Fakt", 4-kun "Kinoya", 5-kun "Absurd".
+# 🚫 TIL VA MANTIQ QOIDALARI (ENG MUHIM QISM):
+Sening eng katta xatoying — mantiqsiz fantastikani o'ylab topishing va inglizchadan to'g'ridan-to'g'ri (Google Translate kabi) tarjima qilib, "Qo'rqinchli taksilar haqida eshitingiz bor bormi?" degan sharmandali, grammatik xato gaplarni yozishing! 
+BUNGA QAT'IYAN CHEK QO'YAMIZ:
+1. SOF O'ZBEK TILI: Matn 100% toza, grammatik jihatdan xatosiz o'zbek tilida bo'lsin. Robot tarjimalarni umuman ishlatma! "Eshitingiz bor bormi", "Absurdiy qarorlar" degan chuchuk gaplar ishlatsang, vazifani barbod qilasan.
+2. ABSURD MANTIQSIZLIK TAQIQLANADI: "Peshxona xo'jayini kiyimni yoqib yubordi", "Do'konga kirish 1 million dollar" kabi osmondan olingan ma'nosiz jinniliklarni YOZMA! Voqealar bizning real hayotimizdagi, ko'chada, ishda, do'stlar orasida bo'ladigan ODDİY muammolar (taksi kutish asabbuzarligi, qarz qaytarmaslik, telefonga qaramlik) haqida bo'lsin.
 
 # 🔥 SSENARIY QOIDALARI:
-1. Har bir voqea ANIQ BITTA Muammo ustiga quriladi: Masalan, taksi kutib asabiylashish, qimmat kiyim olib kiymaslik, qarz berib qaytarib ololmaslik. Abstrakt tushunchalar emas!
-2. Oxirgi xulosa (Mantiq) hech qachon axloq darsi bo'lmasin. Xulosa qora yumor yoki kinoya (sarkazm) bilan tugashi shart.
-3. HARAKAT KO'RSAT: Qahramonlar mashina haydasin, ovqat yoqib yuborsin, telefonda urishsin. Dinamika ber!
+1. TAKRORLANMASIN: Har bir kun bir-biridan 100% farq qilsin. 5 marta faqat so'zlarni o'zgartirib nusxalama. Hooklar: 1-kun "Qo'rqinchli", 2-kun "Kulguli", 3-kun "Fakt", 4-kun "Kinoya", 5-kun "Absurd savol".
+2. HARAKAT BER: Qahramonlar faqat gapirmasin. Ular jismoniy harakat qilsin (telefonga asabiy qarash, kofe ichish, mashina eshigini qattiq yopish).
 
-# 💎 MANA SENGA TAYYOR NAMUNA (FAQAT SHUNDAY YOZASAN):
+# 💎 MANA SENGA TAYYOR NAMUNA (SHU STILDA VA SHU TOZA TILDA YOZASAN):
 
-📅 KUN 1: "Qarz va Xotira" | Platforma: Reels
-🪝 HOOK: "Dunyodagi eng kuchli amneziya (xotira yo'qolishi) qachon boshlanadi bilasizmi?"
-🎬 SSENARIY: Qahvaxona. Yigit do'stiga 500 ming qarz berib turibdi. Do'sti ko'kragiga urib, "Brat, 2 kunda qaytaraman!" deydi. Kadr o'zgaradi: Oradan 2 oy o'tgan. Do'sti yangi iPhone ko'tarib, qimmat joyda ovqatlanib o'tiribdi. Qarz bergan yigit so'rashga uyalib, devor ortidan poylab turibdi.
-🧠 XULOSA/MANTIQ: Qarz berayotganda sher, qaytarib so'rayotganda mushukka aylanamiz.
+📅 KUN 1: "O'chirilgan xabar" | Platforma: Reels
+🪝 HOOK: "Insonning asabini bir soniyada qanday buzish mumkin bilasizmi?"
+🎬 SSENARIY: Yigit kafeda xotirjam choy ichib o'tiribdi. Ekranga "Do'stingizdan xabar" keladi. U shoshmay telefonni ochgunicha xabar "Ushbu xabar o'chirildi" yozuviga aylanadi. Yigitning xotirjamligi yo'qoladi, choyni stolga taraqlab qo'yib, asabiy holda u yoq-bu yoqqa yura boshlaydi.
+🧠 XULOSA/MANTIQ: Hech qanday so'z insonni "O'chirilgan xabar"chalik vahimaga va qiziqishga sololmaydi.
 
 # ENDI SENING NAVBATING:
-Yuqoridagi namunani ko'rdingmi? Hech qanday "hayotning ahamiyati" degan ezmalik yo'q! Endi aynan shu (Namuna) uslubida, sof kinoya va qora yumor bilan 5 KUNLIK mutlaqo har xil voqealarni yoz! Agar yana insho yozsang, nol baho olasan."""
+Sening tilingni va mantig'ingni qattiq tekshiraman! Yuqoridagi [NAMUNA] kabi 100% toza o'zbek tilida, haqiqiy mantiqli, hayotiy va qiziqarli 5 KUNLIK JADVAL tuz!"""
     
     # 1. Gemini orqali urinish (agar ishlasa)
     for _ in range(2):
