@@ -425,11 +425,13 @@ Umumiy vaqt: [Masalan, 30 soniya]
 👁 Kadr (Vizual): [Absurd vaziyat, kutilmagan holat, kamera harakatlari]
 🎵 Ovoz: [Musiqa, Bass drop yoki ovoz effektlari]
 🗣 Yozuv/Diktor (Max 25 so'z): "[Diqqatni tortuvchi so'zlar]"
+🤖 AI Video Prompt (Eng): [Shu kadrni AI videoga aylantirish uchun Runway/Sora/Midjourney dasturlariga mos toza ingliz tilidagi prompt. Hech qanday emoji yoki ssenariy qoliplarisiz. Masalan: "Cinematic shot of a young man in a dark room..."]
 
 🔥 2-QISM (0:10 - 0:20) - BURILISH (TWIST)
 👁 Kadr (Vizual): [Shok qiluvchi burilish, syujetning kutilmagan tomonga ketishi]
 🎵 Ovoz: [Musiqa effekti o'zgarishi]
 🗣 Yozuv/Diktor: "[Matn]"
+🤖 AI Video Prompt (Eng): [Inglizcha vizual prompt]
 
 (va hokazo, so'ralgan qismlar soniga qarab davom eting).
 
