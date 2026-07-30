@@ -327,19 +327,20 @@ Foydalanuvchi ma'lumotlari (profil yo'nalishi): {profile_data}
 Hozirgi Trendlar (Insta, YouTube, FB): {trend_data}
 
 🔥 QOIDALAR (PRO +++MAX QOIDASI):
-1. 30 KUN UCHUN 30 XIL DYNAMIC MAVZU: Oldindan yodlangan, zerikarli shablonlarni (masalan: supermarket, kasino, muzlatgich kabi) UUMUMAN QAYTARMA! Mavzularni bevosita foydalanuvchining ma'lumotlariga va trendlarga moslab, o'zing eng zo'r kreativ va mantiqiy g'oyalarni o'ylab top!
-2. ERKAKLAR PSIXOLOGIYASI VA ABSURD: Ssenariylarga do'stlik (bro-culture), motivatsiya va epik absurd vaziyatlarni qo'sh! Oddiy, quruq faktlardan qoch, o'rniga harakat va kutilmagan vizual burilish (plot twist) bo'lsin.
-3. BOMBA HOOK (1-soniya): Tomoshabinning miyasini chalg'itadigan vahimali yoki jozibali 1 ta qisqa jumla. Hech qanday "Bilasizmi", "Sizni shunday aldaydi" kabi arzon gaplar bo'lmasin.
-4. 10s SSENARIY: Format - [Kadrda: Nima sodir bo'lishi] Ovoz: (Musiqa/Effekt). Kadrlar g'ayrioddiy va 200% retention beradigan darajada qiziq bo'lsin. Oddiy gapirish bo'lmasin, KINO uslubida bo'lsin!
+1. 30 KUN UCHUN 30 TA MUTLAQO HAR XIL MAVZU: Hech qachon bir xil mavzuni (masalan, faqat futbol, sayohat, komediya yoki bodybuilding deb) qayta-qayta yozib, siklga (tsiklga) tushib qolma! 30 kunning har bir kuni bir-biridan 100% mutlaqo farq qiladigan g'oyalar bo'lishi SHART! 
+2. ERKAKLAR PSIXOLOGIYASI VA ABSURD: Ssenariylarga dark psixologiya, pul ishlash sirlari, xavfli manipulyatsiyalar, do'stlik (bro-culture) va epik kutilmagan vaziyatlarni (plot twist) qo'sh!
+3. BOMBA HOOK (1-soniya): Tomoshabinning miyasini chalg'itadigan vahimali yoki jozibali 1 ta qisqa jumla. Oddiy gaplashish bo'lmasin!
+4. 10s SSENARIY: Format - [Kadrda: Nima sodir bo'lishi] Ovoz: (Musiqa/Effekt). Kadrlar shok darajasida qiziq bo'lsin.
 5. PLATFORMALAR: Instagram, YouTube, Facebook uchun eng mos formatlarni aralashtirib yoz.
 
-NAMUNA (Aynan shu jadval formatida yoz, lekin mazmunini to'liq yangi, profilga mos yarat):
+NAMUNA (Aynan shu jadval formatida yoz):
 | Hafta/Kun | Viral Video Mavzusi | Bomba Hook (1-soniya) | 10s Ssenariy (Harakat + Ovoz) | Format |
 | --- | --- | --- | --- | --- |
 | 1-kun | Do'stlik siri (Bro-Code) | "Haqiqiy do'st yordam bermaydi..." | [Kadrda: Sportzal. Yigit qiynalyapti, sherigi yordam o'rniga qulog'iga pichirlaydi, u shtangani otib yuboradi] Ovoz: Epik Phonk musiqasi! | Instagram Reels |
 | 2-kun | Ko'rinmas qopqon (Motivatsiya)| "Biz komfort zonaga keldik. Orqaga qaytamiz!" | [Kadrda: Tungi trassa. Mashina keskin tormoz beradi va 180 gradusga burilib orqaga uchadi] Ovoz: Shinalar chirillashi, yurak urishi. | YouTube Shorts |
+| 3-kun | Qahva va qasos (Karyera) | "Unga bu ishlashini aytishmagandi..." | [Kadrda: Ofis. Xodim qog'ozni yirtib, stoldan sakrab o'tib Boss xonasiga kiradi] Ovoz: Matrix bass effekti | Facebook Reels |
 
-Faqat va faqat to'liq 30 kunlik jadvalni ber! Salomlashish, izoh yozma! Jadvalni NAMUNA kabi batafsil, takrorlamasdan, jozibador yoz!"""
+DIQQAT: 3-kundan boshlab to 30-kungacha O'ZING mutlaqo yangi, takrorlanmas, har xil ssenariylar o'ylab top! Hech qachon bir xil so'zlarni qaytarmagin! Faqat jadvalni qaytar!"""
     
     # 1. Gemini orqali urinish (agar ishlasa)
     for _ in range(2):
