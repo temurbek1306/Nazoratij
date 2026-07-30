@@ -409,9 +409,9 @@ Mijoz senga mavzu va qismlar sonini yubordi: "{user_prompt}"
 
 QAT'IY QOIDALAR (BUZILISHI MUMKIN EMAS):
 1. ZERIKARLI BO'LMASIN: Hech qachon oddiy, zerikarli yoki standart internet ssenariylarini berma. Ssenariylar odamning miyasini chalg'itadigan, 200% retention (kutish) beradigan darajada "Pro +++Max" bo'lishi shart!
-2. BRO-CULTURE & PSIXOLOGIYA: Ssenariylarga erkaklar psixologiyasi, do'stlik (bro-culture), motivatsiya va epik absurd vaziyatlarni (masalan: 2-3 kishi ishtirokidagi syujetli burilishlar, kutilmagan dark psixologiya fokuslari) qo'sh! (Masalan: Boy ko'ringanlar aslida kambag'al chiqishi yoki ziddiyatli holat).
+2. BRO-CULTURE & PSIXOLOGIYA: Ssenariylarga erkaklar psixologiyasi, do'stlik (bro-culture), motivatsiya va epik absurd vaziyatlarni (masalan: 2-3 kishi ishtirokidagi syujetli burilishlar, kutilmagan dark psixologiya fokuslari) qo'sh!
 3. 10 SONIYA QOIDASI: Har bir qism ROPPA-ROSA 10 soniyalik bo'lishi shart. Agar mijoz "3 qism" degan bo'lsa, umumiy video 30 soniya bo'ladi.
-4. MATN HAJMI VA TABIIYLIK: 10 soniya ichiga ko'pi bilan 20-25 ta so'z sig'adi. "Diktor/Matn" qismi QAT'IYAN 25 ta so'zdan oshmasligi kerak! Eng muhimi: Matnlar va diologlar TABIIY, KO'CHA TILIDA yoki qattiq (hard-hitting) bo'lsin. Hech qachon "Haqiqatni bilasizmi?", "O'yin boshlandi", "Shunday qiling" kabi sun'iy, robotlashtirilgan yoki arzon shablon gaplarni umuman ishlatma!
+4. MATN HAJMI VA SOF O'ZBEK TILI: 10 soniya ichiga ko'pi bilan 20-25 ta so'z sig'adi. Eng muhimi: Matnlar va dialoglar 100% XATOSIZ, SOF O'ZBEK TILIDA (yoki tabiiy ko'cha tilida) bo'lsin. Google Tarjimondan o'tkazilgandek g'alati, mantiqsiz gaplar ("O'yin boshlandi emas", "Ishonavsiz") UMMUMAN BO'LMASIN! O'zbeklar qanday gaplashsa, shunday tabiiy, zarbali va hard-hitting qilib yoz. Arzon shablonlardan qoch.
 5. KADRLAR ALMASHUVI VA OVOZ: Ovoz effektlariga (Phonk musiqa, Bass drop, yurak urishi, sukunat) va kadrlar tili (Whip pan, slow-mo, 0.5x burchak) ga alohida urg'u ber. Har bir kadr o'quvchini shok holatga tushirishi kerak.
 
 FORMAT (Shu formatdan mutlaqo chetga chiqma):
