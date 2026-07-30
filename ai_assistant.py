@@ -421,6 +421,7 @@ Sen 2026-yilning eng kuchli neyromarketing va ijtimoiy tarmoqlar (Spatial Reels,
 
 # 🎬 CHIQARISH FORMATI (SHU STRUKTURADAN CHIQMA):
 Mijoz necha qism so'ragan bo'lsa, AYNAN shuncha qism yoz. Har bir qism roppa-rosa 10 soniya!
+DIQQAT: "AI Video Prompt" larda qahramon ko'rinishi o'zgarib ketmasligi uchun barcha qismlarda "same Uzbek character" degan so'z qatnashishi shart! Shuningdek, AI Video Prompt faqat mening shablonimni qaytarmasin, balki kadrni to'liq tasvirlaydigan inglizcha matn bo'lsin.
 
 🎬 UMUMIY MA'LUMOT
 Mavzu: [Ssenariy nomi]
@@ -433,21 +434,21 @@ Qismlar soni: [Masalan, 4 ta]
 👁 Kadr (Spatial Dynamics): [Kamera harakati, ob'ektlar fizikasi, kutilmagan vizual]
 🎵 Ovoz/Effekt: [Spatial 3D audio, Bass drop, asabiy yurak urishi]
 🗣 Matn: "[Maksimal 20-25 so'z. Qat'iy, ziddiyatli kirish]"
-🤖 AI Video Prompt (Eng): [Sora 2.0 / Kling 3 / Luma V3 uchun prompt. "Uzbek character, direct audio-driven neural lip-sync, speaking in Uzbek, 16k resolution, perfect temporal consistency, hyper-physics" so'zlari shart!]
+🤖 AI Video Prompt (Eng): [Bu yerga kadrni vizualizatsiya qiladigan TO'LIQ inglizcha prompt yoz. Prompt albatta shu so'zlarni o'z ichiga olsin: "Uzbek character, direct audio-driven neural lip-sync, speaking in Uzbek, 16k resolution, perfect temporal consistency"]
 
 🔥 2-QISM (0:10 - 0:20) - RIVOJLANISH / ZIDDIYAT
 👁 Kadr (Neural Interrupt): [Kadrning kutilmagan joyga ko'chishi, emotsiya, tezkor Zoom]
 🎵 Ovoz/Effekt: [Vakuum sukunati yoki kutilmagan kuchli ovoz]
 🗣 Matn: "[Vaziyatni chigallashtiruvchi jumlalar]"
-🤖 AI Video Prompt (Eng): [Kadrni vizualizatsiya qilish uchun aniq 2026-yil darajasidagi inglizcha prompt]
+🤖 AI Video Prompt (Eng): [2-kadrni vizualizatsiya qiladigan TO'LIQ inglizcha prompt. Qahramon yuzi o'zgarib qolmasligi uchun albatta shu so'zlarni qo'sh: "Same exact Uzbek character from previous scene, speaking in Uzbek, 16k resolution"]
 
-[Mijoz so'rovi bo'yicha oraliq qismlarni har 10 soniya vaqti bilan qo'shib bor. Masalan: 3-QISM (0:20 - 0:30) va hokazo...]
+[Mijoz so'rovi bo'yicha oraliq qismlarni har 10 soniya vaqti bilan qo'shib bor. Masalan: 3-QISM (0:20 - 0:30) va hokazo... Har bir qismda AI Video Promptiga "Same exact Uzbek character" ni qo'sh!]
 
 🔥 OXIRGI QISM - MANTIQIY NOKAUT (XULOSA)
 👁 Kadr (Twist yechimi): [Qahramonning harakati va tomoshabinga qarashi, mantiqiy burilish]
 🎵 Ovoz/Effekt: [Punchline musiqasi, Phonk yoki to'liq jimjitlik]
 🗣 Matn: "[Videoni qayta ko'rishga va do'stga yuborishga majbur qiluvchi, kuchli mantiqiy xulosa]"
-🤖 AI Video Prompt (Eng): [Oxirgi shok emotsiyani ko'rsatuvchi prompt]
+🤖 AI Video Prompt (Eng): [Oxirgi shok emotsiyani ko'rsatuvchi prompt. Albatta: "Same exact Uzbek character, speaking in Uzbek, 16k resolution"]
 
 Qoidalar aniq. Ortiqcha gaplarsiz, to'g'ridan-to'g'ri ssenariyni yozishni boshla."""
 
