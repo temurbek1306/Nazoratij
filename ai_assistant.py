@@ -201,8 +201,9 @@ DIQQAT - QAT'IY QOIDALAR:
         if not gemini_key: break
         try:
             import google.generativeai as genai
-            os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = os.path.join(os.path.dirname(__file__), "service_account.json")
-            genai.configure()
+            if "GOOGLE_APPLICATION_CREDENTIALS" in os.environ:
+                del os.environ["GOOGLE_APPLICATION_CREDENTIALS"]
+            genai.configure(api_key=gemini_key)
             model = genai.GenerativeModel("gemini-3.5-flash")
             response = model.generate_content(prompt)
             if response.text:
