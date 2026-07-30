@@ -318,8 +318,8 @@ def generate_data_driven_strategy(profile_data, trend_data):
     import random
     import time
     km = KeyManager()
-    prompt = f"""# SENING ROLING VA DARAJANG:
-Sen oddiy AI emassan. Sen ijtimoiy tarmoqlar (Insta, TikTok, YouTube) algoritmalarini buzib tashlaydigan, millionlab prosmotrlar olib keladigan, inson psixologiyasini eng chuqur his qiladigan "Pro +++Max" darajadagi Viral Kontent Prodyuserisan! Sening vazifang menga 20 kunlik shunday kontent plan yozib berishki, uni o'qigan odamning miyasi portlab ketsin!
+    prompt = f"""# SENING ROLING VA DARAJANG (2026-YIL STANDARTI):
+Sen oddiy AI emassan. Sen 2026-yilgi ijtimoiy tarmoqlar (Spatial Reels, TikTok X, YouTube Shorts V2) algoritmalarini buzib tashlaydigan, inson psixologiyasi va neyromarketingni eng chuqur his qiladigan №1 Viral Kontent Prodyuserisan! Sening vazifang menga 20 kunlik shunday AI-videolar jadvalini yozib berishki, uni o'qigan odamning dofamin retseptorlari portlab ketsin!
 
 # INPUT (KIRITUVCHI MA'LUMOTLAR):
 - Profil yo'nalishi (Mavzu): {profile_data}
@@ -327,22 +327,22 @@ Sen oddiy AI emassan. Sen ijtimoiy tarmoqlar (Insta, TikTok, YouTube) algoritmal
 
 (Tasodifiy kodi: {random.randint(1000,99999)})
 
-# ⚠️ QAT'IY QOIDALAR (BUZISH TAQIQLANADI, "PRO +++MAX" REJIMI):
-1. 20 KUN = 20 TA MUTLAQO HAR XIL OLAM! Hech qachon bir xil mavzuni, bir xil mantiqni yoki bir xil xulosani qaytara ko'rma! Siklga (loop) tushib qolish umuman mumkin emas. Har bir kun mutlaqo yangi bir fojia, komediya yoki psixologik fakt bo'lishi shart.
-2. 100% HAYOTIY VA MANTIQIY (RELATABLE): Syujetlar osmondan olinmasin! Odamlar ko'rganda "Iye, bu aniq men-ku!" deb do'stlariga yuborishga majbur bo'lsin. Mavhum, ma'nosiz (masalan, qorong'i xonada yig'lash, mavhum falsafa) shablonlardan qat'iyan qoch! Har bir syujet real hayotdagi aniq bir muammo yoki kulguli mantiqqa (paradoksga) asoslanishi SHART.
-3. BOMBA HOOK (1-SONIYA): Videoning birinchi soniyasidayoq tomoshabin miyasini chalg'itadigan vahimali, absurd yoki o'ta qiziqarli 1 ta qisqa jumla yoz! "Bilasizmi...", "Sizga bitta sir ochaman", "Muvaffaqiyat siri" degan zerikarli, musur so'zlarni UMUMAN ISHLATMA! 
-4. VIZUAL SSENARIY (KINO DARAJASIDA): Menga "oldi-qochdi" gaplar yozma! Har bir kunning ssenariysini 2-3 ta gapda shunday tasvirlaki: Kamera qayerdan olyapti? Qahramon yuzida qanday emotsiya? Atrofda qanday harakat va orqa fonda qanday musiqa/ovoz bor? Barchasi aniq, jonli (ko'cha, oshxona, ofis, mashina ichi) bo'lsin.
-5. KUCHLI XULOSA: Har bir videoning oxirida tomoshabinni o'ylantirib qo'yadigan yoki daxshatli mantiq orqali kulgidan yiqitadigan, psixologik xulosa bo'lishi shart.
+# ⚠️ 2026-YIL QAT'IY QOIDALARI (BUZISH TAQIQLANADI):
+1. 20 KUN = 20 TA MUTLAQO HAR XIL OLAM! Hech qachon bir xil mavzuni, bir xil mantiqni yoki bir xil xulosani qaytara ko'rma! Siklga (loop) tushish umuman mumkin emas. Har bir kun mutlaqo yangi bir fojia, komediya yoki psixologik twist bo'lishi shart.
+2. 100% HAYOTIY VA NEURAL-RELATABLE: Syujetlar osmondan olinmasin! Odamlar ko'rganda "Iye, bu aniq men-ku!" deb do'stlariga yuborishga majbur bo'lsin. Mavhum, ma'nosiz shablonlardan qat'iyan qoch! Har bir syujet real hayotdagi aniq bir muammo yoki kulguli mantiqqa (paradoksga) asoslanishi SHART.
+3. BOMBA HOOK (1-SONIYA): 2026-yilda odamlarning e'tibori millisoniyalarda o'lchanadi. Videoning birinchi soniyasidayoq tomoshabin miyasini chalg'itadigan vahimali, absurd yoki vizual-shok qatnashgan 1 ta qisqa jumla yoz! "Bilasizmi...", "Sizga bitta sir ochaman" degan eski musur so'zlarni UMUMAN ISHLATMA! 
+4. VIZUAL SSENARIY (2026 KINO VA AI DARAJASIDA): Menga "oldi-qochdi" gaplar yozma! Har bir kunning ssenariysini 2-3 ta gapda shunday tasvirlaki: 6D Kamera rakursi qayerdan olyapti? Ob'ektlar fizikasi qanday? Atrofda qanday harakat va orqa fonda qanday Spatial 3D ovoz bor? Barchasi aniq, jonli (ko'cha, oshxona, ofis, mashina ichi) bo'lsin.
+5. KUCHLI XULOSA: Har bir videoning oxirida tomoshabinni o'ylantirib qo'yadigan yoki daxshatli mantiq orqali kulgidan yiqitadigan, psixologik nokaut (xulosa) bo'lishi shart.
 
 # NATIJANI CHIQARISH FORMATI:
 Har bir kun uchun AYNAN SHU STRUKTURA bo'yicha javob ber (Jadval qilib chizma, ro'yxat qilib yoz):
 
-📅 [KUN]: [Videoning jozibali nomi] | Platforma: [Insta / YouTube Shorts / TikTok]
-🪝 HOOK: [1-soniyadagi portlovchi jumla]
-🎬 SSENARIY: [Kamera rakursi, aniq harakatlar, mimika va ovozlar - batafsil 3 ta gapda]
-🧠 XULOSA/MANTIQ: [Tomoshabin oladigan aniq hissiyot yoki mantiqiy yechim]
+📅 [KUN]: [Videoning jozibali nomi] | Platforma: [TikTok X / Spatial Reels / Shorts V2]
+🪝 HOOK: [1-soniyadagi portlovchi neyro-jumla]
+🎬 SSENARIY (AI VISUALS): [6D Kamera harakati, aniq fizik harakatlar, mimika va 3D ovozlar - batafsil 3 ta gapda]
+🧠 XULOSA/MANTIQ: [Tomoshabin oladigan aniq hissiyot yoki mantiqiy burilish]
 
-🔥 Qani ketdik, o'zingdagi butun kreativni ishga sol va menga hech qanday "suvsiz", internetni portlatadigan 20 kunlik jadvalni yaratib ber!"""
+🔥 Qani ketdik, 2026-yilgi butun AI kreativini ishga sol va menga hech qanday "suvsiz", internetni portlatadigan 20 kunlik jadvalni yaratib ber!"""
     
     # 1. Gemini orqali urinish (agar ishlasa)
     for _ in range(2):
