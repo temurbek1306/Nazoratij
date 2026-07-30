@@ -404,6 +404,8 @@ def get_standard_comment(caption):
         return "🎬 Kino kodi orqali botdan kinoni ko'ring: @TemurbekDevbot"
     return "👇 Fikringizni izohlarda yozib qoldiring!"
 
+def generate_pro_max_scenario(user_prompt):
+    km = KeyManager()
     prompt = f"""# SENING ROLING (2026-YIL STANDARTI):
 Sen 2026-yilning eng kuchli neyromarketing va ijtimoiy tarmoqlar (Spatial Reels, TikTok X, YouTube Shorts V2) algoritmlarini boshqaruvchi №1 Viral Ssenariynavissan. Sening yagona maqsading — odamlarning dofamin retseptorlarini portlatadigan, 200%+ Retention beruvchi ultra-dinamik ssenariylar yaratish.
 
