@@ -82,9 +82,10 @@ def brainstorm_idea(prompt):
             
         try:
             import google.generativeai as genai
-            os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = os.path.join(os.path.dirname(__file__), "service_account.json")
-            genai.configure()
-            model = genai.GenerativeModel("gemini-3.5-flash")
+            if "GOOGLE_APPLICATION_CREDENTIALS" in os.environ:
+                del os.environ["GOOGLE_APPLICATION_CREDENTIALS"]
+            genai.configure(api_key=gemini_key)
+            model = genai.GenerativeModel("gemini-3.6-flash")
             response = model.generate_content(full_prompt)
             if response.text:
                 return "✨ [Gemini AI]:\n\n" + response.text
@@ -281,9 +282,10 @@ def generate_first_comment(caption):
         if not gemini_key: break
         try:
             import google.generativeai as genai
-            os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = os.path.join(os.path.dirname(__file__), "service_account.json")
-            genai.configure()
-            model = genai.GenerativeModel("gemini-3.5-flash")
+            if "GOOGLE_APPLICATION_CREDENTIALS" in os.environ:
+                del os.environ["GOOGLE_APPLICATION_CREDENTIALS"]
+            genai.configure(api_key=gemini_key)
+            model = genai.GenerativeModel("gemini-3.6-flash")
             response = model.generate_content(prompt)
             if response.text:
                 first_comment = response.text.strip().replace('"', '')
