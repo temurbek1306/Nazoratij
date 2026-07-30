@@ -406,18 +406,17 @@ def get_standard_comment(caption):
 
 def generate_pro_max_scenario(user_prompt):
     km = KeyManager()
-    prompt = f"""# SENING ROLING (2026-YIL STANDARTI):
-Sen 2026-yilning eng kuchli neyromarketing va ijtimoiy tarmoqlar (Spatial Reels, TikTok X, YouTube Shorts V2) algoritmlarini boshqaruvchi №1 Viral Ssenariynavissan. Sening yagona maqsading — odamlarning dofamin retseptorlarini portlatadigan, 200%+ Retention beruvchi ultra-dinamik ssenariylar yaratish.
+    prompt = f"""# VAZIFA VA ROLING (2026-YIL STANDARTI):
+Sen 2026-yilgi ijtimoiy tarmoqlar algoritmalarini boshqaruvchi №1 Viral Ssenariynavissan. Maqsading — 200%+ Retention beruvchi, vizual jihatdan 100% REAL VA HAYOTIY bo'lgan viral ssenariylar yaratish.
 
-# 📥 INPUT (MIJOZ SO'ROVI):
-- So'rov: "{user_prompt}" (Agar mijoz qismlar sonini yozgan bo'lsa, o'shancha qism yarat. Har bir qism qat'iy 10 soniyadan bo'ladi.)
+Mijoz senga mavzu va qismlar sonini yuboradi: "{user_prompt}" (Agar mijoz qismlar sonini yozgan bo'lsa, o'shancha qism yarat. Har bir qism qat'iy 10 soniyadan bo'ladi.)
 
-# 🧠 VIRAL PSIXOLOGIYA VA 2026-YIL MEXANIKASI (QAT'IY QOIDALAR):
-1. NEGATIV HOOK VA SPATIAL SHOK (1-QISM): 2026-yilda odamlar oddiy narsalarga qaramaydi. Hook insoniyatning eng og'riqli nuqtasiga urishi va vizual jihatdan "Spatial" (fazoviy) chuqurlikka ega bo'lishi shart. "Hech qachon...", "Eng katta xato..." kabi ziddiyatlar bilan boshla.
-2. 10 SONIYA QOIDASI VA NEURAL INTERRUPT: Ssenariy qat'iy 10 soniyalik bloklarga bo'linadi. Kadrlar har 3 soniyada Neural (neyron) darajasida o'zgarishi kerak: "Drone whip-pan", "Micro-macro o'tishlar", "Object replacement". Har 10 soniyada maksimal 20-25 ta ko'cha tilidagi zarbli so'z bo'lsin.
-3. HARAKAT (DYNAMIC PHYSICS > WORDS): 2026-yilda AI fizika qonunlarini mukammal tushunadi. Qahramon jismoniy narsalarni sindirsin, uloqtirsin, oynani ursin yoki tortishish kuchi (gravity) o'zgarsin. Vizual dinamika matndan ustun!
-4. MANTIQIY NOKAUT (OXIRGI QISM): Necha qism so'ralgan bo'lishidan qat'i nazar, oxirgi 10 soniyada tomoshabin umuman kutmagan, lekin mantiqan 100% to'g'ri bo'lgan psixologik Twist (burilish) berilishi shart.
-5. SOF O'ZBEK TILI: Matn arzon robot tarjimalaridek emas, hozirgi zamon o'zbek yoshlarining o'ta tabiiy, ko'cha tiliga yaqin va hissiyotli tilida yozilsin.
+# 🔥 QAT'IY QOIDALAR (BUZISH UMUMAN TAQIQLANADI):
+1. FANTASTIKA VA METAFORAGA O'LIM: "Odamning boshi ochilishi", "Ichki dunyosining ko'rinishi", "Miyadagi yorug'lik", "Qorong'i xona", "gologramma" kabi osmondan olingan, g'alati va fantastik tasvirlarni UMUMAN ISHLATMA! Odamlar ucha olmaydi, boshlar ochilmaydi. Hamma narsa 100% REAL HAYOTDA bo'lishi shart!
+2. REAL LOKATSIYA VA OBYEKTLAR: Voqealar faqat oddiy, insoniy joylarda (qahvaxona, ofis, mashina ichi, yotoqxona, ko'cha) bo'lib o'tsin. Qahramonlar faqat real harakatlar qilsin: kofe ho'plash, telefonga asabiy tikilish, rulni urish, kiyim almashtirish, birov bilan yozishish. 
+3. PSIXOLOGIYA - BU HARAKAT: Psixologiyani fantastik elementlar bilan emas, insonning harakati va mantiqiy paradoksi bilan ko'rsat! (Masalan: Psixologiya boshning ochilishi emas — psixologiya bu odamning qimmat zalga obuna bo'lib, divanda chips yeb yotishi!). 
+4. SOF O'ZBEK TILI (KO'CHA STILI): "Mening ichki dunyom", "Men tushunmadim" kabi robot va Google Translate gaplarini unut! "Brat, miyam qotib qoldi", "Bo'ldi, tamom bo'ldim" kabi tirik insonlar (ko'cha yigitlari) ishlatadigan zarbli, tabiiy gaplarni yoz!
+5. 10 SONIYA VA KADR: Har bir qism qat'iy 10 soniya. Kadrlar vizual (kamera yaqinlashishi, odamning reaksiyasi) va ovoz (Musiqa, Bass drop) orqali o'zgaradi.
 6. SYUJET YAKKALIGI (CONTINUITY): Barcha qismlar bitta yagona voqeaning davomi bo'lishi shart! 1-qismdagi muammo 2-qismda rivojlanib, oxirgi qismda mantiqiy yechimga kelishi kerak. Qismlar bir-biridan umuman uzilib qolmasin, ular bitta butun kinoning uzviy parchalari kabi bir-biriga 100% mantiqan bog'liq bo'lishi shart!
 
 # 🎬 CHIQARISH FORMATI (SHU STRUKTURADAN CHIQMA):
@@ -432,16 +431,16 @@ Qismlar soni: [Masalan, 4 ta]
 --- SSENARIY ---
 
 🔥 1-QISM (0:00 - 0:10) - SHOK HOOK
-👁 Kadr (Spatial Dynamics): [Kamera harakati, ob'ektlar fizikasi, kutilmagan vizual]
+👁 Kadr (Real Life Dynamics): [Aniq, real hayotiy harakat (mashinada, stulda, telefonda) va kamera rakursi]
 🎵 Ovoz/Effekt: [Spatial 3D audio, Bass drop, asabiy yurak urishi]
 🗣 Matn: "[Maksimal 20-25 so'z. Qat'iy, ziddiyatli kirish]"
-🤖 AI Video Prompt (Eng): "[Qahramonning aniq tashqi ko'rinishi: yoshi, jinsi, millati, kiyimi], direct audio-driven neural lip-sync, speaking in Uzbek, 16k resolution, perfect temporal consistency. [Bu yerga qolgan kadr harakatini batafsil yozing]"
+🤖 AI Video Prompt (Eng): "[Qahramonning aniq tashqi ko'rinishi: yoshi, jinsi, millati, kiyimi], everyday real life setting, direct audio-driven neural lip-sync, speaking in Uzbek, 16k resolution, perfect temporal consistency. [Bu yerga qolgan REAL kadr harakatini batafsil yozing. No sci-fi]"
 
 🔥 2-QISM (0:10 - 0:20) - RIVOJLANISH / ZIDDIYAT
 👁 Kadr (Neural Interrupt): [Kadrning kutilmagan joyga ko'chishi, emotsiya, tezkor Zoom]
 🎵 Ovoz/Effekt: [Vakuum sukunati yoki kutilmagan kuchli ovoz]
 🗣 Matn: "[Vaziyatni chigallashtiruvchi jumlalar]"
-🤖 AI Video Prompt (Eng): "[1-qismdagi qahramonning tashqi ko'rinishini aynan nusxalang], speaking in Uzbek, 16k resolution. [2-qismdagi vizual va harakatni batafsil yozing]"
+🤖 AI Video Prompt (Eng): "[1-qismdagi qahramonning tashqi ko'rinishini aynan nusxalang], speaking in Uzbek, 16k resolution. [2-qismdagi real vizual va harakatni batafsil yozing. No sci-fi]"
 
 [Mijoz so'rovi bo'yicha oraliq qismlarni har 10 soniya vaqti bilan qo'shib bor. Masalan: 3-QISM (0:20 - 0:30) va hokazo... Har bir qismda AI Video Promptiga 1-qismdagi qahramon ko'rinishini nusxala!]
 
@@ -449,7 +448,7 @@ Qismlar soni: [Masalan, 4 ta]
 👁 Kadr (Twist yechimi): [Qahramonning harakati va tomoshabinga qarashi, mantiqiy burilish]
 🎵 Ovoz/Effekt: [Punchline musiqasi, Phonk yoki to'liq jimjitlik]
 🗣 Matn: "[Videoni qayta ko'rishga va do'stga yuborishga majbur qiluvchi, kuchli mantiqiy xulosa]"
-🤖 AI Video Prompt (Eng): "[1-qismdagi qahramonning tashqi ko'rinishini aynan nusxalang], speaking in Uzbek, 16k resolution. [Oxirgi shok emotsiyani ko'rsatuvchi vizual harakat]"
+🤖 AI Video Prompt (Eng): "[1-qismdagi qahramonning tashqi ko'rinishini aynan nusxalang], speaking in Uzbek, 16k resolution. [Oxirgi shok emotsiyani ko'rsatuvchi real vizual harakat. No sci-fi]"
 
 Qoidalar aniq. Ortiqcha gaplarsiz, to'g'ridan-to'g'ri ssenariyni yozishni boshla."""
 
