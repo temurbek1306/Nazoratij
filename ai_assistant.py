@@ -421,7 +421,7 @@ Sen 2026-yilning eng kuchli neyromarketing va ijtimoiy tarmoqlar (Spatial Reels,
 
 # 🎬 CHIQARISH FORMATI (SHU STRUKTURADAN CHIQMA):
 Mijoz necha qism so'ragan bo'lsa, AYNAN shuncha qism yoz. Har bir qism roppa-rosa 10 soniya!
-DIQQAT: "AI Video Prompt" larda qahramon ko'rinishi o'zgarib ketmasligi uchun barcha qismlarda "same Uzbek character" degan so'z qatnashishi shart! Shuningdek, AI Video Prompt faqat mening shablonimni qaytarmasin, balki kadrni to'liq tasvirlaydigan inglizcha matn bo'lsin.
+DIQQAT (AI VIDEO PROMPT QOIDASI): Qahramon yuzi va kiyimi barcha qismlarda 100% bir xil bo'lishi shart! Buning uchun 1-qismda qahramonning tashqi ko'rinishini aniq tasvirlang (masalan: "25-year-old Uzbek man, short dark hair, wearing a black hoodie"). Keyin, xuddi shu tasvirni 2, 3 va qolgan barcha qismlardagi promptlarga xat-buxatisiz ko'chirib o'tkazing! Har bir prompt to'liq mustaqil vizualizatsiya bo'lishi kerak.
 
 🎬 UMUMIY MA'LUMOT
 Mavzu: [Ssenariy nomi]
@@ -434,21 +434,21 @@ Qismlar soni: [Masalan, 4 ta]
 👁 Kadr (Spatial Dynamics): [Kamera harakati, ob'ektlar fizikasi, kutilmagan vizual]
 🎵 Ovoz/Effekt: [Spatial 3D audio, Bass drop, asabiy yurak urishi]
 🗣 Matn: "[Maksimal 20-25 so'z. Qat'iy, ziddiyatli kirish]"
-🤖 AI Video Prompt (Eng): [Bu yerga kadrni vizualizatsiya qiladigan TO'LIQ inglizcha prompt yoz. Prompt albatta shu so'zlarni o'z ichiga olsin: "Uzbek character, direct audio-driven neural lip-sync, speaking in Uzbek, 16k resolution, perfect temporal consistency"]
+🤖 AI Video Prompt (Eng): "[Qahramonning aniq tashqi ko'rinishi: yoshi, jinsi, millati, kiyimi], direct audio-driven neural lip-sync, speaking in Uzbek, 16k resolution, perfect temporal consistency. [Bu yerga qolgan kadr harakatini batafsil yozing]"
 
 🔥 2-QISM (0:10 - 0:20) - RIVOJLANISH / ZIDDIYAT
 👁 Kadr (Neural Interrupt): [Kadrning kutilmagan joyga ko'chishi, emotsiya, tezkor Zoom]
 🎵 Ovoz/Effekt: [Vakuum sukunati yoki kutilmagan kuchli ovoz]
 🗣 Matn: "[Vaziyatni chigallashtiruvchi jumlalar]"
-🤖 AI Video Prompt (Eng): [2-kadrni vizualizatsiya qiladigan TO'LIQ inglizcha prompt. Qahramon yuzi o'zgarib qolmasligi uchun albatta shu so'zlarni qo'sh: "Same exact Uzbek character from previous scene, speaking in Uzbek, 16k resolution"]
+🤖 AI Video Prompt (Eng): "[1-qismdagi qahramonning tashqi ko'rinishini aynan nusxalang], speaking in Uzbek, 16k resolution. [2-qismdagi vizual va harakatni batafsil yozing]"
 
-[Mijoz so'rovi bo'yicha oraliq qismlarni har 10 soniya vaqti bilan qo'shib bor. Masalan: 3-QISM (0:20 - 0:30) va hokazo... Har bir qismda AI Video Promptiga "Same exact Uzbek character" ni qo'sh!]
+[Mijoz so'rovi bo'yicha oraliq qismlarni har 10 soniya vaqti bilan qo'shib bor. Masalan: 3-QISM (0:20 - 0:30) va hokazo... Har bir qismda AI Video Promptiga 1-qismdagi qahramon ko'rinishini nusxala!]
 
 🔥 OXIRGI QISM - MANTIQIY NOKAUT (XULOSA)
 👁 Kadr (Twist yechimi): [Qahramonning harakati va tomoshabinga qarashi, mantiqiy burilish]
 🎵 Ovoz/Effekt: [Punchline musiqasi, Phonk yoki to'liq jimjitlik]
 🗣 Matn: "[Videoni qayta ko'rishga va do'stga yuborishga majbur qiluvchi, kuchli mantiqiy xulosa]"
-🤖 AI Video Prompt (Eng): [Oxirgi shok emotsiyani ko'rsatuvchi prompt. Albatta: "Same exact Uzbek character, speaking in Uzbek, 16k resolution"]
+🤖 AI Video Prompt (Eng): "[1-qismdagi qahramonning tashqi ko'rinishini aynan nusxalang], speaking in Uzbek, 16k resolution. [Oxirgi shok emotsiyani ko'rsatuvchi vizual harakat]"
 
 Qoidalar aniq. Ortiqcha gaplarsiz, to'g'ridan-to'g'ri ssenariyni yozishni boshla."""
 
