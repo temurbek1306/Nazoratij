@@ -22,6 +22,9 @@ def load_replied_comments():
     return {"instagram": [], "youtube": []}
 
 def save_replied_comments(data):
+    # Har bir tarmoq uchun faqat oxirgi 1000 ta izohni saqlaymiz (xotira to'lib ketmasligi uchun)
+    data["instagram"] = data.get("instagram", [])[-1000:]
+    data["youtube"] = data.get("youtube", [])[-1000:]
     with open(REPLIED_COMMENTS_FILE, "w", encoding="utf-8") as f:
         json.dump(data, f, ensure_ascii=False, indent=2)
 
