@@ -323,51 +323,21 @@ def generate_data_driven_strategy(profile_data, trend_data):
 (Tasodifiy generatsiya kodi: {random.randint(1000,99999)} / Vaqt: {time.time()})
 
 VAZIFA: Menga 30 KUNLIK SUPER-VIRAL, MIYANI PORTLATADIGAN video ssenariylar jadvalini yozib ber. 
-Foydalanuvchi ma'lumotlari: {profile_data}
-Trendlar: {trend_data}
+Foydalanuvchi ma'lumotlari (profil yo'nalishi): {profile_data}
+Hozirgi Trendlar (Insta, YouTube, FB): {trend_data}
 
-🔥 QOIDALAR (BUZILMASIN!):
-1. 30 KUN UCHUN 30 XIL MAVZU: Takrorlanish qat'iyan taqiqlanadi! Har bir kun uchun men bergan 30 xil yo'nalishdan foydalan!
-2. BOMBA HOOK (1-soniya): Tomoshabinni 1-soniyada mixlab qo'yadigan vahimali/sirli 1 ta jumla. (Masalan: "Telefoningiz sizni pinhona eshitishini bilarmidingiz?").
-3. 10s SSENARIY (JAMI 15 SO'Z): Faqat: [Harakat] + Ovoz. Qotib qolgan gaplar umuman yo'q! "Haqiqatni bilasizmi", "Qorong'i xona" kabi zerikarli gaplarni QAYTARMA!
+🔥 QOIDALAR (PRO +++MAX QOIDASI):
+1. 30 KUN UCHUN 30 XIL DYNAMIC MAVZU: Oldindan yodlangan, zerikarli shablonlarni (masalan: supermarket, kasino, muzlatgich kabi) UUMUMAN QAYTARMA! Mavzularni bevosita foydalanuvchining ma'lumotlariga va trendlarga moslab, o'zing eng zo'r kreativ va mantiqiy g'oyalarni o'ylab top!
+2. ERKAKLAR PSIXOLOGIYASI VA ABSURD: Ssenariylarga do'stlik (bro-culture), motivatsiya va epik absurd vaziyatlarni qo'sh! Oddiy, quruq faktlardan qoch, o'rniga harakat va kutilmagan vizual burilish (plot twist) bo'lsin.
+3. BOMBA HOOK (1-soniya): Tomoshabinning miyasini chalg'itadigan vahimali yoki jozibali 1 ta qisqa jumla. Hech qanday "Bilasizmi", "Sizni shunday aldaydi" kabi arzon gaplar bo'lmasin.
+4. 10s SSENARIY: Format - [Kadrda: Nima sodir bo'lishi] Ovoz: (Musiqa/Effekt). Kadrlar g'ayrioddiy va 200% retention beradigan darajada qiziq bo'lsin. Oddiy gapirish bo'lmasin, KINO uslubida bo'lsin!
+5. PLATFORMALAR: Instagram, YouTube, Facebook uchun eng mos formatlarni aralashtirib yoz.
 
-Mavzular ro'yxati (Bularni ketma-ket jadvalga qo'y):
-1. Supermarketlarning yashirin xiylalari
-2. Tana tilidagi 1 soniyalik sir (Manipulyatsiya)
-3. Smartfon kamerasining biz bilmagan xavfi
-4. Parfyumeriya do'konlarining psixologik siri
-5. Boylarning ertalabki maxfiy odati
-6. Restoran menyularidagi "narx" qopqoni
-7. Yolg'onchini 3 soniyada fosh qilish
-8. Instagram algoritmining qora siri
-9. O'ta arzon tovarlarning daxshatli siri
-10. Samolyot bortkuzatuvchilarining yashirin ishoralari
-11. Miyani tez uxlashga majburlash (Harbiy usul)
-12. Kasinolarda nima uchun soat yo'q?
-13. Wi-Fi orqali sizni qanday kuzatishadi?
-14. Kiyim do'konlaridagi oynalarning siri
-15. Mashhur brendlarning asl ma'nosi
-16. Suyhbatdoshni o'ziga jalb qilishning dark siri
-17. Nega hech qachon "Ha" deb javob bermaslik kerak?
-18. Muzlatgichdagi mahsulotlarning yashirin muddati
-19. Shifokorlar bizga aytmaydigan 1 ta fakt
-20. Reklamalardagi muz kubiklarining siri
-21. Sizni eshitib turadigan aqlli uylar
-22. Zaryadnikni rosetkada qoldirish xavfi
-23. Avtosalonlardagi yashirin psixologiya
-24. Ish suhbatida HRni aldash usuli
-25. 5 soniyada diqqatni jamlash siri
-26. Kreditorlarning asosiy tuzog'i
-27. Mehmonxonalardagi stakanlarning daxshatli siri
-28. TikTok bizning miyamizni qanday o'zgartirdi?
-29. Parollarni qanday qilib 1 soniyada buzishadi?
-30. Qahva do'konlaridagi yozuvlarning ma'nosi
-
-NAMUNA (Aynan shunday yoz):
+NAMUNA (Aynan shu jadval formatida yoz, lekin mazmunini to'liq yangi, profilga mos yarat):
 | Hafta/Kun | Viral Video Mavzusi | Bomba Hook (1-soniya) | 10s Ssenariy (Harakat + Ovoz) | Format |
 | --- | --- | --- | --- | --- |
-| 1-kun | Supermarket xiylasi | "Supermarketlar bizni shunday tunaydi!" | [Kadrda: Aravacha g'ildiragi] Ovoz: G'ildirak atayin qiyshiq yasaladi, sekin yurishingiz uchun! | Reels/TikTok |
-| 2-kun | Manipulyatsiya | "Odamni 3 soniyada o'qib oling!" | [Kadrda: Yuz ifodalari] Ovoz: Kimdir so'zlashayotganda chap ko'ziga qarang, u kalovlanib qoladi! | Reels/TikTok |
+| 1-kun | Do'stlik siri (Bro-Code) | "Haqiqiy do'st yordam bermaydi..." | [Kadrda: Sportzal. Yigit qiynalyapti, sherigi yordam o'rniga qulog'iga pichirlaydi, u shtangani otib yuboradi] Ovoz: Epik Phonk musiqasi! | Instagram Reels |
+| 2-kun | Ko'rinmas qopqon (Motivatsiya)| "Biz komfort zonaga keldik. Orqaga qaytamiz!" | [Kadrda: Tungi trassa. Mashina keskin tormoz beradi va 180 gradusga burilib orqaga uchadi] Ovoz: Shinalar chirillashi, yurak urishi. | YouTube Shorts |
 
 Faqat va faqat to'liq 30 kunlik jadvalni ber! Salomlashish, izoh yozma! Jadvalni NAMUNA kabi batafsil, takrorlamasdan, jozibador yoz!"""
     
