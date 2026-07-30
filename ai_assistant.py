@@ -355,7 +355,7 @@ Sening tilingni va mantig'ingni qattiq tekshiraman! Yuqoridagi [NAMUNA] kabi 100
             if "GOOGLE_APPLICATION_CREDENTIALS" in os.environ:
                 del os.environ["GOOGLE_APPLICATION_CREDENTIALS"]
             genai.configure(api_key=gemini_key)
-            model = genai.GenerativeModel("gemini-1.5-pro")
+            model = genai.GenerativeModel("gemini-3.1-pro")
             response = model.generate_content(prompt)
             if response.text:
                 return response.text.strip()
@@ -463,7 +463,7 @@ Qoidalar aniq. Ortiqcha gaplarsiz, to'g'ridan-to'g'ri ssenariyni yozishni boshla
             if "GOOGLE_APPLICATION_CREDENTIALS" in os.environ:
                 del os.environ["GOOGLE_APPLICATION_CREDENTIALS"]
             genai.configure(api_key=gemini_key)
-            model = genai.GenerativeModel("gemini-1.5-pro") # Ssenariy uchun aqlliroq model kerak
+            model = genai.GenerativeModel("gemini-3.1-pro") # Ssenariy uchun aqlliroq model kerak
             response = model.generate_content(prompt)
             if response.text:
                 return response.text.strip()
