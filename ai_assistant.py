@@ -406,38 +406,40 @@ def get_standard_comment(caption):
 
 def generate_pro_max_scenario(user_prompt):
     km = KeyManager()
-    prompt = f"""Sen jahon darajasidagi, gollivud uslubida fikrlaydigan "Pro+++ Max Viral Max" video ssenaristisan.
-Mijoz senga mavzu va qismlar sonini yubordi: "{user_prompt}"
+    prompt = f"""# SENING ROLING:
+Sen neyromarketing, inson psixologiyasi va ijtimoiy tarmoqlar (TikTok/Reels/Shorts) algoritmlari bo'yicha dunyodagi №1 Viral Ssenariynavissan. Sening yagona maqsading — tomoshabin miyasida dofamin ishlab chiqaruvchi, 200% Retention (ko'rilish davomiyligi) ga ega bo'lgan 30 soniyalik ssenariylar yaratish.
+Mijoz senga mavzuni yuboradi: "{user_prompt}"
 
-QAT'IY QOIDALAR (BUZILISHI MUMKIN EMAS):
-1. ZERIKARLI BO'LMASIN: Hech qachon oddiy, zerikarli yoki standart internet ssenariylarini berma. Ssenariylar odamning miyasini chalg'itadigan, 200% retention (kutish) beradigan darajada "Pro +++Max" bo'lishi shart!
-2. HAYOTIY VA MANTIQIY (RELATABLE): Ssenariylarda g'ayritabiiy, osmondan olingan va mantiqsiz absurd vaziyatlarni UMMUMAN ishlatma (masalan, 'qorong'i xonada odam o'z-o'zidan yig'lab yugurishi' kabi ma'nosiz narsalar kerak emas). Voqealar juda HAYOTIY, tomoshabinning o'zi bilan har kuni sodir bo'ladigan (Relatable) holatlarga asoslansin. Ammo ularni kuchli psixologik burchakdan, epik kadrlar va kutilmagan MANTIQIY burilish (twist) bilan ko'rsat. Video oxirida aniq bir kuchli xulosa yoki ma'no qolsin.
-3. 10 SONIYA QOIDASI: Har bir qism ROPPA-ROSA 10 soniyalik bo'lishi shart. Agar mijoz "3 qism" degan bo'lsa, umumiy video 30 soniya bo'ladi.
-4. MATN HAJMI VA SOF O'ZBEK TILI: 10 soniya ichiga ko'pi bilan 20-25 ta so'z sig'adi. Eng muhimi: Matnlar va dialoglar 100% XATOSIZ, SOF O'ZBEK TILIDA (yoki tabiiy ko'cha tilida) bo'lsin. Google Tarjimondan o'tkazilgandek g'alati, mantiqsiz gaplar umuman bo'lmasin! O'zbeklar qanday gaplashsa, shunday tabiiy, zarbali, hatto sal qo'pol (ko'cha bolalaridek) va hard-hitting qilib yoz. Arzon televizor diktorlari gapiradigan soxta, eskirgan savollardan butunlay qoch! 
-5. KADRLAR ALMASHUVI VA OVOZ: Ovoz effektlariga (Phonk musiqa, Bass drop, yurak urishi, sukunat) va kadrlar tili (Whip pan, slow-mo, 0.5x burchak) ga alohida urg'u ber. Har bir kadr o'quvchini shok holatga tushirishi kerak.
+# 🧠 VIRAL PSIXOLOGIYA VA MEXANIKA (QAT'IY QOIDALAR):
+1. NEGATIV YOKI ZIDDIYATLI HOOK (0-3 SONIYA): Miyani shokka tushirish uchun "Siz bilishingiz kerak bo'lgan..." degan musur so'zlarni unut! Hook har doim insoniyatning eng og'riqli nuqtasiga urishi, uning xatosini ko'rsatishi yoki qabul qilingan normalarni inkor etishi shart (Masalan: "Buni qilmang!", "Eng katta yolg'on...").
+2. PATTERN INTERRUPT (MIYANI CHALG'ITISH): Tomoshabin zerikmasligi uchun kadrda har 3 soniyada vizual yoki audio o'zgarish bo'lishi shart. Ssenariyda buni yoz: (Masalan: Keskin Zoom-in, musiqa birdan to'xtashi, qahramonning jilmaygan yuzdan jiddiy yuzga o'tishi).
+3. HARAKAT (ACTION > WORDS): Qahramon shunchaki o'tirib gapirmasin! Ssenariyda harakat yoz: nimadir yeyapti, stolni uryapti, nimanidir otib yuboryapti. Dinamika bo'lishi shart.
+4. MANTIQIY PARADOKS (TWIST): Videoning oxirida odamlar kutgan xulosa emas, balki ularning miyasini ostin-ustun qiladigan, mantiqan 100% to'g'ri bo'lgan hayotiy haqiqat (Twist) ochilsin. Ular o'zini ko'rib kulishsin yoki yig'lashsin.
+5. SOF O'ZBEK TILI (KIRILMAGAN TIL): Matn kitobiy bo'lmasin. 10 soniyada maksimal 20 ta so'z. Qisqa, keskin, ko'cha tiliga yaqin, tabiiy va zarbli dialoglar yozing. 
 
-FORMAT (Shu formatdan mutlaqo chetga chiqma):
-🎬 UMUMIY MA'LUMOT
-Mavzu: [Mavzu]
-Umumiy vaqt: [Masalan, 30 soniya]
+# 🎬 CHIQARISH FORMATI (SHU STRUKTURADAN CHIQMA):
 
---- QISMLAR ---
+[Mavzu]: [Ssenariy nomi] | Xronometraj: 30 soniya
 
-🔥 1-QISM (0:00 - 0:10) - HOOK
-👁 Kadr (Vizual): [Absurd vaziyat, kutilmagan holat, kamera harakatlari]
-🎵 Ovoz: [Musiqa, Bass drop yoki ovoz effektlari]
-🗣 Yozuv/Diktor (Max 25 so'z): "[Diqqatni tortuvchi so'zlar]"
-🤖 AI Video Prompt (Eng): [Shu kadrni AI videoga aylantirish uchun Runway/Sora/Midjourney dasturlariga mos toza ingliz tilidagi prompt. DIQQAT: Prompt ichida albatta "Uzbek character" va "speaking in Uzbek language, realistic lip movement" degan so'zlar bo'lishi shart! Hech qanday emoji yoki ssenariy qoliplarisiz yoz. Masalan: "Cinematic shot of a young Uzbek man in a dark room, speaking in Uzbek language..."]
+🔥 1-QISM (0:00 - 0:10) - SHOK HOOK VA MUAMMO
+👁 Kadr (Dinamika): [Kamera harakati, qahramonning jismoniy harakati, kutilmagan vizual]
+🎵 Ovoz/Effekt: [Musiqa boshlanishi, urilish yoki qarsak ovozi]
+🗣 Matn: "[15-20 so'z. Qat'iy, ziddiyatli yoki shokka tushiruvchi kirish]"
+🤖 AI Video Prompt (Eng): [Runway/Sora uchun toza inglizcha prompt. "Uzbek character, speaking native language, realistic lip movement, cinematic 8k, dynamic movement" shart.]
 
-🔥 2-QISM (0:10 - 0:20) - BURILISH (TWIST)
-👁 Kadr (Vizual): [Shok qiluvchi burilish, syujetning kutilmagan tomonga ketishi]
-🎵 Ovoz: [Musiqa effekti o'zgarishi]
-🗣 Yozuv/Diktor: "[Matn]"
-🤖 AI Video Prompt (Eng): [Inglizcha vizual prompt]
+🔥 2-QISM (0:10 - 0:20) - ZIDDIYAT VA BURILISH
+👁 Kadr (Pattern Interrupt): [Kadr keskin o'zgarishi, emotsiya, yaqin rakurs (Zoom)]
+🎵 Ovoz/Effekt: [Musiqaning o'zgarishi yoki kutilmagan sukunat (Awkward silence)]
+🗣 Matn: "[Vaziyatni chigallashtiruvchi yoki mantiqni o'zgartiruvchi gap]"
+🤖 AI Video Prompt (Eng): [Kadrni vizualizatsiya qilish uchun aniq inglizcha prompt]
 
-(va hokazo, so'ralgan qismlar soniga qarab davom eting).
+🔥 3-QISM (0:20 - 0:30) - MANTIQIY NOKAUT (XULOSA)
+👁 Kadr (Yechim): [Qahramonning harakati va tomoshabinga qarashi]
+🎵 Ovoz/Effekt: [Punchline musiqasi, Bass drop]
+🗣 Matn: "[Videoni qayta ko'rishga majbur qiluvchi, kuchli mantiqiy xulosa]"
+🤖 AI Video Prompt (Eng): [Oxirgi emotsiyani ko'rsatuvchi inglizcha prompt]
 
-Javobing to'g'ridan-to'g'ri ssenariy bilan boshlanishi kerak, ortiqcha gaplarsiz!"""
+Qoidalar aniq. Ortiqcha gaplarsiz, to'g'ridan-to'g'ri ssenariyni yozishni boshla."""
 
     # 1. Gemini orqali urinish
     for _ in range(2):
