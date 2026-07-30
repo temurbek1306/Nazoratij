@@ -330,7 +330,7 @@ Hozirgi Trendlar (Insta, YouTube, FB): {trend_data}
 1. 30 KUN UCHUN 30 TA MUTLAQO HAR XIL MAVZU: Hech qachon bir xil mavzuni (masalan, faqat futbol, sayohat, komediya yoki bodybuilding deb) qayta-qayta yozib, siklga (tsiklga) tushib qolma! 30 kunning har bir kuni bir-biridan 100% mutlaqo farq qiladigan g'oyalar bo'lishi SHART! 
 2. ERKAKLAR PSIXOLOGIYASI VA ABSURD: Ssenariylarga dark psixologiya, pul ishlash sirlari, xavfli manipulyatsiyalar, do'stlik (bro-culture) va epik kutilmagan vaziyatlarni (plot twist) qo'sh!
 3. BOMBA HOOK (1-soniya): Tomoshabinning miyasini chalg'itadigan vahimali yoki jozibali 1 ta qisqa jumla. Oddiy gaplashish bo'lmasin!
-4. 10s SSENARIY: Format - [Kadrda: Nima sodir bo'lishi] Ovoz: (Musiqa/Effekt). Kadrlar shok darajasida qiziq bo'lsin.
+4. 10s SSENARIY VA MATN XILMAXILLIGI: Har bir kunning ssenariysi mutlaqo har xil gap tuzilishi bilan yozilsin! Hech qachon "X haqiqati" yoki "[Kadrda: X ramzi ochilib, ichidan Y chiqadi]" kabi axmoqona shablonlarni umuman ishlatma! Qandaydir "ramzlar" emas, balki jonli harakatlar (ko'cha, ofis, yuz ifodasi, janjal, tabassum, qo'l harakati) tasvirlansin.
 5. PLATFORMALAR: Instagram, YouTube, Facebook uchun eng mos formatlarni aralashtirib yoz.
 
 NAMUNA (Aynan shu jadval formatida yoz):
@@ -340,7 +340,7 @@ NAMUNA (Aynan shu jadval formatida yoz):
 | 2-kun | Ko'rinmas qopqon (Motivatsiya)| "Biz komfort zonaga keldik. Orqaga qaytamiz!" | [Kadrda: Tungi trassa. Mashina keskin tormoz beradi va 180 gradusga burilib orqaga uchadi] Ovoz: Shinalar chirillashi, yurak urishi. | YouTube Shorts |
 | 3-kun | Qahva va qasos (Karyera) | "Unga bu ishlashini aytishmagandi..." | [Kadrda: Ofis. Xodim qog'ozni yirtib, stoldan sakrab o'tib Boss xonasiga kiradi] Ovoz: Matrix bass effekti | Facebook Reels |
 
-DIQQAT: 3-kundan boshlab to 30-kungacha O'ZING mutlaqo yangi, takrorlanmas, har xil ssenariylar o'ylab top! Hech qachon bir xil so'zlarni qaytarmagin! Faqat jadvalni qaytar!"""
+DIQQAT: 3-kundan boshlab to 30-kungacha O'ZING mutlaqo yangi, takrorlanmas, har xil ssenariylar o'ylab top! Hech qachon shablon ishlatma, ramzlar haqida yozma, faqat REAL KINOMATOGRAFIK KADRLAR bo'lsin! Faqat jadvalni qaytar!"""
     
     # 1. Gemini orqali urinish (agar ishlasa)
     for _ in range(2):
