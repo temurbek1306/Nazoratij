@@ -315,38 +315,105 @@ def generate_first_comment(caption):
     return first_comment
 
 def generate_data_driven_strategy(profile_data, trend_data):
+    """
+    Kontent reja generatori (Static-First + AI-Fallback arxitekturasi).
+    
+    MANTIQ:
+    1. AVVAL: Loyihadagi tayyor 20 kunlik ssenariylar faylidan random 5 tasini oladi.
+       (Bu ssenariylar qo'lda yozilgan, 100% sifatli va o'zbek mentalitetiga mos)
+    2. FAQAT FAYL TOPILMASA: AI modeliga murojaat qiladi (hardened prompt bilan).
+    """
     import random
     import time
+    import re
+    
+    # ===== 1-BOSQICH: STATIK MA'LUMOTLAR BAZASIDAN OLISH (ASOSIY MANBA) =====
+    try:
+        scenarios_file = os.path.join(os.path.dirname(os.path.abspath(__file__)), "20_kunlik_viral_ssenariylar.md")
+        if os.path.exists(scenarios_file):
+            with open(scenarios_file, "r", encoding="utf-8") as f:
+                content = f.read()
+            
+            # Faylni "### 📅 KUN" bloklari bo'yicha bo'laklarga ajratish
+            blocks = re.split(r'(?=### 📅 KUN \d+)', content)
+            scenario_blocks = [b.strip() for b in blocks if b.strip().startswith("### 📅 KUN")]
+            
+            if len(scenario_blocks) >= 5:
+                # 20 ta ichidan random 5 tasini tanlash
+                selected = random.sample(scenario_blocks, min(5, len(scenario_blocks)))
+                
+                # Yangi kun raqamlarini berish (1-5)
+                result_lines = []
+                result_lines.append("# 🔥 5 KUNLIK VIRAL KONTENT REJANGIZ")
+                result_lines.append(f"*(Profil: {profile_data} | Trend: {trend_data})*\n")
+                result_lines.append("---\n")
+                
+                for i, block in enumerate(selected, 1):
+                    # Eski kun raqamini yangisiga almashtirish
+                    reformatted = re.sub(
+                        r'### 📅 KUN \d+:',
+                        f'### 📅 KUN {i}:',
+                        block,
+                        count=1
+                    )
+                    result_lines.append(reformatted)
+                    result_lines.append("")  # Bo'sh qator
+                
+                result_lines.append("---")
+                result_lines.append("*Har bir ssenariy real hayotdagi mantiqiy paradokslar ustiga qurilgan.*")
+                
+                return "\n".join(result_lines)
+    except Exception:
+        pass  # Fayl bilan muammo bo'lsa, AI ga o'tamiz
+    
+    # ===== 2-BOSQICH: AI FALLBACK (faqat fayl topilmaganda) =====
     km = KeyManager()
     prompt = f"""# VAZIFA VA ROLING:
-Sen Gollivud darajasidagi ssenarist va eng kuchli O'zbek tili mutaxassisisan! Sening vazifang 5 kunlik HAYOTIY, MANTIQIY va mutlaqo TAKRORLANMAS kontent reja yozish. 
+Sen axloq darsi o'tadigan o'qituvchi emassan! Sen asabiy, reallikni boricha (achchiq va kulguli qilib) ko'rsatadigan "Stand-up" komiki va Gollivud darajasidagi ssenaristsan. Sening vazifang 5 kunlik HAYOTIY, MANTIQIY va mutlaqo TAKRORLANMAS kontent reja yozish.
 
-# INPUT (KIRITUVCHI MA'LUMOTLAR):
-- Profil yo'nalishi (Mavzu): {profile_data}
+# INPUT:
+- Profil yo'nalishi: {profile_data}
 - Hozirgi Trendlar: {trend_data}
 (Tasodifiy kodi: {random.randint(1000,99999)})
 
-# 🚫 TIL VA MANTIQ QOIDALARI (ENG MUHIM QISM):
-Sening eng katta xatoying — mantiqsiz fantastikani o'ylab topishing va inglizchadan to'g'ridan-to'g'ri (Google Translate kabi) tarjima qilib, "Qo'rqinchli taksilar haqida eshitingiz bor bormi?" degan sharmandali, grammatik xato gaplarni yozishing! 
-BUNGA QAT'IYAN CHEK QO'YAMIZ:
-1. SOF O'ZBEK TILI: Matn 100% toza, grammatik jihatdan xatosiz o'zbek tilida bo'lsin. Robot tarjimalarni umuman ishlatma! "Eshitingiz bor bormi", "Absurdiy qarorlar" degan chuchuk gaplar ishlatsang, vazifani barbod qilasan.
-2. ABSURD MANTIQSIZLIK TAQIQLANADI: "Peshxona xo'jayini kiyimni yoqib yubordi", "Do'konga kirish 1 million dollar" kabi osmondan olingan ma'nosiz jinniliklarni YOZMA! Voqealar bizning real hayotimizdagi, ko'chada, ishda, do'stlar orasida bo'ladigan ODDİY muammolar (taksi kutish asabbuzarligi, qarz qaytarmaslik, telefonga qaramlik) haqida bo'lsin.
+# 🚫 TAQIQLANGAN SO'ZLAR (BAN LIST — BIRONTASINI HAM ISHLATSANG, VAZIFA BARBOD):
+- "Hayotning ma'nosi", "Qaror qabul qilish", "Pulni boshqarish", "Sevgi bu..."
+- "Ular buni anglab yetishadi", "Muhim rol o'ynaydi", "Tushunish kerak"
+- "Lekin ba'zilar tushunmaydi", "Eng yaxshi usuli", "Eshitingiz bor bormi"
+- "Absurdiy qarorlar", "Asabiyati keskin kesiladi" — bu robot tarjimalar!
+INSHO YOZISHNI EMAS, HAYOTIY KOMEDIYA/FOJIA YOZISHNI BUYURYAPMAN!
+
+# 🚫 TIL QOIDALARI:
+1. SOF O'ZBEK TILI: 100% toza, grammatik xatosiz o'zbek tilida yoz. Google Translate tarjimalari TAQIQLANADI!
+2. ABSURD MANTIQSIZLIK TAQIQLANADI: Osmondan olingan jinniliklarni yozma! Faqat real hayotdagi oddiy muammolar (taksi kutish, qarz, telefon qaramlik).
+3. KINOYA = PICHING/IRONIYA/SARKAZM, KINOYA ≠ KINOTEATR!!! Buni chalkashtirsang, vazifani barbod qilasan.
 
 # 🔥 SSENARIY QOIDALARI:
-1. TAKRORLANMASIN: Har bir kun bir-biridan 100% farq qilsin. 5 marta faqat so'zlarni o'zgartirib nusxalama. Hooklar: 1-kun "Qo'rqinchli", 2-kun "Kulguli", 3-kun "Fakt", 4-kun "Kinoya", 5-kun "Absurd savol".
-2. HARAKAT BER: Qahramonlar faqat gapirmasin. Ular jismoniy harakat qilsin (telefonga asabiy qarash, kofe ichish, mashina eshigini qattiq yopish).
+1. Hooklar: 1-kun "Qo'rqinchli", 2-kun "Kulguli", 3-kun "Fakt", 4-kun "Kinoya (piching)", 5-kun "Absurd savol".
+2. Xulosa hech qachon axloq darsi bo'lmasin — faqat qora yumor yoki kinoya (piching)!
+3. HARAKAT: Qahramonlar jismoniy harakat qilsin (telefonga asabiy qarash, kofe to'kish, mashina eshigini urish).
 
-# 💎 MANA SENGA TAYYOR NAMUNA (SHU STILDA VA SHU TOZA TILDA YOZASAN):
+# 💎 NAMUNALAR (AYNAN SHU DARAJADA, SHU TILDA YOZASAN):
 
-📅 KUN 1: "O'chirilgan xabar" | Platforma: Reels
-🪝 HOOK: "Insonning asabini bir soniyada qanday buzish mumkin bilasizmi?"
-🎬 SSENARIY: Yigit kafeda xotirjam choy ichib o'tiribdi. Ekranga "Do'stingizdan xabar" keladi. U shoshmay telefonni ochgunicha xabar "Ushbu xabar o'chirildi" yozuviga aylanadi. Yigitning xotirjamligi yo'qoladi, choyni stolga taraqlab qo'yib, asabiy holda u yoq-bu yoqqa yura boshlaydi.
-🧠 XULOSA/MANTIQ: Hech qanday so'z insonni "O'chirilgan xabar"chalik vahimaga va qiziqishga sololmaydi.
+📅 KUN 1: "Budilnik Illyuziyasi" | Platforma: Reels
+🪝 HOOK: "Nega biz o'zimizga-o'zimiz ataylab yolg'on gapirishni yaxshi ko'ramiz?"
+🎬 SSENARIY: Yotoqxona. Yigit uxlashdan oldin telefonida budilniklarni sozlayapti: 06:00, 06:05, 06:10. Yuzida "ertaga tog'larni talqon qilaman" degan jiddiy ishonch. Kadr keskin o'zgaradi: Tonggi soat 07:45. Yigit ko'zini ochib soatga qaraydi va panikada bitta paypog'ini topolmay, xona bo'ylab sakrab yugurishni boshlaydi.
+🧠 XULOSA/MANTIQ: Biz 10 ta budilnikni barvaqt uyg'onish uchun emas, vijdonimizni tinchlantirib xotirjam uxlash uchun qo'yamiz.
+
+📅 KUN 2: "Mashina va G'urur (GPS)" | Platforma: YouTube Shorts
+🪝 HOOK: "Erkak kishining g'ururi qachon o'zining eng yuqori cho'qqisiga chiqadi?"
+🎬 SSENARIY: Mashina ichida. GPS navigator robot ovozida: "O'ngga buriling, manzilga 5 daqiqa qoldi" deydi. Yigit jiddiy qiyofada navigatorga qarab: "Sen nimaniyam bilarding" deydi-da, rulni keskin chapga buradi. Kadr o'zgaradi: Mashina qorong'i, yopiq tupikka tiqilib qolgan. Yigit rulni urib, "Shu internet umuman yaxshi ishlamayapti-da o'zi!" deb nosozlikni ayblaydi.
+🧠 XULOSA/MANTIQ: Erkak kishi o'z xatosini tan olgandan ko'ra, butun koinot va zamonaviy texnologiyalarni ayblashni afzal ko'radi.
+
+📅 KUN 3: "Xolodilnik Fojiasi" | Platforma: Shorts
+🪝 HOOK: "Miyamizdagi mo'jizaga bo'lgan yashirin ishonchni qayerda ko'rish mumkin?"
+🎬 SSENARIY: Kechqurun. Yigit qornini ushlab xolodilnikni ochadi: Ichida yarimta qatiq va piyoz bor xolos. Xafsalasiz yopadi. 5 daqiqadan so'ng u qaytib kelib xolodilnikni yana ochadi (xuddi ichida o'z-o'zidan qovurilgan go'sht paydo bo'lib qoladigandek). U bu ishni yana 3 marta takrorlaydi, umidvor nigoh bilan.
+🧠 XULOSA/MANTIQ: Umid so'nggi bo'lib o'ladi... Ayniqsa gap qorin ochligi va xolodilnik haqida ketganda.
 
 # ENDI SENING NAVBATING:
-Sening tilingni va mantig'ingni qattiq tekshiraman! Yuqoridagi [NAMUNA] kabi 100% toza o'zbek tilida, haqiqiy mantiqli, hayotiy va qiziqarli 5 KUNLIK JADVAL tuz!"""
+Yuqoridagi 3 ta NAMUNANI diqqat bilan o'rgandingmi? AYNAN shu stilda, shu sifatda va shu toza tilda 5 KUNLIK mutlaqo har xil ssenariylar yoz! Agar yana "asabiyati kesildi" yoki "kinoga borganlar" degan ahmoqlik yozsang — nol baho olasan!"""
     
-    # 1. Gemini orqali urinish (agar ishlasa)
+    # 2a. Gemini orqali urinish
     for _ in range(2):
         gemini_key = km.get_gemini_key()
         if not gemini_key: break
@@ -355,14 +422,14 @@ Sening tilingni va mantig'ingni qattiq tekshiraman! Yuqoridagi [NAMUNA] kabi 100
             if "GOOGLE_APPLICATION_CREDENTIALS" in os.environ:
                 del os.environ["GOOGLE_APPLICATION_CREDENTIALS"]
             genai.configure(api_key=gemini_key)
-            model = genai.GenerativeModel("gemini-3.1-pro")
+            model = genai.GenerativeModel("gemini-2.5-flash")
             response = model.generate_content(prompt)
             if response.text:
                 return response.text.strip()
         except Exception:
             continue
             
-    # 2. Zaxira sifatida Groq
+    # 2b. Zaxira sifatida Groq
     for _ in range(3):
         groq_key = km.get_groq_key()
         if not groq_key: break
@@ -379,7 +446,7 @@ Sening tilingni va mantig'ingni qattiq tekshiraman! Yuqoridagi [NAMUNA] kabi 100
         except Exception:
             continue
             
-    # 3. Zaxira sifatida OpenRouter
+    # 2c. Zaxira sifatida OpenRouter
     for _ in range(3):
         or_key = km.get_openrouter_key()
         if not or_key: break
@@ -463,7 +530,7 @@ Qoidalar aniq. Ortiqcha gaplarsiz, to'g'ridan-to'g'ri ssenariyni yozishni boshla
             if "GOOGLE_APPLICATION_CREDENTIALS" in os.environ:
                 del os.environ["GOOGLE_APPLICATION_CREDENTIALS"]
             genai.configure(api_key=gemini_key)
-            model = genai.GenerativeModel("gemini-3.1-pro") # Ssenariy uchun aqlliroq model kerak
+            model = genai.GenerativeModel("gemini-2.5-flash") # Ssenariy uchun ishonchli model
             response = model.generate_content(prompt)
             if response.text:
                 return response.text.strip()
