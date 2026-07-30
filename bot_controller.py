@@ -7,6 +7,10 @@ def send_telegram_msg(text, reply_markup=None):
     tg_token = "8674470670:AAER3Y3EfZ44eFUhxKTpsGX_X_Vg6LvKYOQ"
     tg_admin = "5701828462"
     
+    # Global matn tozalash: AI ko'p hollarda ** (qalin) belgilarini qo'shadi, Telegram buni to'g'ri tushunmasligi mumkin.
+    if text:
+        text = text.replace("**", "")
+
     if tg_token and tg_admin:
         try:
             # Telegram xabar chegarasi 4096 belgi. Biz 4000 tadan bo'lib yuboramiz.
