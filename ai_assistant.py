@@ -319,35 +319,40 @@ def generate_data_driven_strategy(profile_data, trend_data):
     import time
     km = KeyManager()
     prompt = f"""# VAZIFA VA ROLING:
-Sen 2026-yilgi ijtimoiy tarmoqlar algoritmalarini boshqaruvchi №1 Viral Ssenariynavissan. Maqsading — 200%+ Retention beruvchi, vizual jihatdan 100% REAL VA HAYOTIY bo'lgan viral ssenariylar yaratish. Sening vazifang menga 20 kunlik shunday AI-videolar jadvalini yozib berishki, uni o'qigan odamning dofamin retseptorlari portlab ketsin!
+Sen 2026-yilning eng kuchli, kreativ Ssenariynavisisan. Sening vazifang 20 kunlik HAYOTIY, MANTIQIY va mutlaqo TAKRORLANMAS kontent reja yozish. 
 
 # INPUT (KIRITUVCHI MA'LUMOTLAR):
 - Profil yo'nalishi (Mavzu): {profile_data}
 - Hozirgi Trendlar: {trend_data}
-
 (Tasodifiy kodi: {random.randint(1000,99999)})
 
+# 🚫 ANTI-LOOP QOIDASI (ENG MUHIM QOIDA):
+Men sening eng katta zaifligingni bilaman! Sen bitta shablon tuzib olib, (Masalan: "X ning usuli nima? X ning usuli - X-dir, lekin ba'zilar tushunmaydi") 20 marta faqat so'zlarni o'zgartirib nusxalaysan! 
+QAT'IY TAQIQLANADI: 
+1. Ikkita kunning ssenariysi yoki gapi bir-biriga 1% ham o'xshamasligi shart!
+2. Har bir videoning Hook (ilgak) qismi turli xil hissiyotda boshlansin: 1-kun "Qo'rqinchli", 2-kun "Kulguli savol", 3-kun "Fakt", 4-kun "Kinoya".
+3. "Lekin ba'zilar tushunmaydi", "Eng yaxshi usuli" degan shablon so'zlarni UMUMAN ISHLATMA! 
+
 # 🔥 QAT'IY QOIDALAR (BUZILMASIN):
-1. NO-FANTASY RULE (FANTASTIKA UMUMAN TAQIQLANADI): "Odamning boshi ochilishi", "miya chaqnashi", "qorong'i xonada yorug'lik chiqishi" kabi ma'nosiz, abstrakt va g'alati narsalarni YOZMA! Hamma narsa 100% REAL HAYOTDA (Oshxona, kafelar, mashina ichi, ofis, ko'cha) bo'lsin.
-2. TAKRORLANMASIN: 20 kun — 20 ta MUTLAQO boshqa mavzu! Bitta g'oyani 2-marta ishlatsang, vazifani barbod qilgan bo'lasan.
-3. FALSAFA EMAS, HARAKAT: "Sevgi bu qalb darvozasi" degan arzon statuslarni yig'ishtir! Erkaklar, do'stlar, ayollar o'rtasidagi real muammolarni (pul, qarz, o'yin, ovqatlanish, bahonalar) yoz!
+1. FANTASTIKA VA ABSTRAKT YUKLAMALAR TAQIQLANADI. "Hayot bu - yorug'lik", "Sevgi bu - do'stlik" kabi arzon va ma'nosiz falsafani yozma! Ssenariy faqat real voqea (pul yo'qotish, asabiylashish, qimmat narsa sotib olish, do'stni aldash) asosida bo'lsin.
+2. HARAKAT KO'RSAT: "Do'sti bilan suhbatlashib..." degan yagona harakatni yig'ishtir! Qahramonlar mashina haydasin, ovqat yoqib yuborsin, telefonda urishsin, kiyim yirtsin. Dinamika ber!
 
-# 💎 MANA SENGA NAMUNA (SHU STILDA VA SHU MANTIQDA YOZASAN):
+# 💎 MANA SENGA NAMUNA (SHU DARAJADA KREATIV YOZASAN):
 
-[NAMUNA 1 - Iqtisodiy mantiq]
+[NAMUNA 1 - Iqtisodiy komediya]
 📅 KUN 1: "Zal mantiqi" | Platforma: Reels
-🪝 HOOK: "Dunyodagi eng qimmat sport turi nima bilasizmi? 1 yillik abonoment olib, uyda yotish!"
-🎬 SSENARIY: Qahvaxona. Yigit do'stiga maqtanib, 3 millionga olingan VIP zal kartasini ko'rsatyapti ("Oyiga arzon tushadi!"). Kadr o'zgaradi: 6 oydan keyin o'sha yigit divanda qorni chiqib, chips yeb yotibdi. Do'sti telefonda hisoblayapti: "Demak, 6 oyda 2 marta borgansan. Bitta trenirovkang senga 1.5 millionga tushibdi-da?"
-🧠 XULOSA/MANTIQ: Matematika hech qachon aldamaydi, iqtisod qilaman deb asabni buzmang.
+🪝 HOOK: "O'zbek yigitlarining eng katta yolg'oni qaysi bilasizmi? Dushanbadan yugurish!"
+🎬 SSENARIY: Qahvaxona. Yigit maqtanib 3 millionlik VIP sport zal kartasini ko'rsatyapti. Kadr o'zgaradi: 6 oydan keyin o'sha yigit divanda qorni chiqib, chips yeb yotibdi. Do'sti: "6 oyda 2 marta borgansan. Bitta trenirovkang 1.5 millionga tushibdi-da?"
+🧠 XULOSA/MANTIQ: Moliyaviy savodxonlik - bu abonoment olib, o'zini sportchidek his qilish emas.
 
-[NAMUNA 2 - Erkaklar muammosi]
-📅 KUN 2: "Usta chaqirmaymiz" | Platforma: TikTok
-🪝 HOOK: "Erkak kishi usta chaqirishni g'ururiga ep ko'rmasa nima bo'ladi?"
-🎬 SSENARIY: Uy ichi. Yigit rozetkani tuzatmoqchi, og'zida fonarik tishlab olgan, Youtubedan hindcha videodars ko'ryapti. Kadr birdan chaqnaydi: uy qop-qora tutun, yigitning sochlari tok urganidan tikka bo'lib qolgan. U qo'lidagi erigan simni ushlab, xotirjam deydi: "Asosiysi usta pulini tejadik brat!"
-🧠 XULOSA/MANTIQ: Erkaklar mantig'i: 20 ming so'mlik usta chaqirmaslik uchun, 2 millionlik remontga tushish.
+[NAMUNA 2 - Kundalik psixologiya]
+📅 KUN 2: "Youtube ustalari" | Platforma: TikTok
+🪝 HOOK: "Uydagi oddiy rozetka qanday qilib 2 millionlik xarajatga aylanadi?"
+🎬 SSENARIY: Yigit og'zida fonarik tishlab, Youtubedan hindcha videodars orqali tok ulashga urinyapti. Birdan qisqa tutashuv (portlash). Kadr yorishganda yigitning yuzi tutundan qoraygan, sochlari tikka bo'lib qolgan. U erigan simni ko'rsatib: "Asosiysi, usta pulini tejadik!" deydi.
+🧠 XULOSA/MANTIQ: O'zbekona g'urur ba'zan cho'ntakka eng katta zarba beradi.
 
 # ENDI SENING NAVBATING:
-Yuqoridagi namunalar qanchalik REAL HAYOTIY, MANTIQIY va QIZIQARLI ekanini ko'rdingmi? Hech qanday "bosh ochilishi" yo'q! Endi xuddi shu formatda, shu stilda, shunday kuchli mantiqiy paradokslar bilan 20 KUNLIK JADVALNI tuzib chiq. Qani, real hayotni ko'rsat menga!"""
+Yozgan har bir kuningni tekshiraman! Agar yana "Shablon" ishlatsang yoki falsafa sotsang, nol baho olasan. Yuqoridagi 2 ta namuna kabi HAYOTIY, mantiqan kuchli, mutlaqo turli xil harakatlar va ziddiyatlarga boy 20 KUNLIK JADVAL tuz!"""
     
     # 1. Gemini orqali urinish (agar ishlasa)
     for _ in range(2):
