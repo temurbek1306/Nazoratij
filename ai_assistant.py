@@ -319,40 +319,34 @@ def generate_data_driven_strategy(profile_data, trend_data):
     import time
     km = KeyManager()
     prompt = f"""# VAZIFA VA ROLING:
-Sen 2026-yilning eng kuchli, kreativ Ssenariynavisisan. Sening vazifang 5 kunlik HAYOTIY, MANTIQIY va mutlaqo TAKRORLANMAS kontent reja yozish. 
+Sen axloq darsi o'tadigan o'qituvchi emassan! Sen asabiy, reallikni boricha (achchiq va kulguli qilib) ko'rsatadigan "Stand-up" komiki va xit ssenariynavissan. Sening yagona maqsading 5 kunlik shunday ssenariylar yozishki, unda odamlar o'zining ahmoqona xatolarini ko'rib kulishsin. 
 
 # INPUT (KIRITUVCHI MA'LUMOTLAR):
 - Profil yo'nalishi (Mavzu): {profile_data}
 - Hozirgi Trendlar: {trend_data}
 (Tasodifiy kodi: {random.randint(1000,99999)})
 
-# 🚫 ANTI-LOOP QOIDASI (ENG MUHIM QOIDA):
-Men sening eng katta zaifligingni bilaman! Sen bitta shablon tuzib olib, (Masalan: "X ning usuli nima? X ning usuli - X-dir, lekin ba'zilar tushunmaydi") 5 marta faqat so'zlarni o'zgartirib nusxalaysan! 
-QAT'IY TAQIQLANADI: 
-1. Ikkita kunning ssenariysi yoki gapi bir-biriga 1% ham o'xshamasligi shart!
-2. Har bir videoning Hook (ilgak) qismi turli xil hissiyotda boshlansin: 1-kun "Qo'rqinchli", 2-kun "Kulguli savol", 3-kun "Fakt", 4-kun "Kinoya", 5-kun "Absurd".
-3. "Lekin ba'zilar tushunmaydi", "Eng yaxshi usuli nima" degan shablon so'zlarni UMUMAN ISHLATMA! 
+# 🚫 QAT'IY TAQIQLANGAN SO'ZLAR (BAN LIST) VA ANTI-LOOP:
+Quyidagi so'zlar va mantiqlarni ishlatish QAT'IYAN TAQIQLANADI. Agar bittasini ishlatsang ham, vazifani barbod qilgan bo'lasan:
+- "Hayotning ma'nosi", "Qaror qabul qilish", "Pulni boshqarish", "Sevgi bu..."
+- "Ular buni anglab yetishadi", "Muhim rol o'ynaydi", "Tushunish kerak", "Lekin ba'zilar tushunmaydi", "Eng yaxshi usuli"
+Bu kabi zerikarli va maktab darsliklaridagi gaplarni umuman YOZMA! Men senga insho yozishni emas, HAYOTIY KOMEDIYA/FOJIA yozishni buyuryapman!
+TAKRORLANMASIN: 5 marta faqat so'zlarni o'zgartirib nusxalama. 5 ta kunning ssenariysi bir-biriga 1% ham o'xshamasligi shart! Hooklar: 1-kun "Qo'rqinchli", 2-kun "Kulguli", 3-kun "Fakt", 4-kun "Kinoya", 5-kun "Absurd".
 
-# 🔥 QAT'IY QOIDALAR (BUZILMASIN):
-1. FANTASTIKA VA ABSTRAKT YUKLAMALAR TAQIQLANADI. "Hayot bu - yorug'lik", "Sevgi bu - do'stlik" kabi arzon va ma'nosiz falsafani yozma! Ssenariy faqat real voqea (pul yo'qotish, asabiylashish, qimmat narsa sotib olish, do'stni aldash) asosida bo'lsin.
-2. HARAKAT KO'RSAT: "Do'sti bilan suhbatlashib..." degan yagona harakatni yig'ishtir! Qahramonlar mashina haydasin, ovqat yoqib yuborsin, telefonda urishsin, kiyim yirtsin. Dinamika ber!
+# 🔥 SSENARIY QOIDALARI:
+1. Har bir voqea ANIQ BITTA Muammo ustiga quriladi: Masalan, taksi kutib asabiylashish, qimmat kiyim olib kiymaslik, qarz berib qaytarib ololmaslik. Abstrakt tushunchalar emas!
+2. Oxirgi xulosa (Mantiq) hech qachon axloq darsi bo'lmasin. Xulosa qora yumor yoki kinoya (sarkazm) bilan tugashi shart.
+3. HARAKAT KO'RSAT: Qahramonlar mashina haydasin, ovqat yoqib yuborsin, telefonda urishsin. Dinamika ber!
 
-# 💎 MANA SENGA NAMUNA (SHU DARAJADA KREATIV YOZASAN):
+# 💎 MANA SENGA TAYYOR NAMUNA (FAQAT SHUNDAY YOZASAN):
 
-[NAMUNA 1 - Iqtisodiy komediya]
-📅 KUN 1: "Zal mantiqi" | Platforma: Reels
-🪝 HOOK: "O'zbek yigitlarining eng katta yolg'oni qaysi bilasizmi? Dushanbadan yugurish!"
-🎬 SSENARIY: Qahvaxona. Yigit maqtanib 3 millionlik VIP sport zal kartasini ko'rsatyapti. Kadr o'zgaradi: 6 oydan keyin o'sha yigit divanda qorni chiqib, chips yeb yotibdi. Do'sti: "6 oyda 2 marta borgansan. Bitta trenirovkang 1.5 millionga tushibdi-da?"
-🧠 XULOSA/MANTIQ: Moliyaviy savodxonlik - bu abonoment olib, o'zini sportchidek his qilish emas.
-
-[NAMUNA 2 - Kundalik psixologiya]
-📅 KUN 2: "Youtube ustalari" | Platforma: TikTok
-🪝 HOOK: "Uydagi oddiy rozetka qanday qilib 2 millionlik xarajatga aylanadi?"
-🎬 SSENARIY: Yigit og'zida fonarik tishlab, Youtubedan hindcha videodars orqali tok ulashga urinyapti. Birdan qisqa tutashuv (portlash). Kadr yorishganda yigitning yuzi tutundan qoraygan, sochlari tikka bo'lib qolgan. U erigan simni ko'rsatib: "Asosiysi, usta pulini tejadik!" deydi.
-🧠 XULOSA/MANTIQ: O'zbekona g'urur ba'zan cho'ntakka eng katta zarba beradi.
+📅 KUN 1: "Qarz va Xotira" | Platforma: Reels
+🪝 HOOK: "Dunyodagi eng kuchli amneziya (xotira yo'qolishi) qachon boshlanadi bilasizmi?"
+🎬 SSENARIY: Qahvaxona. Yigit do'stiga 500 ming qarz berib turibdi. Do'sti ko'kragiga urib, "Brat, 2 kunda qaytaraman!" deydi. Kadr o'zgaradi: Oradan 2 oy o'tgan. Do'sti yangi iPhone ko'tarib, qimmat joyda ovqatlanib o'tiribdi. Qarz bergan yigit so'rashga uyalib, devor ortidan poylab turibdi.
+🧠 XULOSA/MANTIQ: Qarz berayotganda sher, qaytarib so'rayotganda mushukka aylanamiz.
 
 # ENDI SENING NAVBATING:
-Yozgan har bir kuningni qattiq tekshiraman! Agar yana "Shablon" ishlatsang yoki falsafa sotsang, nol baho olasan. Yuqoridagi 2 ta namuna kabi HAYOTIY, mantiqan kuchli, mutlaqo turli xil harakatlar va ziddiyatlarga boy 5 KUNLIK JADVAL tuz!"""
+Yuqoridagi namunani ko'rdingmi? Hech qanday "hayotning ahamiyati" degan ezmalik yo'q! Endi aynan shu (Namuna) uslubida, sof kinoya va qora yumor bilan 5 KUNLIK mutlaqo har xil voqealarni yoz! Agar yana insho yozsang, nol baho olasan."""
     
     # 1. Gemini orqali urinish (agar ishlasa)
     for _ in range(2):
