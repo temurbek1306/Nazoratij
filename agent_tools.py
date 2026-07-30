@@ -18,19 +18,21 @@ def get_pending_video() -> str:
     return video if video else ""
 
 def expose_video_url(filename: str) -> str:
-    """Starts the local server and ngrok tunnel (or catbox) to expose the video file to the internet. Returns the public URL."""
+    """Starts the local server and ngrok tunnel (or uguu.se) to expose the video file to the internet. Returns the public URL."""
     import requests
     filepath = f"videos/pending/{filename}"
-    print(f"[{filename}] catbox.moe orqali ochiq URL olinmoqda...")
+    print(f"[{filename}] uguu.se orqali ochiq URL olinmoqda...")
     try:
         with open(filepath, 'rb') as f:
-            files = {'reqtype': (None, 'fileupload'), 'fileToUpload': f}
-            res = requests.post('https://catbox.moe/user/api.php', files=files)
-        url = res.text.strip()
-        if url.startswith("http"):
-            return url
+            files = {'files[]': f}
+            res = requests.post('https://uguu.se/upload', files=files, timeout=30)
+        data = res.json()
+        if data.get('success') and data.get('files'):
+            url = data['files'][0]['url']
+            if url.startswith("http"):
+                return url
     except Exception as e:
-        print(f"catbox orqali URL olishda xatolik: {e}, ngrok'ga o'tilmoqda...")
+        print(f"uguu.se orqali URL olishda xatolik: {e}, ngrok'ga o'tilmoqda...")
         
     global server
     if not server:
