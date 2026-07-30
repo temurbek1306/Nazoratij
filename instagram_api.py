@@ -110,3 +110,48 @@ class InstagramAPI:
         except Exception as e:
             print(f"[API] Statistika API xatosi: {e}")
             return None
+
+    def get_recent_media(self, limit: int = 5):
+        """Oxirgi postlarni (media) olib keladi"""
+        url = f"{self.base_url}/{self.account_id}/media?fields=id,caption,media_type,timestamp&limit={limit}&access_token={self.access_token}"
+        try:
+            response = requests.get(url)
+            data = response.json()
+            if "data" in data:
+                return data["data"]
+            return []
+        except Exception as e:
+            print(f"[API] Oxirgi media xatosi: {e}")
+            return []
+
+    def get_comments(self, media_id: str):
+        """Berilgan postning barcha izohlarini olib keladi"""
+        url = f"{self.base_url}/{media_id}/comments?fields=id,text,timestamp,username,from&access_token={self.access_token}"
+        try:
+            response = requests.get(url)
+            data = response.json()
+            if "data" in data:
+                return data["data"]
+            return []
+        except Exception as e:
+            print(f"[API] Kommentlarni olishda xato: {e}")
+            return []
+
+    def reply_to_comment(self, comment_id: str, message: str) -> bool:
+        """Berilgan izohga javob qaytaradi (Thread yaratadi)"""
+        url = f"{self.base_url}/{comment_id}/replies"
+        payload = {
+            "message": message,
+            "access_token": self.access_token
+        }
+        print(f"[API] Kommentga javob yozilmoqda...")
+        response = requests.post(url, data=payload)
+        data = response.json()
+        
+        if "id" in data:
+            print(f"[API] Javob Muvaffaqiyatli qoldirildi!")
+            return True
+        else:
+            print(f"[API] Javob yozishda xatolik: {data}")
+            return False
+

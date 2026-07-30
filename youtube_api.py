@@ -112,3 +112,80 @@ class YouTubeAPI:
         except Exception as e:
             print(f"⚠️ YouTube izoh qoldirishda xatolik (Balki scope yetishmas): {e}")
             return False
+
+    def get_recent_videos(self, limit: int = 5):
+        """Oxirgi yuklangan videolarni olib keladi"""
+        try:
+            # Kanal uploads playlist id sini olamiz
+            channels_response = self.youtube.channels().list(mine=True, part="contentDetails").execute()
+            if "items" not in channels_response or not channels_response["items"]:
+                return []
+            uploads_playlist_id = channels_response["items"][0]["contentDetails"]["relatedPlaylists"]["uploads"]
+            
+            # Playlistdagi videolarni olamiz
+            playlist_response = self.youtube.playlistItems().list(
+                part="snippet",
+                playlistId=uploads_playlist_id,
+                maxResults=limit
+            ).execute()
+            
+            videos = []
+            if "items" in playlist_response:
+                for item in playlist_response["items"]:
+                    videos.append({
+                        "id": item["snippet"]["resourceId"]["videoId"],
+                        "title": item["snippet"]["title"],
+                        "timestamp": item["snippet"]["publishedAt"]
+                    })
+            return videos
+        except Exception as e:
+            print(f"⚠️ YouTube videolarni olishda xato: {e}")
+            return []
+
+    def get_comments(self, video_id: str):
+        """Berilgan videodagi izohlarni olib keladi"""
+        try:
+            response = self.youtube.commentThreads().list(
+                part="snippet,replies",
+                videoId=video_id,
+                maxResults=50,
+                textFormat="plainText"
+            ).execute()
+            
+            comments = []
+            if "items" in response:
+                for item in response["items"]:
+                    top_comment = item["snippet"]["topLevelComment"]["snippet"]
+                    comments.append({
+                        "id": item["id"],
+                        "text": top_comment["textDisplay"],
+                        "author": top_comment["authorDisplayName"],
+                        "timestamp": top_comment["publishedAt"],
+                        "has_replies": item["snippet"]["totalReplyCount"] > 0
+                    })
+            return comments
+        except Exception as e:
+            # Ehtimol comments o'chirilgan bo'lishi mumkin
+            print(f"⚠️ YouTube izohlarni olishda xato ({video_id}): {e}")
+            return []
+
+    def reply_to_comment(self, comment_id: str, message: str) -> bool:
+        """Berilgan YouTube izohiga javob yozish (Reply)"""
+        try:
+            body = {
+                "snippet": {
+                    "parentId": comment_id,
+                    "textOriginal": message
+                }
+            }
+            request = self.youtube.comments().insert(
+                part="snippet",
+                body=body
+            )
+            response = request.execute()
+            print(f"💬 YouTube izohiga javob qaytarildi!")
+            return True
+        except Exception as e:
+            print(f"⚠️ YouTube izohiga javob yozishda xatolik: {e}")
+            return False
+

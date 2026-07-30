@@ -496,3 +496,35 @@ Javobing to'g'ridan-to'g'ri ssenariy bilan boshlanishi kerak, ortiqcha gaplarsiz
             pass
 
     return "⚠️ Ssenariy yaratishda xatolik yuz berdi. AI serverlari band bo'lishi mumkin."
+
+def generate_comment_reply(comment_text, platform, username):
+    km = KeyManager()
+    prompt = f"""Sen samimiy, tajribali va do'stona Dasturchi (Temurbek) san. 
+Sening {platform} sahifangdagi videoga quyidagi izoh (komment) yozildi.
+Foydalanuvchi: {username}
+Izoh: "{comment_text}"
+
+QAT'IY QOIDALAR:
+1. Izohga o'ta samimiy va xuddi odamdek javob ber. O'zbek tilida yoz.
+2. Qisqa va lo'nda bo'lsin (1-2 ta gap).
+3. Emojilardan me'yorida foydalan.
+4. Hech qanday "Salom, men Temurbekman" deb o'zingni tanishtirma, shunchaki suhbatni davom ettir.
+5. Faqat izohning o'zini qaytar, ortiqcha so'zlarsiz.
+"""
+    
+    for _ in range(3):
+        gemini_key = km.get_gemini_key()
+        if not gemini_key: break
+        try:
+            import google.generativeai as genai
+            if "GOOGLE_APPLICATION_CREDENTIALS" in os.environ:
+                del os.environ["GOOGLE_APPLICATION_CREDENTIALS"]
+            genai.configure(api_key=gemini_key)
+            model = genai.GenerativeModel("gemini-3.6-flash")
+            response = model.generate_content(prompt)
+            if response.text:
+                return response.text.strip().replace('"', '')
+        except Exception:
+            pass
+            
+    return "Ajoyib fikr! Rahmat! 😊"
