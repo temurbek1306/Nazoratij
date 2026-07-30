@@ -18,7 +18,22 @@ def get_pending_video() -> str:
     return video if video else ""
 
 def expose_video_url(filename: str) -> str:
-    """Starts the local server and ngrok tunnel to expose the video file to the internet. Returns the public URL."""
+    """Starts the local server and ngrok tunnel (or tmpfiles) to expose the video file to the internet. Returns the public URL."""
+    import requests
+    filepath = f"videos/pending/{filename}"
+    print(f"[{filename}] tmpfiles.org orqali ochiq URL olinmoqda...")
+    try:
+        with open(filepath, 'rb') as f:
+            files = {'file': f}
+            res = requests.post('https://tmpfiles.org/api/v1/upload', files=files)
+        data = res.json()
+        if 'data' in data and 'url' in data['data']:
+            url = data['data']['url']
+            direct_url = url.replace('tmpfiles.org/', 'tmpfiles.org/dl/')
+            return direct_url
+    except Exception as e:
+        print(f"tmpfiles orqali URL olishda xatolik: {e}, ngrok'ga o'tilmoqda...")
+        
     global server
     if not server:
         server = LocalVideoServer(port=8000, directory="videos/pending")
