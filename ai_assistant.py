@@ -209,7 +209,7 @@ DIQQAT - QAT'IY QOIDALAR (BU QOIDALARNI O'QIB, UNGA AMAL QIL, LEKIN ULARDAN IQTI
             if "GOOGLE_APPLICATION_CREDENTIALS" in os.environ:
                 del os.environ["GOOGLE_APPLICATION_CREDENTIALS"]
             genai.configure(api_key=gemini_key)
-            model = genai.GenerativeModel("gemini-3.5-flash")
+            model = genai.GenerativeModel("gemini-3.6-flash")
             response = model.generate_content(prompt)
             if response.text:
                 import re
