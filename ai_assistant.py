@@ -318,29 +318,31 @@ def generate_data_driven_strategy(profile_data, trend_data):
     import random
     import time
     km = KeyManager()
-    prompt = f"""Sen O'zbekistondagi eng qimmat va kuchli "Dark SMM" va Viral-Video prodyusersan. 
+    prompt = f"""# SENING ROLING VA DARAJANG:
+Sen oddiy AI emassan. Sen ijtimoiy tarmoqlar (Insta, TikTok, YouTube) algoritmalarini buzib tashlaydigan, millionlab prosmotrlar olib keladigan, inson psixologiyasini eng chuqur his qiladigan "Pro +++Max" darajadagi Viral Kontent Prodyuserisan! Sening vazifang menga 20 kunlik shunday kontent plan yozib berishki, uni o'qigan odamning miyasi portlab ketsin!
 
-(Tasodifiy generatsiya kodi: {random.randint(1000,99999)} / Vaqt: {time.time()})
+# INPUT (KIRITUVCHI MA'LUMOTLAR):
+- Profil yo'nalishi (Mavzu): {profile_data}
+- Hozirgi Trendlar: {trend_data}
 
-VAZIFA: Menga 20 KUNLIK SUPER-VIRAL, MIYANI PORTLATADIGAN batafsil video ssenariylar jadvalini yozib ber. 
-Foydalanuvchi ma'lumotlari (profil yo'nalishi): {profile_data}
-Hozirgi Trendlar (Insta, YouTube, FB): {trend_data}
+(Tasodifiy kodi: {random.randint(1000,99999)})
 
-🔥 QOIDALAR (PRO +++MAX QOIDASI):
-1. 20 KUN UCHUN 20 TA MUTLAQO HAR XIL MAVZU: Hech qachon bir xil mavzuni qayta-qayta yozib, siklga tushib qolma! 20 kunning har biri bir-biridan 100% mutlaqo farq qiladigan g'oyalar bo'lishi SHART! 
-2. HAYOTIY VA MANTIQIY (RELATABLE): Syujetlar osmondan olingan bo'lmasin! Tomoshabin "Ha, bu xuddi men haqimda-ku!" deb o'ylaydigan hayotiy haqiqatlar, sirlar va mantiqli psixologik tryuklar bo'lsin. Mavhum va mantiqsiz (masalan, kishi qorong'i xonada turib birdan yig'lab qochishi kabi) ma'nosiz syujetlardan qat'iyan qoch! Har bir video aniq bir muammoga yechim yoki o'ylantiradigan mantiqiy xulosa bersin.
-3. BOMBA HOOK (1-soniya): Tomoshabinning miyasini chalg'itadigan vahimali yoki jozibali 1 ta qisqa jumla. Oddiy gaplashish bo'lmasin!
-4. BATAFSIL SSENARIY VA MATN XILMAXILLIGI: Har bir kunning ssenariysini juda batafsil qilib 2-3 ta gapda yozib ber (kamera qayerdan keladi, odam qanday harakat qiladi, qanday ovoz eshitiladi). Hech qachon "X haqiqati" kabi axmoqona shablonlarni umuman ishlatma! Qandaydir mavhum "ramzlar" emas, balki jonli, real harakatlar (ko'cha, ofis, mashina, janjal) tasvirlansin.
-5. XULOSA/MA'NO: Har bir video tomoshabinga qanday yashirin ma'no yoki hissiyot berishi kerakligini qisqacha qo'sh. U aniq va mantiqiy bo'lishi shart.
-6. PLATFORMALAR: Instagram, YouTube, Facebook uchun eng mos formatlarni aralashtirib yoz.
+# ⚠️ QAT'IY QOIDALAR (BUZISH TAQIQLANADI, "PRO +++MAX" REJIMI):
+1. 20 KUN = 20 TA MUTLAQO HAR XIL OLAM! Hech qachon bir xil mavzuni, bir xil mantiqni yoki bir xil xulosani qaytara ko'rma! Siklga (loop) tushib qolish umuman mumkin emas. Har bir kun mutlaqo yangi bir fojia, komediya yoki psixologik fakt bo'lishi shart.
+2. 100% HAYOTIY VA MANTIQIY (RELATABLE): Syujetlar osmondan olinmasin! Odamlar ko'rganda "Iye, bu aniq men-ku!" deb do'stlariga yuborishga majbur bo'lsin. Mavhum, ma'nosiz (masalan, qorong'i xonada yig'lash, mavhum falsafa) shablonlardan qat'iyan qoch! Har bir syujet real hayotdagi aniq bir muammo yoki kulguli mantiqqa (paradoksga) asoslanishi SHART.
+3. BOMBA HOOK (1-SONIYA): Videoning birinchi soniyasidayoq tomoshabin miyasini chalg'itadigan vahimali, absurd yoki o'ta qiziqarli 1 ta qisqa jumla yoz! "Bilasizmi...", "Sizga bitta sir ochaman", "Muvaffaqiyat siri" degan zerikarli, musur so'zlarni UMUMAN ISHLATMA! 
+4. VIZUAL SSENARIY (KINO DARAJASIDA): Menga "oldi-qochdi" gaplar yozma! Har bir kunning ssenariysini 2-3 ta gapda shunday tasvirlaki: Kamera qayerdan olyapti? Qahramon yuzida qanday emotsiya? Atrofda qanday harakat va orqa fonda qanday musiqa/ovoz bor? Barchasi aniq, jonli (ko'cha, oshxona, ofis, mashina ichi) bo'lsin.
+5. KUCHLI XULOSA: Har bir videoning oxirida tomoshabinni o'ylantirib qo'yadigan yoki daxshatli mantiq orqali kulgidan yiqitadigan, psixologik xulosa bo'lishi shart.
 
-NAMUNA (Aynan shu jadval formatida yoz):
-| Hafta/Kun | Viral Video Mavzusi | Bomba Hook (1-soniya) | Batafsil Ssenariy (Kadrlar + Ovoz) | Xulosa/Ma'no | Format |
-| --- | --- | --- | --- | --- | --- |
-| 1-kun | Do'stlik siri (Bro-Code) | "Haqiqiy do'st senga yordam bermaydi..." | [Kadr: Qorong'i sportzal. Yigit katta og'irlik ko'tarolmay qiynalyapti. Sherigi yordam berish o'rniga uning qulog'iga nimadir pichirlaydi. Yigitning ko'zlari kattalashib, shtangani osmonga otib yuboradi!] Ovoz: Sekin boshlanib, portlovchi Phonk musiqasi. | Tomoshabinda g'azab aralash ulkan motivatsiya uyg'onadi. | Instagram Reels |
-| 2-kun | Ko'rinmas qopqon (Xavf)| "Biz komfort zonaga keldik. Endi orqaga qaytamiz!" | [Kadr: Yomg'irli tungi trassa. Mashina katta tezlikda ketyapti. Birdan haydovchi keskin tormoz beradi va rulni qayirib, mashinani orqaga uchiradi.] Ovoz: Shinalar chirillashi, kuchli yurak urishi. | Komfort zonaning aslida qanchalik xavfli ekanligini anglash. | YouTube Shorts |
+# NATIJANI CHIQARISH FORMATI:
+Har bir kun uchun AYNAN SHU STRUKTURA bo'yicha javob ber (Jadval qilib chizma, ro'yxat qilib yoz):
 
-DIQQAT ENGIN ENG MUHIM QOIDA: Namunadagi "Do'stlik siri" va "Ko'rinmas qopqon" mavzularini UMMUMAN jadvalga qo'shma!!! Ular faqat men senga tushuntirishim uchun yozilgan misol! Sen 1-kundan boshlab o'zingning 20 ta mutlaqo yangi, takrorlanmas ssenariylaringni yozasan! Hech qanday shablonlarsiz! Faqat jadvalni qaytar!"""
+📅 [KUN]: [Videoning jozibali nomi] | Platforma: [Insta / YouTube Shorts / TikTok]
+🪝 HOOK: [1-soniyadagi portlovchi jumla]
+🎬 SSENARIY: [Kamera rakursi, aniq harakatlar, mimika va ovozlar - batafsil 3 ta gapda]
+🧠 XULOSA/MANTIQ: [Tomoshabin oladigan aniq hissiyot yoki mantiqiy yechim]
+
+🔥 Qani ketdik, o'zingdagi butun kreativni ishga sol va menga hech qanday "suvsiz", internetni portlatadigan 20 kunlik jadvalni yaratib ber!"""
     
     # 1. Gemini orqali urinish (agar ishlasa)
     for _ in range(2):
