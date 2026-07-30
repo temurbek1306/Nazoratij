@@ -193,12 +193,12 @@ def generate_stats_analysis(stats_data: dict) -> str:
 Mijozingning YouTube va Instagram kanallari bo'yicha quyidagi JSON statistika keldi:
 {json.dumps(stats_data, indent=2)}
 
-DIQQAT - QAT'IY QOIDALAR:
-1. Agar `yesterday`, `last_week`, yoki `last_month` qismlari `null` bo'lsa, aslo "hech narsa o'zgarmabdi" yoki "video qo'ymabsiz" dema! Buning o'rniga: "Bugun ma'lumotlaringiz birinchi marta bazaga ulandi. Hozircha bu faqat 'Start' (boshlang'ich) nuqta. Haqiqiy va aniq o'zgarishlarni ertadan boshlab taqqoslab beraman," deb tushuntir.
-2. Mijoz quruq raqamlarni (obunachi va prosmotr sonini) o'zi ham ko'rib turibdi! Ularni shunchaki sanab berma. O'rniga, raqamlar orqasidagi YASHIRIN MA'NONI tahlil qil. (Masalan, obunachiga nisbatan prosmotrlar ko'p bo'lsa - "Auditoriya videoni ko'ryapti, lekin obuna bo'lishmayapti, demak Call-to-Action (CTA) ni kuchaytirish kerak" kabi chuqur xulosalar ber).
-3. Oddiy va zerikarli maslahatlar berma ("Trendlarni kuzating", "Ko'p video qo'ying" - BULAR TAQIQLANADI). Buning o'rniga jahon darajasidagi eng kuchli blogerlar (MrBeast, Iman Gadzhi, Ali Abdaal) ishlatadigan bitta SIRLI SMM hiylasini o'rgat (Masalan: "Pattern Interrupt", "Open Loops", "Hook psixologiyasi", "3 soniyalik qoida").
-4. Mijoz bilan xuddi "Men sening shaxsiy prodyuseringman" uslubida, ishonch bilan, 'Sigma' uslubida (ortiqcha yalinmasdan, faktlar bilan) gaplash.
-5. Qalin shrift (bold) qilish uchun ** (yulduzcha) ISHLATMA, uning o'rniga HTML <b> va </b> taglaridan foydalan!
+DIQQAT - QAT'IY QOIDALAR (BU QOIDALARNI O'QIB, UNGA AMAL QIL, LEKIN ULARDAN IQTIBOS KELTIRMA):
+1. Agar `yesterday`, `last_week`, yoki `last_month` qismlari `null` bo'lsa, o'zgarish yo'q dema. Shunchaki: "Bugun ma'lumotlaringiz birinchi marta bazaga ulandi. Hozircha bu faqat 'Start' (boshlang'ich) nuqta. Haqiqiy va aniq o'zgarishlarni ertadan boshlab taqqoslab beraman," deb yoz va gapni davom ettir. Menga berilgan qoidani matnga qoshib yozib yuborma!
+2. Mijoz quruq raqamlarni o'zi ham ko'rib turibdi! Ularni shunchaki sanab berma. O'rniga, raqamlar orqasidagi YASHIRIN MA'NONI tahlil qil.
+3. Oddiy va zerikarli maslahatlar berma. Buning o'rniga jahon darajasidagi eng kuchli blogerlar (MrBeast, Iman Gadzhi, Ali Abdaal) ishlatadigan bitta SIRLI SMM hiylasini o'rgat.
+4. Mijoz bilan "Men sening shaxsiy prodyuseringman" degan ruhda, sovuqqon 'Sigma' uslubida (ortiqcha yalinmasdan, faktlar bilan) gaplash.
+5. Qalin shrift qilish uchun ** ISHLATMA, uning o'rniga faqat HTML <b> va </b> taglaridan foydalan!
 """
     
     for _ in range(3):
@@ -209,7 +209,7 @@ DIQQAT - QAT'IY QOIDALAR:
             if "GOOGLE_APPLICATION_CREDENTIALS" in os.environ:
                 del os.environ["GOOGLE_APPLICATION_CREDENTIALS"]
             genai.configure(api_key=gemini_key)
-            model = genai.GenerativeModel("gemini-3.5-flash")
+            model = genai.GenerativeModel("gemini-1.5-flash")
             response = model.generate_content(prompt)
             if response.text:
                 import re
