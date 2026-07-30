@@ -177,7 +177,7 @@ def run():
         except:
             first_comment = "👇 Fikringizni izohlarda yozib qoldiring!"
             
-        status_str = post_to_platforms(platform, local_video_path, url, manual_caption, first_comment, video_name, base_caption=caption)
+        status_str = post_to_platforms(platform, local_video_path, url, manual_caption, first_comment, video_name, base_caption=manual_caption)
         send_alert(f"""✅ Boss, video holati (Qo'lda yozilgan izoh bilan):
 
 Video: {video_name}
