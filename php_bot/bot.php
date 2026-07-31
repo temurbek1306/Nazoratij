@@ -796,11 +796,7 @@ function setupBotCommands() {
     global $TELEGRAM_TOKEN;
     $url = "https://api.telegram.org/bot" . $TELEGRAM_TOKEN . "/setMyCommands";
     $commands = [
-        ["command" => "start", "description" => "Asosiy menyuni ochish"],
-        ["command" => "stats", "description" => "Hozirgi statistika"],
-        ["command" => "list", "description" => "Navbatdagi videolar"],
-
-        ["command" => "settings", "description" => "Vaqt sozlamalari"]
+        ["command" => "start", "description" => "Asosiy menyuni ochish"]
     ];
     $data = ['commands' => json_encode($commands)];
     
