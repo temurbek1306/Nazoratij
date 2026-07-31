@@ -247,6 +247,7 @@ def run():
         import video_generator
         video_generator.generate(prompt_text, ratio)
     elif command == "merge_videos":
+        pass
     elif command == "brainstorm":
         if prompt.startswith("http"):
             send_telegram_msg("📥 Bu linkka o'xshaydi. Link orqali yuklab olish funksiyasi tez kunda (Keyingi qadamda) qo'shiladi!")
