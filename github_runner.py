@@ -75,7 +75,8 @@ def post_to_platforms(platforms_str, local_video_path, url, caption, first_comme
     if "tg" in platforms:
         from agent_tools import post_to_telegram
         if os.path.exists(local_video_path):
-            if post_to_telegram(local_video_path, caption):
+            tg_caption = "Telegram kanal: @Temurbek_dev\nTelegram bot: @TemurbekDevbot"
+            if post_to_telegram(local_video_path, tg_caption):
                 status_messages.append("✅ Telegram Channel")
             else:
                 status_messages.append("❌ Telegram Channel")
