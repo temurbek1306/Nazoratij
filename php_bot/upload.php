@@ -85,11 +85,24 @@ if (move_uploaded_file($file['tmp_name'], $dest_path)) {
     file_put_contents("last_video.txt", $video_url);
     
     // Telegramga xabar jo'natamiz
+    $state_file = "platforms_" . $ADMIN_ID . ".json";
+    if (!file_exists($state_file)) {
+        $platforms = ["ig" => true, "yt" => true, "tg" => true, "fb" => true];
+        file_put_contents($state_file, json_encode($platforms));
+    } else {
+        $platforms = json_decode(file_get_contents($state_file), true);
+    }
+    
+    $btn_ig = ($platforms['ig'] ? "✅" : "❌") . " Instagram";
+    $btn_yt = ($platforms['yt'] ? "✅" : "❌") . " YouTube";
+    $btn_tg = ($platforms['tg'] ? "✅" : "❌") . " Telegram";
+    $btn_fb = ($platforms['fb'] ? "✅" : "❌") . " Facebook";
+    
     $keyboard = json_encode([
         "inline_keyboard" => [
-            [["text" => "📸 Instagram", "callback_data" => "platform_ig"]],
-            [["text" => "📺 YouTube", "callback_data" => "platform_yt"]],
-            [["text" => "📸+📺 Ikkalasiga ham", "callback_data" => "platform_both"]]
+            [["text" => $btn_ig, "callback_data" => "toggle_ig"], ["text" => $btn_yt, "callback_data" => "toggle_yt"]],
+            [["text" => $btn_tg, "callback_data" => "toggle_tg"], ["text" => $btn_fb, "callback_data" => "toggle_fb"]],
+            [["text" => "▶️ Davom etish", "callback_data" => "confirm_platforms"]]
         ]
     ]);
     
