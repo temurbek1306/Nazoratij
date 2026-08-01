@@ -23,7 +23,7 @@ def send_alert(msg):
         except Exception as e:
             print(f"⚠️ Telegramga yuborishda xatolik: {e}")
 
-def post_to_platforms(platforms_str, local_video_path, url, caption, first_comment, video_name, base_caption=""):
+def post_to_platforms(platforms_str, local_video_path, url, caption, first_comment, video_name, base_caption="", clean_caption=""):
     platforms = platforms_str.split(',') if platforms_str else ["ig", "yt", "fb", "tg"]
     if "both" in platforms:
         platforms = ["ig", "yt", "fb", "tg"]
@@ -75,8 +75,8 @@ def post_to_platforms(platforms_str, local_video_path, url, caption, first_comme
     if "tg" in platforms:
         from agent_tools import post_to_telegram
         if os.path.exists(local_video_path):
-            tg_caption = "Telegram kanal: @Temurbek_dev\nTelegram bot: @TemurbekDevbot"
-            if post_to_telegram(local_video_path, tg_caption):
+            tg_text = (clean_caption if clean_caption else caption) + "\n\nTelegram kanal: @Temurbek_dev\nTelegram bot: @TemurbekDevbot"
+            if post_to_telegram(local_video_path, tg_text):
                 status_messages.append("✅ Telegram Channel")
             else:
                 status_messages.append("❌ Telegram Channel")
@@ -159,6 +159,7 @@ def run():
             manual_caption = f.read().strip()
             
         import ai_assistant
+        clean_manual_caption = manual_caption
         try:
             print("🧠 AI orqali top heshteglar qo'shilmoqda...")
             manual_caption = ai_assistant.append_viral_hashtags(manual_caption)
@@ -177,7 +178,7 @@ def run():
         except:
             first_comment = "👇 Fikringizni izohlarda yozib qoldiring!"
             
-        status_str = post_to_platforms(platform, local_video_path, url, manual_caption, first_comment, video_name, base_caption=manual_caption)
+        status_str = post_to_platforms(platform, local_video_path, url, manual_caption, first_comment, video_name, base_caption=manual_caption, clean_caption=clean_manual_caption)
         send_alert(f"""✅ Boss, video holati (Qo'lda yozilgan izoh bilan):
 
 Video: {video_name}
@@ -267,6 +268,10 @@ CAPTION_A: (videoga to'liq mos yozilgan caption)"""
                 if not caption_b: caption_b = caption_a + "\n\n(Groq ishlamadi, zaxira)"
                 if not caption_c: caption_c = caption_a + "\n\n(OpenRouter ishlamadi, zaxira)"
                 
+                clean_a = caption_a
+                clean_b = caption_b
+                clean_c = caption_c
+                
                 # Hashtaglarni to'g'ri biriktirish (Data-driven)
                 caption_a = ai_assistant.append_viral_hashtags(caption_a)
                 caption_b = ai_assistant.append_viral_hashtags(caption_b)
@@ -288,7 +293,10 @@ CAPTION_A: (videoga to'liq mos yozilgan caption)"""
                     "video_name": video_name,
                     "caption_a": caption_a,
                     "caption_b": caption_b,
-                    "caption_c": caption_c
+                    "caption_c": caption_c,
+                    "clean_a": clean_a,
+                    "clean_b": clean_b,
+                    "clean_c": clean_c
                 }
                 with open(f"videos/pending/{video_name}.json", "w") as f:
                     json.dump(data, f)

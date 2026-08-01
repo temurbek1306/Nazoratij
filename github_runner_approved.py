@@ -22,6 +22,7 @@ def run():
             data = json.load(f)
             
         caption = data.get(f"caption_{choice}", "")
+        clean_caption = data.get(f"clean_{choice}", caption)
         
         print(f"🎬 Video: {video_name}")
         print(f"📝 Tanlangan matn ({choice.upper()}): {caption[:50]}...")
@@ -51,11 +52,13 @@ def run():
         # --- INSTAGRAM ---
         if "ig" in platforms:
             print(f"📝 Instagramga joylanmoqda...")
+            from agent_tools import post_ig_comment
             ig_media_id = post_to_instagram(url, caption, video_name)
             if ig_media_id:
                 status_messages.append("✅ Instagram")
-                from agent_tools import post_ig_comment
-                post_ig_comment(ig_media_id, first_comment)
+                try:
+                    post_ig_comment(ig_media_id, first_comment)
+                except: pass
             else:
                 status_messages.append("❌ Instagram")
                 
@@ -66,7 +69,7 @@ def run():
             yt_refresh_token = os.getenv("YOUTUBE_REFRESH_TOKEN")
             if yt_client_id and yt_client_secret and yt_refresh_token:
                 try:
-                    print("\n📺 YouTube Shorts yuklash boshlanmoqda...")
+                    print("📺 YouTubega joylanmoqda...")
                     from youtube_api import YouTubeAPI
                     yt_api = YouTubeAPI(yt_client_id, yt_client_secret, yt_refresh_token)
                     title = caption.split('\n')[0][:100] 
@@ -89,7 +92,7 @@ def run():
         if "tg" in platforms:
             from agent_tools import post_to_telegram
             if os.path.exists(local_video_path):
-                tg_caption = "Telegram kanal: @Temurbek_dev\nTelegram bot: @TemurbekDevbot"
+                tg_caption = clean_caption + "\n\nTelegram kanal: @Temurbek_dev\nTelegram bot: @TemurbekDevbot"
                 if post_to_telegram(local_video_path, tg_caption):
                     status_messages.append("✅ Telegram Channel")
                 else:
