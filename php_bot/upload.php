@@ -102,7 +102,7 @@ if (move_uploaded_file($file['tmp_name'], $dest_path)) {
         "inline_keyboard" => [
             [["text" => $btn_ig, "callback_data" => "toggle_ig"], ["text" => $btn_yt, "callback_data" => "toggle_yt"]],
             [["text" => $btn_tg, "callback_data" => "toggle_tg"], ["text" => $btn_fb, "callback_data" => "toggle_fb"]],
-            [["text" => "▶️ Davom etish", "callback_data" => "confirm_platforms"]]
+            [["text" => "▶️ TASDIQLASH (Davom etish)", "callback_data" => "platform_confirm"]]
         ]
     ]);
     
