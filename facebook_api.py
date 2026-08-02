@@ -39,17 +39,16 @@ class FacebookReelsAPI:
                 'file_size': str(file_size)
             }
             
-            with open(video_path, 'rb') as f:
-                video_data = f.read()
-                
             upload_url = f"https://rupload.facebook.com/video-upload/v19.0/{video_id}"
-            upload_res = requests.post(upload_url, headers=upload_headers, data=video_data)
+            with open(video_path, 'rb') as f:
+                upload_res = requests.post(upload_url, headers=upload_headers, data=f)
             
             if upload_res.status_code != 200:
                 print(f"❌ Faylni yuklashda xatolik: {upload_res.text}")
                 return False
                 
-            print("✅ Fayl serverga muvaffaqiyatli yuklandi.")
+            print("✅ Fayl serverga muvaffaqiyatli yuklandi. Facebook protsessingini kutyapmiz (15 soniya)...")
+            time.sleep(15)
 
             # 3. Publish Reel
             finish_payload = {
