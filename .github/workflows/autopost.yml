@@ -12,6 +12,7 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       contents: write
+      actions: read
 
     steps:
       - name: Checkout repository 📥
@@ -94,6 +95,7 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       contents: write # Repozitoriyaga o'zgarishlarni yozish (commit qilish) huquqi
+      actions: read
 
     steps:
       - name: Checkout repository 📥
@@ -206,6 +208,7 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       contents: write
+      actions: read
 
     steps:
       - name: Checkout repository 📥
