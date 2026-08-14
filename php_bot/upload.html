@@ -254,6 +254,10 @@
             const formData = new FormData();
             formData.append('video', selectedFile);
             formData.append('tg_data', initData);
+            
+            const urlParams = new URLSearchParams(window.location.search);
+            const uploadType = urlParams.get('type') || 'normal';
+            formData.append('type', uploadType);
 
             const xhr = new XMLHttpRequest();
             xhr.open('POST', 'upload.php', true);

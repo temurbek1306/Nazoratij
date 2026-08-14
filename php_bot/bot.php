@@ -300,7 +300,17 @@ if (isset($update['message'])) {
         file_put_contents("state.txt", "waiting_for_trial_video");
         file_put_contents("last_trial.txt", "true");
         file_put_contents("last_platform.txt", "ig");
-        sendMessage($chat_id, "🧪 <b>Instagram Trial Video (Sinov) rejimi faollashdi!</b>\n\nBu video <b>faqat Instagram</b>ga sinov tariqasida (boshida faqat obuna bo'lmagan yangi auditoriyaga) joylanadi.\n\n📥 Iltimos, videoni yuboring (Telegram orqali fayl yoki galereyadan):");
+        
+        $webapp_url = "https://temurbek.dev/php_bot/upload.html?type=trial";
+        $webapp_keyboard = json_encode([
+            "inline_keyboard" => [
+                [
+                    ["text" => "🌐 Katta Trial Videoni Yuklash", "web_app" => ["url" => $webapp_url]]
+                ]
+            ]
+        ]);
+        
+        sendMessage($chat_id, "🧪 <b>Instagram Trial Video (Sinov) rejimi faollashdi!</b>\n\nBu video <b>faqat Instagram</b>ga sinov tariqasida (boshida faqat obuna bo'lmagan yangi auditoriyaga) joylanadi.\n\n📥 Iltimos, videoni yuboring (Telegram orqali fayl yoki galereyadan) Yoki Web-App dan yuklang:", $webapp_keyboard);
     }
     elseif ($text == "☁️ Web-App orqali yuklash" || $text == "/upload") {
         $bot_url = "https://" . $_SERVER['HTTP_HOST'] . dirname($_SERVER['REQUEST_URI']);

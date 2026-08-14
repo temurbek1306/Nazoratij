@@ -83,31 +83,49 @@ if (move_uploaded_file($file['tmp_name'], $dest_path)) {
     
     // bot.php logic ga ulaymiz (Xuddi Telegramdan kelgandek)
     file_put_contents("last_video.txt", $video_url);
-    file_put_contents("last_trial.txt", "false");
+    $upload_type = isset($_POST['type']) ? $_POST['type'] : 'normal';
     
-    // Telegramga xabar jo'natamiz
-    $state_file = "platforms_" . $ADMIN_ID . ".json";
-    if (!file_exists($state_file)) {
-        $platforms = ["ig" => true, "yt" => true, "tg" => true, "fb" => true];
-        file_put_contents($state_file, json_encode($platforms));
+    if ($upload_type === 'trial') {
+        file_put_contents("last_trial.txt", "true");
+        file_put_contents("last_platform.txt", "ig");
+        
+        $keyboard = json_encode([
+            "inline_keyboard" => [
+                [
+                    ["text" => "🤖 AI O'zi yozsin", "callback_data" => "video_ai"],
+                    ["text" => "✍️ O'zim yozaman", "callback_data" => "video_manual"]
+                ]
+            ]
+        ]);
+        
+        $text = "☁️ <b>Web-App orqali TRIAL VIDEO qabul qilindi!</b>\n\nFayl hajmi: " . number_format($file['size'] / 1048576, 2) . " MB\n\n🧪 Rejim: <b>Faqat Instagram (Trial Reel)</b>\n\nEndi izohni kim yozadi?";
     } else {
-        $platforms = json_decode(file_get_contents($state_file), true);
+        file_put_contents("last_trial.txt", "false");
+        
+        // Telegramga xabar jo'natamiz
+        $state_file = "platforms_" . $ADMIN_ID . ".json";
+        if (!file_exists($state_file)) {
+            $platforms = ["ig" => true, "yt" => true, "tg" => true, "fb" => true];
+            file_put_contents($state_file, json_encode($platforms));
+        } else {
+            $platforms = json_decode(file_get_contents($state_file), true);
+        }
+        
+        $btn_ig = ($platforms['ig'] ? "✅" : "❌") . " Instagram";
+        $btn_yt = ($platforms['yt'] ? "✅" : "❌") . " YouTube";
+        $btn_tg = ($platforms['tg'] ? "✅" : "❌") . " Telegram";
+        $btn_fb = ($platforms['fb'] ? "✅" : "❌") . " Facebook";
+        
+        $keyboard = json_encode([
+            "inline_keyboard" => [
+                [["text" => $btn_ig, "callback_data" => "toggle_ig"], ["text" => $btn_yt, "callback_data" => "toggle_yt"]],
+                [["text" => $btn_tg, "callback_data" => "toggle_tg"], ["text" => $btn_fb, "callback_data" => "toggle_fb"]],
+                [["text" => "▶️ TASDIQLASH (Davom etish)", "callback_data" => "platform_confirm"]]
+            ]
+        ]);
+        
+        $text = "☁️ <b>Web-App orqali KATTA VIDEO qabul qilindi!</b>\n\nFayl hajmi: " . number_format($file['size'] / 1048576, 2) . " MB\n\nQaysi tarmoqqa joylaymiz?";
     }
-    
-    $btn_ig = ($platforms['ig'] ? "✅" : "❌") . " Instagram";
-    $btn_yt = ($platforms['yt'] ? "✅" : "❌") . " YouTube";
-    $btn_tg = ($platforms['tg'] ? "✅" : "❌") . " Telegram";
-    $btn_fb = ($platforms['fb'] ? "✅" : "❌") . " Facebook";
-    
-    $keyboard = json_encode([
-        "inline_keyboard" => [
-            [["text" => $btn_ig, "callback_data" => "toggle_ig"], ["text" => $btn_yt, "callback_data" => "toggle_yt"]],
-            [["text" => $btn_tg, "callback_data" => "toggle_tg"], ["text" => $btn_fb, "callback_data" => "toggle_fb"]],
-            [["text" => "▶️ TASDIQLASH (Davom etish)", "callback_data" => "platform_confirm"]]
-        ]
-    ]);
-    
-    $text = "☁️ <b>Web-App orqali KATTA VIDEO qabul qilindi!</b>\n\nFayl hajmi: " . number_format($file['size'] / 1048576, 2) . " MB\n\nQaysi tarmoqqa joylaymiz?";
     
     $url = "https://api.telegram.org/bot" . $TELEGRAM_TOKEN . "/sendMessage";
     $data = array(
