@@ -8,13 +8,15 @@ on:
 jobs:
   reply_to_comments:
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
     
     steps:
       - name: Checkout repo
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Set up Python
-        uses: actions/setup-python@v4
+        uses: actions/setup-python@v5
         with:
           python-version: '3.10'
 
@@ -39,7 +41,16 @@ jobs:
           
       - name: Commit replied_comments.json
         run: |
-          git config --local user.email "action@github.com"
-          git config --local user.name "GitHub Action"
+          git config --local user.email "bot@temurbek.dev"
+          git config --local user.name "AutoReels Bot"
           git add replied_comments.json || true
-          git diff --quiet && git diff --staged --quiet || (git commit -m "Update replied comments tracking [skip ci]" && git push)
+          if [[ -n "$(git status --porcelain replied_comments.json)" ]]; then
+            git commit -m "🤖 AutoReply: Update replied comments tracking [skip ci]"
+            for i in {1..5}; do
+              git pull origin main --rebase --autostash || (git rebase --abort && sleep 5 && continue)
+              if git push; then
+                break
+              fi
+              sleep 5
+            done
+          fi
