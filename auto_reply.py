@@ -47,27 +47,28 @@ def check_and_reply_instagram(replied_data):
         for comment in comments:
             comment_id = comment["id"]
             
-            # Agar o'zimiz yozgan bo'lsak yoki allaqachon javob bergan bo'lsak, o'tkazib yuboramiz
+            # 1. Agar oldin javob berilgan deb saqlangan bo'lsa, o'tkazib yuboramiz
             if comment_id in replied_data["instagram"]:
                 continue
                 
-            # 'from' obyekti ba'zan bo'lmasligi mumkin
+            # 2. O'zimizning izohimiz bo'lsa
             username = comment.get("username", "Foydalanuvchi")
-            if comment.get("from") and comment["from"].get("id") == ig_account_id:
-                # O'zimizning izohimiz
+            if comment.get("from") and str(comment["from"].get("id")) == str(ig_account_id):
                 replied_data["instagram"].append(comment_id)
                 continue
                 
-            bot_replied = False
-            if "replies" in comment and "data" in comment["replies"]:
-                for reply in comment["replies"]["data"]:
-                    if reply.get("from") and reply["from"].get("id") == ig_account_id:
-                        bot_replied = True
-                        break
-                        
-            if bot_replied:
-                if comment_id not in replied_data["instagram"]:
-                    replied_data["instagram"].append(comment_id)
+            # 3. Agar ushbu izohga ALLAQACHON javob berilgan bo'lsa (Instagram API replies tekshiruvi)
+            replies = comment.get("replies", {}).get("data", [])
+            has_reply = False
+            for r in replies:
+                # Agar o'zimiz yoki kimdir javob yozgan bo'lsa
+                if str(r.get("from", {}).get("id")) == str(ig_account_id) or len(replies) > 0:
+                    has_reply = True
+                    break
+            
+            if has_reply:
+                print(f"[IG] Izohga allaqachon javob yozilgan ({comment_id}), qayta yozilmaydi.")
+                replied_data["instagram"].append(comment_id)
                 continue
                 
             text = comment.get("text", "")
@@ -90,6 +91,8 @@ def check_and_reply_instagram(replied_data):
                 save_replied_comments(replied_data)
                 
             time.sleep(2) # API limitlaridan qochish uchun
+            
+    save_replied_comments(replied_data)
 
 def check_and_reply_youtube(replied_data):
     client_id = os.getenv("YOUTUBE_CLIENT_ID")
@@ -132,10 +135,7 @@ def check_and_reply_youtube(replied_data):
             
             print(f"[YT] Yangi izoh ({username}): {text}")
             
-            if "+" in text:
-                reply_text = "Xizmatimizdan foydalanish uchun telegramdan yozing @Temurbek_Gulboyev"
-            else:
-                reply_text = ai_assistant.generate_comment_reply(text, "YouTube", username)
+            reply_text = ai_assistant.generate_comment_reply(text, "YouTube", username)
             print(f"[AI Javobi]: {reply_text}")
             
             success = yt.reply_to_comment(comment_id, reply_text)
