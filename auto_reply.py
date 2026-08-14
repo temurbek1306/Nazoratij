@@ -58,6 +58,18 @@ def check_and_reply_instagram(replied_data):
                 replied_data["instagram"].append(comment_id)
                 continue
                 
+            bot_replied = False
+            if "replies" in comment and "data" in comment["replies"]:
+                for reply in comment["replies"]["data"]:
+                    if reply.get("from") and reply["from"].get("id") == ig_account_id:
+                        bot_replied = True
+                        break
+                        
+            if bot_replied:
+                if comment_id not in replied_data["instagram"]:
+                    replied_data["instagram"].append(comment_id)
+                continue
+                
             text = comment.get("text", "")
             if not text:
                 continue
@@ -65,7 +77,10 @@ def check_and_reply_instagram(replied_data):
             print(f"[IG] Yangi izoh ({username}): {text}")
             
             # AI dan javob olish
-            reply_text = ai_assistant.generate_comment_reply(text, "Instagram", username)
+            if "+" in text:
+                reply_text = "Xizmatimizdan foydalanish uchun telegramdan yozing @Temurbek_Gulboyev"
+            else:
+                reply_text = ai_assistant.generate_comment_reply(text, "Instagram", username)
             print(f"[AI Javobi]: {reply_text}")
             
             # Javobni yuborish
@@ -117,7 +132,10 @@ def check_and_reply_youtube(replied_data):
             
             print(f"[YT] Yangi izoh ({username}): {text}")
             
-            reply_text = ai_assistant.generate_comment_reply(text, "YouTube", username)
+            if "+" in text:
+                reply_text = "Xizmatimizdan foydalanish uchun telegramdan yozing @Temurbek_Gulboyev"
+            else:
+                reply_text = ai_assistant.generate_comment_reply(text, "YouTube", username)
             print(f"[AI Javobi]: {reply_text}")
             
             success = yt.reply_to_comment(comment_id, reply_text)
