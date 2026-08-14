@@ -226,8 +226,7 @@ if (isset($update['message'])) {
             file_put_contents($scheduled_file, json_encode($scheduled_list, JSON_PRETTY_PRINT));
             
             $formatted_time = date("d.m.Y H:i", $timestamp);
-            $trial_note = $is_trial ? " (🧪 Trial Reel)" : "";
-            sendMessage($chat_id, "✅ Video ro'yxatga olindi!\n\nVideo aynan <b>$formatted_time</b> da avtomatik tarzda joylanadi.$trial_note");
+            sendMessage($chat_id, "✅ Video ro'yxatga olindi!\n\nVideo aynan <b>$formatted_time</b> da avtomatik tarzda joylanadi.");
         } else {
             sendMessage($chat_id, "❌ Video manzili topilmadi.");
         }
@@ -260,7 +259,7 @@ if (isset($update['message'])) {
                 [["text" => "☁️ Web-App orqali yuklash"], ["text" => "➕ Yangi Video Qo'shish"]],
                 [["text" => "🧪 Trial Video Joylash"], ["text" => "🚀 Hozir Joylash"]],
                 [["text" => "🎞 Videolarni Birlashtirish"], ["text" => "📋 Navbat (Queue)"]],
-                [["text" => "🔖 Doimiy Hashteglar"], ["text" => "⚙️ Vaqt Sozlamalari"]],
+                [["text" => "⚙️ Vaqt Sozlamalari"], ["text" => "🔖 Doimiy Hashteglar"]],
                 [["text" => "📊 Statistika"], ["text" => "🗑 Eski videolarni o'chirish"]]
             ],
             "resize_keyboard" => true,
@@ -276,7 +275,7 @@ if (isset($update['message'])) {
             [["text" => "☁️ Web-App orqali yuklash"], ["text" => "➕ Yangi Video Qo'shish"]],
             [["text" => "🧪 Trial Video Joylash"], ["text" => "🚀 Hozir Joylash"]],
             [["text" => "🎞 Videolarni Birlashtirish"], ["text" => "📋 Navbat (Queue)"]],
-            [["text" => "🔖 Doimiy Hashteglar"], ["text" => "⚙️ Vaqt Sozlamalari"]],
+            [["text" => "⚙️ Vaqt Sozlamalari"], ["text" => "🔖 Doimiy Hashteglar"]],
             [["text" => "📊 Statistika"], ["text" => "🗑 Eski videolarni o'chirish"]]
         ],
         "resize_keyboard" => true,
@@ -297,6 +296,12 @@ if (isset($update['message'])) {
         setupBotCommands();
         sendMessage($chat_id, "👋 Salom, Boss! Ultra God Mode (v3.0) aktiv.\n\nPastdagi menyudan kerakli tugmani tanlang:", $main_keyboard);
     } 
+    elseif ($text == "🧪 Trial Video Joylash" || $text == "/trial") {
+        file_put_contents("state.txt", "waiting_for_trial_video");
+        file_put_contents("last_trial.txt", "true");
+        file_put_contents("last_platform.txt", "ig");
+        sendMessage($chat_id, "🧪 <b>Instagram Trial Video (Sinov) rejimi faollashdi!</b>\n\nBu video <b>faqat Instagram</b>ga sinov tariqasida (boshida faqat obuna bo'lmagan yangi auditoriyaga) joylanadi.\n\n📥 Iltimos, videoni yuboring (Telegram orqali fayl yoki galereyadan):");
+    }
     elseif ($text == "☁️ Web-App orqali yuklash" || $text == "/upload") {
         $bot_url = "https://" . $_SERVER['HTTP_HOST'] . dirname($_SERVER['REQUEST_URI']);
         $webapp_url = rtrim($bot_url, '/') . "/upload.html";
@@ -346,14 +351,7 @@ if (isset($update['message'])) {
         }
     }
 
-    elseif ($text == "🧪 Trial Video Joylash" || $text == "/trial") {
-        file_put_contents("state.txt", "waiting_for_trial_video");
-        file_put_contents("last_trial.txt", "true");
-        file_put_contents("last_platform.txt", "ig");
-        sendMessage($chat_id, "🧪 <b>Instagram Trial Video (Sinov) rejimi faollashdi!</b>\n\nBu rejimda yuborilgan video <b>faqat Instagram</b>ga sinov (Trial Reel) sifatida joylanadi — dastlab faqat obuna bo'lmagan yangi auditoriyaga (non-followers) ko'rsatiladi va profilingiz asosiy lentasiga tushmaydi.\n\n📥 <i>Iltimos, Instagramga sinov tariqasida joylamoqchi bo'lgan videongizni yuboring (fayl yoki galereyadan):</i>");
-    }
     elseif ($text == "➕ Yangi Video Qo'shish") {
-        file_put_contents("last_trial.txt", "false");
         sendMessage($chat_id, "📥 <b>Yangi video qo'shish</b>\n\nVideoni shunchaki Telegram botga yuboring (fayl yoki galereya orqali). Qolganini o'zim hal qilaman!");
     }
     elseif ($text == "🔖 Doimiy Hashteglar") {
@@ -406,7 +404,8 @@ if (isset($update['message'])) {
                 $row = [];
                 foreach ($scheduled_videos as $i => $sv) {
                     $time = date("d.m.Y H:i", $sv['post_time']);
-                    $scheduled_msg .= ($i+1) . ". 🕰 <b>$time</b> da chiqadi\n";
+                    $trial_badge = (!empty($sv['is_trial'])) ? " 🧪 [Trial Reel]" : "";
+                    $scheduled_msg .= ($i+1) . ". 🕰 <b>$time</b>$trial_badge da chiqadi\n";
                     $row[] = ["text" => "🗑 " . ($i+1), "callback_data" => "delsched_" . $i];
                     if (count($row) == 5) {
                         $keyboard_buttons[] = $row;
@@ -606,8 +605,7 @@ if (isset($update['callback_query'])) {
                 ]
             ]
         ]);
-        $trial_note = $is_trial ? "\n🧪 <i>Instagram uchun Trial Reel rejimi yoqildi.</i>" : "";
-        sendMessage($chat_id, "✅ Tarmoqlar tasdiqlandi!$trial_note\n\nEndi izohni kim yozadi?", $keyboard);
+        sendMessage($chat_id, "✅ Tarmoqlar tasdiqlandi!\n\nEndi izohni kim yozadi?", $keyboard);
         $url = "https://api.telegram.org/bot" . $TELEGRAM_TOKEN . "/editMessageReplyMarkup";
         file_get_contents($url . "?chat_id=$chat_id&message_id=$message_id&reply_markup=" . urlencode(json_encode(["inline_keyboard" => []])));
         exit;
@@ -682,24 +680,24 @@ if (isset($update['callback_query'])) {
             }
             
             if (strpos($data, "act_queue") === 0) {
-                sendMessage($chat_id, "✅ Video navbatga qo'shilmoqda... (Background processing)" . ($is_trial ? "\n🧪 <i>Rejim: Instagram Trial Reel</i>" : ""));
+                sendMessage($chat_id, "✅ Video navbatga qo'shilmoqda... (Background processing)");
                 triggerGitHubAction("telegram_queue", array(
                     "video_url" => $video_url,
                     "artifact_run_id" => $artifact_id,
                     "caption" => $caption,
                     "custom_name" => $custom_name,
                     "platform" => $platform,
-                    "is_trial" => ($is_trial ? "true" : "false")
+                    "is_trial" => $is_trial ? "true" : "false"
                 ));
             } else {
-                sendMessage($chat_id, "🚀 Video hoziroq tarmoqlarga joylanmoqda! (Kuting...)" . ($is_trial ? "\n🧪 <i>Rejim: Instagram Trial Reel</i>" : ""));
+                sendMessage($chat_id, "🚀 Video hoziroq tarmoqlarga joylanmoqda! (Kuting...)");
                 triggerGitHubAction("telegram_post", array(
                     "video_url" => $video_url,
                     "artifact_run_id" => $artifact_id,
                     "caption" => $caption,
                     "custom_name" => $custom_name,
                     "platform" => $platform,
-                    "is_trial" => ($is_trial ? "true" : "false")
+                    "is_trial" => $is_trial ? "true" : "false"
                 ));
             }
             
@@ -747,7 +745,14 @@ if (isset($update['callback_query'])) {
         ]);
         
         $url = "https://api.telegram.org/bot" . $TELEGRAM_TOKEN . "/editMessageText";
-        $msg = "🔖 <b>Doimiy Hashteglar Sozlamasi</b>\n\n⚙️ Hozirgi rejim: <b>$mode_text</b>\n\n📝 <b>Joriy saqlangan hashteglar:</b>\n<pre>$current_tags</pre>\n\n👇 <i>Qanday ishlashini tanlang:</i>";
+        $msg = "🔖 <b>Doimiy Hashteglar Sozlamasi</b>
+
+⚙️ Hozirgi rejim: <b>$mode_text</b>
+
+📝 <b>Joriy saqlangan hashteglar:</b>
+<pre>$current_tags</pre>
+
+👇 <i>Qanday ishlashini tanlang:</i>";
         file_get_contents($url . "?chat_id=$chat_id&message_id=$message_id&text=" . urlencode($msg) . "&parse_mode=HTML&reply_markup=" . urlencode($keyboard));
         
         $url_ans = "https://api.telegram.org/bot" . $TELEGRAM_TOKEN . "/answerCallbackQuery";
@@ -765,7 +770,21 @@ if (isset($update['callback_query'])) {
             if (!$current_tags) $current_tags = "Hozircha bo'sh.";
         }
         
-        $msg = "🔖 <b>Doimiy Matn/Hashteglar</b>\n\nBu yerda yozgan har qanday matningiz videolarga qo'shiladi.\n\n📝 <b>Hozirgi saqlangan matn:</b>\n<pre>$current_tags</pre>\n\n🔄 <b>Navbatma-navbat ishlashi uchun:</b>\nAgar siz bir nechta xil hashteglarni navbat bilan (1-videoga 1-hashteg, 2-videoga 2-hashteg) chiqishini xohlasangiz, ularni <b>===</b> belgisi bilan ajrating.\nMasalan:\n#kulgili #rek\n===\n#uzb #trend\n\n👇 <i>Yangi doimiy matnni yuboring (Diqqat: yangisini yuborsangiz, eskisi butunlay o'chib ketadi!):</i>";
+        $msg = "🔖 <b>Doimiy Matn/Hashteglar</b>
+
+Bu yerda yozgan har qanday matningiz videolarga qo'shiladi.
+
+📝 <b>Hozirgi saqlangan matn:</b>
+<pre>$current_tags</pre>
+
+🔄 <b>Navbatma-navbat ishlashi uchun:</b>
+Agar siz bir nechta xil hashteglarni navbat bilan (1-videoga 1-hashteg, 2-videoga 2-hashteg) chiqishini xohlasangiz, ularni <b>===</b> belgisi bilan ajrating.
+Masalan:
+#kulgili #rek
+===
+#uzb #trend
+
+👇 <i>Yangi doimiy matnni yuboring (Diqqat: yangisini yuborsangiz, eskisi butunlay o'chib ketadi!):</i>";
         sendMessage($chat_id, $msg);
         
         $url_ans = "https://api.telegram.org/bot" . $TELEGRAM_TOKEN . "/answerCallbackQuery";
