@@ -12,9 +12,9 @@ NGROK_AUTHTOKEN = os.getenv("NGROK_AUTHTOKEN")
 manager = VideoManager("videos")
 server = None
 
-def get_pending_video() -> str:
+def get_pending_video(queue_type="regular") -> str:
     """Returns the filename of the next pending video to be posted. Returns an empty string if there are no videos."""
-    video = manager.get_next_video()
+    video = manager.get_next_video(queue_type)
     return video if video else ""
 
 def expose_video_url(filename: str) -> str:
