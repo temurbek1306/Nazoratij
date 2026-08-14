@@ -27,10 +27,6 @@ def send_telegram_msg(text, reply_markup=None):
                 res = requests.post(f"https://api.telegram.org/bot{tg_token}/sendMessage", data=data)
                 if res.status_code != 200:
                     print("Telegram xatosi:", res.text)
-                    # Xato bo'lsa HTML siz va tugmalarsiz oddiy matn yuborib ko'ramiz
-                    data.pop("parse_mode", None)
-                    data.pop("reply_markup", None)
-                    requests.post(f"https://api.telegram.org/bot{tg_token}/sendMessage", data=data)
         except Exception as e:
             print(f"Telegram tarmog'i xatosi: {e}")
 
@@ -65,8 +61,8 @@ def handle_list():
     last_run_str = os.getenv("TELEGRAM_LAST_RUN", "0")
     last_run_timestamp = float(last_run_str) if last_run_str.strip() else 0.0
     
-    import time
-    current_time_ts = time.time()
+    now_utc = datetime.datetime.utcnow()
+    current_time_ts = now_utc.timestamp()
     interval_seconds = interval_hours * 3600
     next_post_ts = last_run_timestamp + interval_seconds
     if next_post_ts < current_time_ts:
@@ -83,9 +79,7 @@ def handle_list():
             estimated_ts = next_post_ts + (i * interval_seconds)
             estimated_time = datetime.datetime.utcfromtimestamp(estimated_ts) + datetime.timedelta(hours=5)
             time_str = estimated_time.strftime("%d.%m.%Y %H:%M")
-            import html
-            safe_f = html.escape(f)
-            msg += f"{idx}. {safe_f} <i>(~{time_str} da)</i>\n"
+            msg += f"{idx}. {f} <i>(~{time_str} da)</i>\n"
             
             cb_data = f"del_{f[:50]}"
             row.append({"text": f"🗑 {idx}", "callback_data": cb_data})
@@ -102,9 +96,7 @@ def handle_list():
             estimated_ts = next_post_ts + (i * interval_seconds)
             estimated_time = datetime.datetime.utcfromtimestamp(estimated_ts) + datetime.timedelta(hours=5)
             time_str = estimated_time.strftime("%d.%m.%Y %H:%M")
-            import html
-            safe_f = html.escape(f)
-            msg += f"{idx}. {safe_f} <i>(~{time_str} da)</i>\n"
+            msg += f"{idx}. {f} <i>(~{time_str} da)</i>\n"
             
             cb_data = f"del_{f[:50]}"
             row.append({"text": f"🗑 {idx}", "callback_data": cb_data})

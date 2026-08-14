@@ -73,6 +73,20 @@ jobs:
             echo "$PLATFORM" > "videos/pending/$BASE_NAME.platform.txt"
           fi
 
+      - name: Save Trial Flag 🧪
+        run: |
+          CUSTOM_NAME="${{ github.event.client_payload.custom_name }}"
+          if [ -n "$CUSTOM_NAME" ]; then
+            BASE_NAME="${CUSTOM_NAME}_${{ github.run_id }}"
+          else
+            BASE_NAME="zz_tg_video_${{ github.run_id }}"
+          fi
+          IS_TRIAL="${{ github.event.client_payload.is_trial }}"
+          if [ "$IS_TRIAL" = "true" ]; then
+            echo "true" > "videos/pending/$BASE_NAME.trial.txt"
+            echo "🧪 Trial Reel flag saqlandi: $BASE_NAME"
+          fi
+
       - name: Commit and Push changes 💾
         run: |
           git config --local user.email "bot@temurbek.dev"
@@ -156,6 +170,21 @@ jobs:
           PLATFORM="${{ github.event.client_payload.platform }}"
           if [ -n "$PLATFORM" ]; then
             echo "$PLATFORM" > "videos/pending/$BASE_NAME.platform.txt"
+          fi
+
+      - name: Save Trial Flag 🧪
+        if: github.event_name == 'repository_dispatch'
+        run: |
+          CUSTOM_NAME="${{ github.event.client_payload.custom_name }}"
+          if [ -n "$CUSTOM_NAME" ]; then
+            BASE_NAME="${CUSTOM_NAME}_${{ github.run_id }}"
+          else
+            BASE_NAME="zz_tg_video_${{ github.run_id }}"
+          fi
+          IS_TRIAL="${{ github.event.client_payload.is_trial }}"
+          if [ "$IS_TRIAL" = "true" ]; then
+            echo "true" > "videos/pending/$BASE_NAME.trial.txt"
+            echo "🧪 Trial Reel flag saqlandi: $BASE_NAME"
           fi
 
       - name: Setup Python 🐍

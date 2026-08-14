@@ -12,9 +12,9 @@ NGROK_AUTHTOKEN = os.getenv("NGROK_AUTHTOKEN")
 manager = VideoManager("videos")
 server = None
 
-def get_pending_video() -> str:
+def get_pending_video(queue_type="regular") -> str:
     """Returns the filename of the next pending video to be posted. Returns an empty string if there are no videos."""
-    video = manager.get_next_video()
+    video = manager.get_next_video(queue_type)
     return video if video else ""
 
 def expose_video_url(filename: str) -> str:
@@ -44,7 +44,7 @@ def expose_video_url(filename: str) -> str:
     
     return f"{server.public_url}/{filename}"
 
-def post_to_instagram(video_url: str, caption: str, filename: str) -> bool:
+def post_to_instagram(video_url: str, caption: str, filename: str, is_trial: bool = False) -> bool:
     """Uploads the video from video_url to Instagram Reels with the given caption. Marks the video as posted and stops the local server."""
     global server
     
@@ -53,7 +53,7 @@ def post_to_instagram(video_url: str, caption: str, filename: str) -> bool:
         
     try:
         api = InstagramAPI(access_token=IG_ACCESS_TOKEN, account_id=IG_ACCOUNT_ID)
-        container_id = api.upload_reel(video_url=video_url, caption=caption)
+        container_id = api.upload_reel(video_url=video_url, caption=caption, is_trial=is_trial)
         
         is_ready = api.check_status(container_id)
         if is_ready:
