@@ -68,7 +68,8 @@ foreach ($scheduled_videos as $index => $sv) {
                 "video_url" => $sv['video_url'],
                 "caption" => $sv['caption'],
                 "custom_name" => isset($sv['custom_name']) ? $sv['custom_name'] : "",
-                "platform" => isset($sv['platform']) ? $sv['platform'] : "both"
+                "platform" => isset($sv['platform']) ? $sv['platform'] : "both",
+                "is_trial" => (isset($sv['is_trial']) && $sv['is_trial']) ? "true" : "false"
             )
         );
         
