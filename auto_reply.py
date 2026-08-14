@@ -57,17 +57,17 @@ def check_and_reply_instagram(replied_data):
                 replied_data["instagram"].append(comment_id)
                 continue
                 
-            # 3. Agar ushbu izohga ALLAQACHON javob berilgan bo'lsa (Instagram API replies tekshiruvi)
+            # 3. Agar ushbu izohga O'ZIMIZ ALLAQACHON javob yozgan bo'lsak (Instagram API replies tekshiruvi)
             replies = comment.get("replies", {}).get("data", [])
-            has_reply = False
+            already_replied_by_us = False
             for r in replies:
-                # Agar o'zimiz yoki kimdir javob yozgan bo'lsa
-                if str(r.get("from", {}).get("id")) == str(ig_account_id) or len(replies) > 0:
-                    has_reply = True
+                reply_author_id = str(r.get("from", {}).get("id", ""))
+                if reply_author_id == str(ig_account_id):
+                    already_replied_by_us = True
                     break
             
-            if has_reply:
-                print(f"[IG] Izohga allaqachon javob yozilgan ({comment_id}), qayta yozilmaydi.")
+            if already_replied_by_us:
+                print(f"[IG] Izohga o'zimiz allaqachon javob yozganmiz ({comment_id}), qayta yozilmaydi.")
                 replied_data["instagram"].append(comment_id)
                 continue
                 
