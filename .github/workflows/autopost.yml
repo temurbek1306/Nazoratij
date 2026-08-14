@@ -12,7 +12,6 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       contents: write
-      actions: read
 
     steps:
       - name: Checkout repository 📥
@@ -74,7 +73,7 @@ jobs:
             echo "$PLATFORM" > "videos/pending/$BASE_NAME.platform.txt"
           fi
 
-      - name: Save Trial Choice 🧪
+      - name: Save Trial Flag 🧪
         run: |
           CUSTOM_NAME="${{ github.event.client_payload.custom_name }}"
           if [ -n "$CUSTOM_NAME" ]; then
@@ -85,6 +84,7 @@ jobs:
           IS_TRIAL="${{ github.event.client_payload.is_trial }}"
           if [ "$IS_TRIAL" = "true" ]; then
             echo "true" > "videos/pending/$BASE_NAME.trial.txt"
+            echo "🧪 Trial Reel flag saqlandi: $BASE_NAME"
           fi
 
       - name: Commit and Push changes 💾
@@ -108,7 +108,6 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       contents: write # Repozitoriyaga o'zgarishlarni yozish (commit qilish) huquqi
-      actions: read
 
     steps:
       - name: Checkout repository 📥
@@ -173,7 +172,7 @@ jobs:
             echo "$PLATFORM" > "videos/pending/$BASE_NAME.platform.txt"
           fi
 
-      - name: Save Trial Choice 🧪
+      - name: Save Trial Flag 🧪
         if: github.event_name == 'repository_dispatch'
         run: |
           CUSTOM_NAME="${{ github.event.client_payload.custom_name }}"
@@ -185,6 +184,7 @@ jobs:
           IS_TRIAL="${{ github.event.client_payload.is_trial }}"
           if [ "$IS_TRIAL" = "true" ]; then
             echo "true" > "videos/pending/$BASE_NAME.trial.txt"
+            echo "🧪 Trial Reel flag saqlandi: $BASE_NAME"
           fi
 
       - name: Setup Python 🐍
