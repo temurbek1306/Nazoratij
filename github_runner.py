@@ -35,7 +35,8 @@ def post_to_platforms(platforms_str, local_video_path, url, caption, first_comme
         from agent_tools import post_to_instagram, post_ig_comment
         ig_media_id = post_to_instagram(url, caption, video_name, is_trial=is_trial)
         if ig_media_id:
-            status_messages.append("✅ Instagram (🧪 Trial Reel)" if is_trial else "✅ Instagram")
+            trial_badge = " (🧪 Trial Reel)" if is_trial else ""
+            status_messages.append(f"✅ Instagram{trial_badge}")
             try:
                 post_ig_comment(ig_media_id, first_comment)
             except: pass
@@ -150,13 +151,14 @@ def run():
     if os.path.exists(platform_file):
         with open(platform_file, "r", encoding="utf-8") as f:
             platform = f.read().strip()
-            
-    # 🧪 Trial Reel tekshiruvi (Faqat Instagram uchun)
-    trial_file = f"videos/pending/{base_name}.trial.txt"
+    
+    # Trial rejimini tekshirish
     is_trial = False
+    trial_file = f"videos/pending/{base_name}.trial.txt"
     if os.path.exists(trial_file):
         with open(trial_file, "r", encoding="utf-8") as f:
-            is_trial = f.read().strip().lower() in ["true", "1", "yes"]
+            is_trial = f.read().strip().lower() == "true"
+        print(f"🧪 Trial rejim: {is_trial}")
             
     # ✍️ QO'LDA YOZILGAN IZOH TEKSHIRUVI
     txt_file = f"videos/pending/{base_name}.txt"
@@ -303,8 +305,7 @@ CAPTION_A: (videoga to'liq mos yozilgan caption)"""
                     "caption_c": caption_c,
                     "clean_a": clean_a,
                     "clean_b": clean_b,
-                    "clean_c": clean_c,
-                    "is_trial": is_trial
+                    "clean_c": clean_c
                 }
                 with open(f"videos/pending/{video_name}.json", "w") as f:
                     json.dump(data, f)
@@ -314,8 +315,7 @@ CAPTION_A: (videoga to'liq mos yozilgan caption)"""
                 tg_admin = "5701828462"
                 if tg_token and tg_admin:
                     import requests
-                    trial_badge = " [🧪 TRIAL REEL]" if is_trial else ""
-                    msg = f"🎬 <b>Video tayyor: {video_name}</b>{trial_badge}\n\nAI'lar jangi boshlandi! Qaysi matnni post qilamiz?\n\n"
+                    msg = f"🎬 <b>Video tayyor: {video_name}</b>\n\nAI'lar jangi boshlandi! Qaysi matnni post qilamiz?\n\n"
                     msg += f"<b>🅰️ Gemini (Kreativ):</b>\n{caption_a}\n\n"
                     msg += f"<b>🅱️ Groq (SMM Ekspert):</b>\n{caption_b}\n\n"
                     msg += f"<b>©️ OpenRouter (Faylasuf):</b>\n{caption_c}"
