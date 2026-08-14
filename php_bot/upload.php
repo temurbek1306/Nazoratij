@@ -83,6 +83,7 @@ if (move_uploaded_file($file['tmp_name'], $dest_path)) {
     
     // bot.php logic ga ulaymiz (Xuddi Telegramdan kelgandek)
     file_put_contents("last_video.txt", $video_url);
+    file_put_contents("last_trial.txt", "false");
     
     // Telegramga xabar jo'natamiz
     $state_file = "platforms_" . $ADMIN_ID . ".json";
