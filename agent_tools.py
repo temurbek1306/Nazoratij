@@ -44,7 +44,7 @@ def expose_video_url(filename: str) -> str:
     
     return f"{server.public_url}/{filename}"
 
-def post_to_instagram(video_url: str, caption: str, filename: str, is_trial: bool = False) -> str:
+def post_to_instagram(video_url: str, caption: str, filename: str, is_trial: bool = False) -> bool:
     """Uploads the video from video_url to Instagram Reels with the given caption. Marks the video as posted and stops the local server."""
     global server
     
