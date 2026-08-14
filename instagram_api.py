@@ -1,5 +1,4 @@
 import os
-import json
 import requests
 import time
 
@@ -9,23 +8,17 @@ class InstagramAPI:
         self.account_id = account_id
         self.base_url = "https://graph.facebook.com/v19.0"
 
-    def upload_reel(self, video_url: str, caption: str = "", is_trial: bool = False, graduation_strategy: str = "MANUAL") -> str:
+    def upload_reel(self, video_url: str, caption: str = "") -> str:
         """Videoni Instagram serveriga yuklaydi (Container yaratadi)"""
         url = f"{self.base_url}/{self.account_id}/media"
         payload = {
             "media_type": "REELS",
             "video_url": video_url,
             "caption": caption,
+            "share_to_feed": "true",
             "access_token": self.access_token
         }
-        
-        if is_trial:
-            print(f"[API] 🧪 Video TRIAL REEL (Sinov) rejimida yuklanmoqda (Faqat non-followers ko'radi)...")
-            payload["trial_params"] = json.dumps({"graduation_strategy": graduation_strategy})
-        else:
-            payload["share_to_feed"] = "true"
-            print(f"[API] Video yuklanmoqda... Kuting.")
-            
+        print(f"[API] Video yuklanmoqda... Kuting.")
         response = requests.post(url, data=payload)
         data = response.json()
         
@@ -132,8 +125,8 @@ class InstagramAPI:
             return []
 
     def get_comments(self, media_id: str):
-        """Berilgan postning barcha izohlarini olib keladi"""
-        url = f"{self.base_url}/{media_id}/comments?fields=id,text,timestamp,username,from,replies{{from,id,text}}&access_token={self.access_token}"
+        """Berilgan postning barcha izohlarini olib keladi (replies bilan birga)"""
+        url = f"{self.base_url}/{media_id}/comments?fields=id,text,timestamp,username,from,replies{{id,text,timestamp,username,from}}&access_token={self.access_token}"
         try:
             response = requests.get(url)
             data = response.json()
