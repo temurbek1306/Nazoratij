@@ -87,21 +87,24 @@ if (move_uploaded_file($file['tmp_name'], $dest_path)) {
     // Telegramga xabar jo'natamiz
     $state_file = "platforms_" . $ADMIN_ID . ".json";
     if (!file_exists($state_file)) {
-        $platforms = ["ig" => true, "yt" => true, "tg" => true, "fb" => true];
+        $platforms = ["ig" => true, "yt" => true, "tg" => true, "fb" => true, "trial" => false];
         file_put_contents($state_file, json_encode($platforms));
     } else {
         $platforms = json_decode(file_get_contents($state_file), true);
+        if (!isset($platforms['trial'])) $platforms['trial'] = false;
     }
     
     $btn_ig = ($platforms['ig'] ? "✅" : "❌") . " Instagram";
     $btn_yt = ($platforms['yt'] ? "✅" : "❌") . " YouTube";
     $btn_tg = ($platforms['tg'] ? "✅" : "❌") . " Telegram";
     $btn_fb = ($platforms['fb'] ? "✅" : "❌") . " Facebook";
+    $btn_trial = ($platforms['trial'] ? "🧪 Trial Reel (Faqat IG): ✅ YONIQ" : "🧪 Trial Reel (Faqat IG): ❌ O'CHIQ");
     
     $keyboard = json_encode([
         "inline_keyboard" => [
             [["text" => $btn_ig, "callback_data" => "toggle_ig"], ["text" => $btn_yt, "callback_data" => "toggle_yt"]],
             [["text" => $btn_tg, "callback_data" => "toggle_tg"], ["text" => $btn_fb, "callback_data" => "toggle_fb"]],
+            [["text" => $btn_trial, "callback_data" => "toggle_trial"]],
             [["text" => "▶️ TASDIQLASH (Davom etish)", "callback_data" => "platform_confirm"]]
         ]
     ]);
