@@ -14,10 +14,20 @@ class VideoManager:
             if not os.path.exists(d):
                 os.makedirs(d)
                 
-    def get_next_video(self) -> str:
-        """Navbatdagi videoni olib beradi"""
+    def get_next_video(self, queue_type="regular") -> str:
+        """Navbatdagi videoni olib beradi. queue_type 'regular' yoki 'trial' bo'lishi mumkin."""
         files = os.listdir(self.pending_dir)
-        video_files = [f for f in files if f.lower().endswith(('.mp4', '.mov'))]
+        video_files = []
+        
+        for f in files:
+            if f.lower().endswith(('.mp4', '.mov')):
+                base_name = os.path.splitext(f)[0]
+                is_trial = os.path.exists(os.path.join(self.pending_dir, f"{base_name}.trial.txt"))
+                
+                if queue_type == "trial" and is_trial:
+                    video_files.append(f)
+                elif queue_type == "regular" and not is_trial:
+                    video_files.append(f)
         
         if not video_files:
             return None
