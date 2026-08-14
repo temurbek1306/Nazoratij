@@ -39,13 +39,17 @@ def run():
         if os.path.exists(platform_file):
             with open(platform_file, "r", encoding="utf-8") as f:
                 platforms = f.read().strip().split(",")
-                
-        # 🧪 Trial Reel tekshiruvi
-        is_trial = data.get("is_trial", False)
+        
+        # Trial rejimini tekshirish
+        is_trial = False
         trial_file = f"videos/pending/{base_name}.trial.txt"
-        if not is_trial and os.path.exists(trial_file):
+        if os.path.exists(trial_file):
             with open(trial_file, "r", encoding="utf-8") as f:
-                is_trial = f.read().strip().lower() in ["true", "1", "yes"]
+                is_trial = f.read().strip().lower() == "true"
+        
+        # A/B testing json da is_trial bormi?
+        if not is_trial and data.get("is_trial"):
+            is_trial = True
                 
         import ai_assistant
         try:
@@ -58,11 +62,12 @@ def run():
         
         # --- INSTAGRAM ---
         if "ig" in platforms:
-            print(f"📝 Instagramga joylanmoqda... (Trial: {is_trial})")
+            trial_label = " (🧪 Trial Reel)" if is_trial else ""
+            print(f"📝 Instagramga joylanmoqda...{trial_label}")
             from agent_tools import post_ig_comment
             ig_media_id = post_to_instagram(url, caption, video_name, is_trial=is_trial)
             if ig_media_id:
-                status_messages.append("✅ Instagram (🧪 Trial Reel)" if is_trial else "✅ Instagram")
+                status_messages.append(f"✅ Instagram{trial_label}")
                 try:
                     post_ig_comment(ig_media_id, first_comment)
                 except: pass
