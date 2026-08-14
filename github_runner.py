@@ -344,9 +344,11 @@ Nomi: <code>{video_name}</code>
 
 {status_str}""")
 
-    from video_manager import VideoManager
-    VideoManager().mark_as_posted(video_name)
-
+    if "✅" in status_str:
+        from video_manager import VideoManager
+        VideoManager().mark_as_posted(video_name)
+    else:
+        send_alert(f"⚠️ <b>Video tarqatilmadi!</b>\nXatolik yuz bergani sababli <code>{video_name}</code> navbatdan o'chirilmadi va keyingi safar qayta urinib ko'riladi.")
 
 def run():
     print("🚀 GitHub Actions: Avtomatik Video Yuklash boshlandi...")
