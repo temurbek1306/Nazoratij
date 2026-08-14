@@ -27,72 +27,98 @@ def send_telegram_msg(text, reply_markup=None):
                 res = requests.post(f"https://api.telegram.org/bot{tg_token}/sendMessage", data=data)
                 if res.status_code != 200:
                     print("Telegram xatosi:", res.text)
+                    # Xato bo'lsa HTML siz va tugmalarsiz oddiy matn yuborib ko'ramiz
+                    data.pop("parse_mode", None)
+                    data.pop("reply_markup", None)
+                    requests.post(f"https://api.telegram.org/bot{tg_token}/sendMessage", data=data)
         except Exception as e:
             print(f"Telegram tarmog'i xatosi: {e}")
 
 def handle_list():
     import datetime
+    import os
+    import re
     os.makedirs("videos/pending", exist_ok=True)
-    files = [f for f in os.listdir("videos/pending") if f.endswith(('.mp4', '.mov'))]
+    all_files = [f for f in os.listdir("videos/pending") if f.endswith(('.mp4', '.mov'))]
+    
     def extract_run_id(f):
-        import re
         match = re.search(r'_(\d+)\.(mp4|mov)$', f, re.IGNORECASE)
         return int(match.group(1)) if match else 0
         
-    files.sort(key=extract_run_id) # Ensure they are shown in processing order (github run_ids)
-    if not files:
-        send_telegram_msg("📭 Oddiy navbatda hech qanday video yo'q.")
+    all_files.sort(key=extract_run_id)
+    
+    regular_files = []
+    trial_files = []
+    for f in all_files:
+        base_name = os.path.splitext(f)[0]
+        if os.path.exists(os.path.join("videos/pending", f"{base_name}.trial.txt")):
+            trial_files.append(f)
+        else:
+            regular_files.append(f)
+            
+    if not regular_files and not trial_files:
+        send_telegram_msg("📭 Navbatda umuman video yo'q.")
         return
-    
+        
     interval_str = os.getenv("TELEGRAM_INTERVAL", "2")
-    if not interval_str.strip():
-        interval_str = "2"
-    interval_hours = int(interval_str)
-    
+    interval_hours = int(interval_str) if interval_str.strip() else 2
     last_run_str = os.getenv("TELEGRAM_LAST_RUN", "0")
-    if not last_run_str.strip():
-        last_run_str = "0"
-    last_run_timestamp = float(last_run_str)
+    last_run_timestamp = float(last_run_str) if last_run_str.strip() else 0.0
     
-    msg = f"📋 <b>Oddiy navbatdagi videolar ({len(files)} ta):</b>\n\n"
-    
-    # Calculate base time. If last_run is 0 or too old, the next post is practically 'now' + interval.
-    # But wait, cron.php posts if current_time >= last_run + interval.
-    # So the *next* post will be at max(current_time, last_run + interval).
-    # Then subsequent posts add interval.
-    # Since we need to show Uzbekistan time (UTC+5), we will convert everything to UTC+5.
-    now_utc = datetime.datetime.utcnow()
-    current_time_ts = now_utc.timestamp()
-    
+    import time
+    current_time_ts = time.time()
     interval_seconds = interval_hours * 3600
     next_post_ts = last_run_timestamp + interval_seconds
     if next_post_ts < current_time_ts:
-        # If interval already passed, it will post on the next cron run (which is essentially 'now')
         next_post_ts = current_time_ts
         
-    for i, f in enumerate(files, 0):
-        estimated_ts = next_post_ts + (i * interval_seconds)
-        estimated_time = datetime.datetime.utcfromtimestamp(estimated_ts) + datetime.timedelta(hours=5)
-        time_str = estimated_time.strftime("%d.%m.%Y %H:%M")
-        msg += f"{i+1}. {f} <i>(~{time_str} da)</i>\n"
-        
-    import json
+    msg = ""
+    idx = 1
     keyboard_buttons = []
     row = []
-    for i, f in enumerate(files, 1):
-        # We use a short callback data to avoid limits (64 bytes max)
-        # Using base filename instead of full name if it's too long
-        cb_data = f"del_{f[:50]}"
-        row.append({"text": f"🗑 {i}", "callback_data": cb_data})
-        if len(row) == 5:
-            keyboard_buttons.append(row)
-            row = []
+    
+    if regular_files:
+        msg += f"📋 <b>Oddiy navbatdagi videolar ({len(regular_files)} ta):</b>\n\n"
+        for i, f in enumerate(regular_files):
+            estimated_ts = next_post_ts + (i * interval_seconds)
+            estimated_time = datetime.datetime.utcfromtimestamp(estimated_ts) + datetime.timedelta(hours=5)
+            time_str = estimated_time.strftime("%d.%m.%Y %H:%M")
+            import html
+            safe_f = html.escape(f)
+            msg += f"{idx}. {safe_f} <i>(~{time_str} da)</i>\n"
+            
+            cb_data = f"del_{f[:50]}"
+            row.append({"text": f"🗑 {idx}", "callback_data": cb_data})
+            if len(row) == 5:
+                keyboard_buttons.append(row)
+                row = []
+            idx += 1
+            
+        msg += "\n"
+        
+    if trial_files:
+        msg += f"🧪 <b>Trial navbatdagi videolar ({len(trial_files)} ta):</b>\n\n"
+        for i, f in enumerate(trial_files):
+            estimated_ts = next_post_ts + (i * interval_seconds)
+            estimated_time = datetime.datetime.utcfromtimestamp(estimated_ts) + datetime.timedelta(hours=5)
+            time_str = estimated_time.strftime("%d.%m.%Y %H:%M")
+            import html
+            safe_f = html.escape(f)
+            msg += f"{idx}. {safe_f} <i>(~{time_str} da)</i>\n"
+            
+            cb_data = f"del_{f[:50]}"
+            row.append({"text": f"🗑 {idx}", "callback_data": cb_data})
+            if len(row) == 5:
+                keyboard_buttons.append(row)
+                row = []
+            idx += 1
+            
     if row:
         keyboard_buttons.append(row)
         
+    import json
     reply_markup = json.dumps({"inline_keyboard": keyboard_buttons}) if keyboard_buttons else None
-    
-    send_telegram_msg(msg, reply_markup=reply_markup)
+    send_telegram_msg(msg.strip(), reply_markup=reply_markup)
 
 def handle_clear():
     count = 0
