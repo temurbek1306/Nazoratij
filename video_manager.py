@@ -40,7 +40,8 @@ class VideoManager:
             filename,
             f"{base_name}.txt",
             f"{base_name}.json",
-            f"{base_name}.platform.txt"
+            f"{base_name}.platform.txt",
+            f"{base_name}.trial.txt"
         ]
         
         for f_name in files_to_remove:
