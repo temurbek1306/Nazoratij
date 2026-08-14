@@ -515,6 +515,7 @@ if (isset($update['callback_query'])) {
         $run_id = str_replace("approve_merged_", "", $data);
         file_put_contents("last_video.txt", "artifact:" . $run_id);
         file_put_contents("state.txt", "waiting_for_video_name");
+        file_put_contents("last_trial.txt", "false");
         
         $url = "https://api.telegram.org/bot" . $TELEGRAM_TOKEN . "/editMessageReplyMarkup";
         file_get_contents($url . "?chat_id=$chat_id&message_id=$message_id&reply_markup=" . urlencode(json_encode(["inline_keyboard" => []])));
@@ -594,8 +595,7 @@ if (isset($update['callback_query'])) {
         }
         
         file_put_contents("last_platform.txt", implode(",", $selected));
-        $is_trial = (!empty($platforms['trial']) && in_array("ig", $selected));
-        file_put_contents("last_trial.txt", $is_trial ? "true" : "false");
+        file_put_contents("last_trial.txt", "false");
         
         $keyboard = json_encode([
             "inline_keyboard" => [
@@ -893,13 +893,11 @@ function get_platforms_keyboard($chat_id) {
     $btn_yt = ($platforms['yt'] ? "✅" : "❌") . " YouTube";
     $btn_tg = ($platforms['tg'] ? "✅" : "❌") . " Telegram";
     $btn_fb = ($platforms['fb'] ? "✅" : "❌") . " Facebook";
-    $btn_trial = ($platforms['trial'] ? "🧪 Trial Reel (Faqat IG): ✅ YONIQ" : "🧪 Trial Reel (Faqat IG): ❌ O'CHIQ");
     
     $keyboard = json_encode([
         "inline_keyboard" => [
             [["text" => $btn_ig, "callback_data" => "toggle_ig"], ["text" => $btn_yt, "callback_data" => "toggle_yt"]],
             [["text" => $btn_tg, "callback_data" => "toggle_tg"], ["text" => $btn_fb, "callback_data" => "toggle_fb"]],
-            [["text" => $btn_trial, "callback_data" => "toggle_trial"]],
             [["text" => "▶️ TASDIQLASH (Davom etish)", "callback_data" => "platform_confirm"]]
         ]
     ]);
