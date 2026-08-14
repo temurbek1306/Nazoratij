@@ -49,6 +49,14 @@ if (isset($update['message'])) {
                 exit;
             }
             
+            $is_trial_mode = (file_exists("state.txt") && file_get_contents("state.txt") == "waiting_for_trial_video") || (file_exists("last_trial.txt") && file_get_contents("last_trial.txt") == "true");
+            if ($is_trial_mode) {
+                file_put_contents("last_trial.txt", "true");
+                file_put_contents("last_platform.txt", "ig");
+            } else {
+                file_put_contents("last_trial.txt", "false");
+            }
+            
             // Videoni nomi sifatida caption ni olish (agar mavjud bo'lsa)
             $video_name_custom = "";
             if (isset($update['message']['caption'])) {
@@ -68,10 +76,24 @@ if (isset($update['message'])) {
                         [["text" => "⏭ Nom bermasdan o'tkazib yuborish", "callback_data" => "skip_naming"]]
                     ]
                 ]);
-                sendMessage($chat_id, "🎬 Video qabul qilindi!\n\n✏️ Iltimos, bu videoga ixtiyoriy qisqa nom bering (keyingi yuborgan matningiz nom sifatida qabul qilinadi).", $keyboard);
+                $msg_title = $is_trial_mode ? "🧪 Instagram Trial Video qabul qilindi!" : "🎬 Video qabul qilindi!";
+                sendMessage($chat_id, "$msg_title\n\n✏️ Iltimos, bu videoga ixtiyoriy qisqa nom bering (keyingi yuborgan matningiz nom sifatida qabul qilinadi).", $keyboard);
             } else {
-                $keyboard = get_platforms_keyboard($chat_id);
-                sendMessage($chat_id, "🎬 Video qabul qilindi! Nomi: <b>$video_name_custom</b>\n\nQaysi tarmoqqa joylaymiz?", $keyboard);
+                if ($is_trial_mode) {
+                    file_put_contents("state.txt", "none");
+                    $caption_keyboard = json_encode([
+                        "inline_keyboard" => [
+                            [
+                                ["text" => "🤖 AI O'zi yozsin", "callback_data" => "video_ai"],
+                                ["text" => "✍️ O'zim yozaman", "callback_data" => "video_manual"]
+                            ]
+                        ]
+                    ]);
+                    sendMessage($chat_id, "🧪 <b>Instagram Trial Video qabul qilindi!</b>\nNomi: <b>$video_name_custom</b>\n\nBu video <b>faqat Instagram</b>ga sinov (Trial Reel) sifatida yuklanadi.\n\nEndi izohni kim yozadi?", $caption_keyboard);
+                } else {
+                    $keyboard = get_platforms_keyboard($chat_id);
+                    sendMessage($chat_id, "🎬 Video qabul qilindi! Nomi: <b>$video_name_custom</b>\n\nQaysi tarmoqqa joylaymiz?", $keyboard);
+                }
             }
         } else {
             sendMessage($chat_id, "❌ Videoni qabul qilishda xatolik yuz berdi (Fayl hajmi juda katta bo'lishi mumkin).");
@@ -84,7 +106,7 @@ if (isset($update['message'])) {
     
     // Videoga nom berish qismi
     if (file_exists("state.txt") && file_get_contents("state.txt") == "waiting_for_video_name" && $text != "") {
-        if (strpos($text, "/") !== 0 && !in_array($text, ["☁️ Web-App orqali yuklash", "➕ Yangi Video Qo'shish", "🔖 Doimiy Hashteglar", "🚀 Hozir Joylash", "📊 Statistika", "📋 Navbat (Queue)", "🗑 Eski videolarni o'chirish", "⚙️ Vaqt Sozlamalari", "🔙 Ortga"])) {
+        if (strpos($text, "/") !== 0 && !in_array($text, ["☁️ Web-App orqali yuklash", "➕ Yangi Video Qo'shish", "🧪 Trial Video Joylash", "🔖 Doimiy Hashteglar", "🚀 Hozir Joylash", "📊 Statistika", "📋 Navbat (Queue)", "🗑 Eski videolarni o'chirish", "⚙️ Vaqt Sozlamalari", "🔙 Ortga"])) {
             $video_name_custom = preg_replace('/[^A-Za-z0-9_]/', '_', $text);
             $video_name_custom = substr($video_name_custom, 0, 40);
             $video_name_custom = trim($video_name_custom, "_");
@@ -92,9 +114,22 @@ if (isset($update['message'])) {
             file_put_contents("last_custom_name.txt", $video_name_custom);
             file_put_contents("state.txt", "none");
             
-            if (file_exists("platforms_" . $chat_id . ".json")) unlink("platforms_" . $chat_id . ".json");
-            $keyboard = get_platforms_keyboard($chat_id);
-            sendMessage($chat_id, "✅ Videoga <b>$video_name_custom</b> deb nom berildi!\n\nQaysi tarmoqqa joylaymiz?", $keyboard);
+            $is_trial_mode = (file_exists("last_trial.txt") && file_get_contents("last_trial.txt") == "true");
+            if ($is_trial_mode) {
+                $caption_keyboard = json_encode([
+                    "inline_keyboard" => [
+                        [
+                            ["text" => "🤖 AI O'zi yozsin", "callback_data" => "video_ai"],
+                            ["text" => "✍️ O'zim yozaman", "callback_data" => "video_manual"]
+                        ]
+                    ]
+                ]);
+                sendMessage($chat_id, "✅ Videoga <b>$video_name_custom</b> deb nom berildi!\n\n🧪 Rejim: <b>Faqat Instagram (Trial Reel)</b>\n\nEndi izohni kim yozadi?", $caption_keyboard);
+            } else {
+                if (file_exists("platforms_" . $chat_id . ".json")) unlink("platforms_" . $chat_id . ".json");
+                $keyboard = get_platforms_keyboard($chat_id);
+                sendMessage($chat_id, "✅ Videoga <b>$video_name_custom</b> deb nom berildi!\n\nQaysi tarmoqqa joylaymiz?", $keyboard);
+            }
             exit;
         }
     }
@@ -176,19 +211,23 @@ if (isset($update['message'])) {
                 $video_url = "";
             }
             
+            $is_trial = (file_exists("last_trial.txt") && file_get_contents("last_trial.txt") == "true");
+            
             $scheduled_list[] = [
                 "video_url" => $video_url,
                 "artifact_run_id" => $artifact_id,
                 "caption" => $caption,
                 "custom_name" => $custom_name,
                 "post_time" => $timestamp,
-                "platform" => $platform
+                "platform" => $platform,
+                "is_trial" => $is_trial
             ];
             
             file_put_contents($scheduled_file, json_encode($scheduled_list, JSON_PRETTY_PRINT));
             
             $formatted_time = date("d.m.Y H:i", $timestamp);
-            sendMessage($chat_id, "✅ Video ro'yxatga olindi!\n\nVideo aynan <b>$formatted_time</b> da avtomatik tarzda joylanadi.");
+            $trial_note = $is_trial ? " (🧪 Trial Reel)" : "";
+            sendMessage($chat_id, "✅ Video ro'yxatga olindi!\n\nVideo aynan <b>$formatted_time</b> da avtomatik tarzda joylanadi.$trial_note");
         } else {
             sendMessage($chat_id, "❌ Video manzili topilmadi.");
         }
@@ -219,10 +258,10 @@ if (isset($update['message'])) {
         $main_keyboard_temp = json_encode([
             "keyboard" => [
                 [["text" => "☁️ Web-App orqali yuklash"], ["text" => "➕ Yangi Video Qo'shish"]],
-                [["text" => "🎞 Videolarni Birlashtirish"], ["text" => "🚀 Hozir Joylash"]],
-                [["text" => "📋 Navbat (Queue)"], ["text" => "🔖 Doimiy Hashteglar"]],
-                [["text" => "⚙️ Vaqt Sozlamalari"], ["text" => "📊 Statistika"]],
-                [["text" => "🗑 Eski videolarni o'chirish"]]
+                [["text" => "🧪 Trial Video Joylash"], ["text" => "🚀 Hozir Joylash"]],
+                [["text" => "🎞 Videolarni Birlashtirish"], ["text" => "📋 Navbat (Queue)"]],
+                [["text" => "🔖 Doimiy Hashteglar"], ["text" => "⚙️ Vaqt Sozlamalari"]],
+                [["text" => "📊 Statistika"], ["text" => "🗑 Eski videolarni o'chirish"]]
             ],
             "resize_keyboard" => true,
             "one_time_keyboard" => false
@@ -235,10 +274,10 @@ if (isset($update['message'])) {
     $main_keyboard = json_encode([
         "keyboard" => [
             [["text" => "☁️ Web-App orqali yuklash"], ["text" => "➕ Yangi Video Qo'shish"]],
-            [["text" => "🎞 Videolarni Birlashtirish"], ["text" => "🚀 Hozir Joylash"]],
-            [["text" => "📋 Navbat (Queue)"], ["text" => "🔖 Doimiy Hashteglar"]],
-            [["text" => "⚙️ Vaqt Sozlamalari"], ["text" => "📊 Statistika"]],
-            [["text" => "🗑 Eski videolarni o'chirish"]]
+            [["text" => "🧪 Trial Video Joylash"], ["text" => "🚀 Hozir Joylash"]],
+            [["text" => "🎞 Videolarni Birlashtirish"], ["text" => "📋 Navbat (Queue)"]],
+            [["text" => "🔖 Doimiy Hashteglar"], ["text" => "⚙️ Vaqt Sozlamalari"]],
+            [["text" => "📊 Statistika"], ["text" => "🗑 Eski videolarni o'chirish"]]
         ],
         "resize_keyboard" => true,
         "one_time_keyboard" => false
@@ -307,7 +346,14 @@ if (isset($update['message'])) {
         }
     }
 
+    elseif ($text == "🧪 Trial Video Joylash" || $text == "/trial") {
+        file_put_contents("state.txt", "waiting_for_trial_video");
+        file_put_contents("last_trial.txt", "true");
+        file_put_contents("last_platform.txt", "ig");
+        sendMessage($chat_id, "🧪 <b>Instagram Trial Video (Sinov) rejimi faollashdi!</b>\n\nBu rejimda yuborilgan video <b>faqat Instagram</b>ga sinov (Trial Reel) sifatida joylanadi — dastlab faqat obuna bo'lmagan yangi auditoriyaga (non-followers) ko'rsatiladi va profilingiz asosiy lentasiga tushmaydi.\n\n📥 <i>Iltimos, Instagramga sinov tariqasida joylamoqchi bo'lgan videongizni yuboring (fayl yoki galereyadan):</i>");
+    }
     elseif ($text == "➕ Yangi Video Qo'shish") {
+        file_put_contents("last_trial.txt", "false");
         sendMessage($chat_id, "📥 <b>Yangi video qo'shish</b>\n\nVideoni shunchaki Telegram botga yuboring (fayl yoki galereya orqali). Qolganini o'zim hal qilaman!");
     }
     elseif ($text == "🔖 Doimiy Hashteglar") {
@@ -493,9 +539,22 @@ if (isset($update['callback_query'])) {
     
     if ($data == "skip_naming") {
         file_put_contents("state.txt", "none");
-        if (file_exists("platforms_" . $chat_id . ".json")) unlink("platforms_" . $chat_id . ".json");
-        $keyboard = get_platforms_keyboard($chat_id);
-        sendMessage($chat_id, "✅ Faylga avtomatik nom beriladi.\n\nQaysi tarmoqqa joylaymiz?", $keyboard);
+        $is_trial_mode = (file_exists("last_trial.txt") && file_get_contents("last_trial.txt") == "true");
+        if ($is_trial_mode) {
+            $caption_keyboard = json_encode([
+                "inline_keyboard" => [
+                    [
+                        ["text" => "🤖 AI O'zi yozsin", "callback_data" => "video_ai"],
+                        ["text" => "✍️ O'zim yozaman", "callback_data" => "video_manual"]
+                    ]
+                ]
+            ]);
+            sendMessage($chat_id, "✅ Faylga avtomatik nom beriladi.\n\n🧪 Rejim: <b>Faqat Instagram (Trial Reel)</b>\n\nEndi izohni kim yozadi?", $caption_keyboard);
+        } else {
+            if (file_exists("platforms_" . $chat_id . ".json")) unlink("platforms_" . $chat_id . ".json");
+            $keyboard = get_platforms_keyboard($chat_id);
+            sendMessage($chat_id, "✅ Faylga avtomatik nom beriladi.\n\nQaysi tarmoqqa joylaymiz?", $keyboard);
+        }
         $url = "https://api.telegram.org/bot" . $TELEGRAM_TOKEN . "/editMessageReplyMarkup";
         file_get_contents($url . "?chat_id=$chat_id&message_id=$message_id&reply_markup=" . urlencode(json_encode(["inline_keyboard" => []])));
         exit;
@@ -506,7 +565,11 @@ if (isset($update['callback_query'])) {
         $key = str_replace("toggle_", "", $data);
         $state_file = "platforms_" . $chat_id . ".json";
         $platforms = json_decode(file_get_contents($state_file), true);
-        $platforms[$key] = !$platforms[$key];
+        if ($key == "trial") {
+            $platforms['trial'] = empty($platforms['trial']);
+        } else {
+            $platforms[$key] = !$platforms[$key];
+        }
         file_put_contents($state_file, json_encode($platforms));
         
         $keyboard = get_platforms_keyboard($chat_id);
@@ -522,7 +585,7 @@ if (isset($update['callback_query'])) {
         
         $selected = [];
         foreach($platforms as $k => $v) {
-            if ($v) $selected[] = $k;
+            if ($v && $k != 'trial') $selected[] = $k;
         }
         
         if (empty($selected)) {
@@ -532,6 +595,8 @@ if (isset($update['callback_query'])) {
         }
         
         file_put_contents("last_platform.txt", implode(",", $selected));
+        $is_trial = (!empty($platforms['trial']) && in_array("ig", $selected));
+        file_put_contents("last_trial.txt", $is_trial ? "true" : "false");
         
         $keyboard = json_encode([
             "inline_keyboard" => [
@@ -541,9 +606,8 @@ if (isset($update['callback_query'])) {
                 ]
             ]
         ]);
-        sendMessage($chat_id, "✅ Tarmoqlar tasdiqlandi!
-
-Endi izohni kim yozadi?", $keyboard);
+        $trial_note = $is_trial ? "\n🧪 <i>Instagram uchun Trial Reel rejimi yoqildi.</i>" : "";
+        sendMessage($chat_id, "✅ Tarmoqlar tasdiqlandi!$trial_note\n\nEndi izohni kim yozadi?", $keyboard);
         $url = "https://api.telegram.org/bot" . $TELEGRAM_TOKEN . "/editMessageReplyMarkup";
         file_get_contents($url . "?chat_id=$chat_id&message_id=$message_id&reply_markup=" . urlencode(json_encode(["inline_keyboard" => []])));
         exit;
@@ -607,6 +671,8 @@ Endi izohni kim yozadi?", $keyboard);
                 $platform = file_get_contents("last_platform.txt");
             }
             
+            $is_trial = (file_exists("last_trial.txt") && file_get_contents("last_trial.txt") == "true");
+            
             $is_artifact = false;
             $artifact_id = "";
             if (strpos($video_url, "artifact:") === 0) {
@@ -616,22 +682,24 @@ Endi izohni kim yozadi?", $keyboard);
             }
             
             if (strpos($data, "act_queue") === 0) {
-                sendMessage($chat_id, "✅ Video navbatga qo'shilmoqda... (Background processing)");
+                sendMessage($chat_id, "✅ Video navbatga qo'shilmoqda... (Background processing)" . ($is_trial ? "\n🧪 <i>Rejim: Instagram Trial Reel</i>" : ""));
                 triggerGitHubAction("telegram_queue", array(
                     "video_url" => $video_url,
                     "artifact_run_id" => $artifact_id,
                     "caption" => $caption,
                     "custom_name" => $custom_name,
-                    "platform" => $platform
+                    "platform" => $platform,
+                    "is_trial" => ($is_trial ? "true" : "false")
                 ));
             } else {
-                sendMessage($chat_id, "🚀 Video hoziroq tarmoqlarga joylanmoqda! (Kuting...)");
+                sendMessage($chat_id, "🚀 Video hoziroq tarmoqlarga joylanmoqda! (Kuting...)" . ($is_trial ? "\n🧪 <i>Rejim: Instagram Trial Reel</i>" : ""));
                 triggerGitHubAction("telegram_post", array(
                     "video_url" => $video_url,
                     "artifact_run_id" => $artifact_id,
                     "caption" => $caption,
                     "custom_name" => $custom_name,
-                    "platform" => $platform
+                    "platform" => $platform,
+                    "is_trial" => ($is_trial ? "true" : "false")
                 ));
             }
             
@@ -679,14 +747,7 @@ Endi izohni kim yozadi?", $keyboard);
         ]);
         
         $url = "https://api.telegram.org/bot" . $TELEGRAM_TOKEN . "/editMessageText";
-        $msg = "🔖 <b>Doimiy Hashteglar Sozlamasi</b>
-
-⚙️ Hozirgi rejim: <b>$mode_text</b>
-
-📝 <b>Joriy saqlangan hashteglar:</b>
-<pre>$current_tags</pre>
-
-👇 <i>Qanday ishlashini tanlang:</i>";
+        $msg = "🔖 <b>Doimiy Hashteglar Sozlamasi</b>\n\n⚙️ Hozirgi rejim: <b>$mode_text</b>\n\n📝 <b>Joriy saqlangan hashteglar:</b>\n<pre>$current_tags</pre>\n\n👇 <i>Qanday ishlashini tanlang:</i>";
         file_get_contents($url . "?chat_id=$chat_id&message_id=$message_id&text=" . urlencode($msg) . "&parse_mode=HTML&reply_markup=" . urlencode($keyboard));
         
         $url_ans = "https://api.telegram.org/bot" . $TELEGRAM_TOKEN . "/answerCallbackQuery";
@@ -704,21 +765,7 @@ Endi izohni kim yozadi?", $keyboard);
             if (!$current_tags) $current_tags = "Hozircha bo'sh.";
         }
         
-        $msg = "🔖 <b>Doimiy Matn/Hashteglar</b>
-
-Bu yerda yozgan har qanday matningiz videolarga qo'shiladi.
-
-📝 <b>Hozirgi saqlangan matn:</b>
-<pre>$current_tags</pre>
-
-🔄 <b>Navbatma-navbat ishlashi uchun:</b>
-Agar siz bir nechta xil hashteglarni navbat bilan (1-videoga 1-hashteg, 2-videoga 2-hashteg) chiqishini xohlasangiz, ularni <b>===</b> belgisi bilan ajrating.
-Masalan:
-#kulgili #rek
-===
-#uzb #trend
-
-👇 <i>Yangi doimiy matnni yuboring (Diqqat: yangisini yuborsangiz, eskisi butunlay o'chib ketadi!):</i>";
+        $msg = "🔖 <b>Doimiy Matn/Hashteglar</b>\n\nBu yerda yozgan har qanday matningiz videolarga qo'shiladi.\n\n📝 <b>Hozirgi saqlangan matn:</b>\n<pre>$current_tags</pre>\n\n🔄 <b>Navbatma-navbat ishlashi uchun:</b>\nAgar siz bir nechta xil hashteglarni navbat bilan (1-videoga 1-hashteg, 2-videoga 2-hashteg) chiqishini xohlasangiz, ularni <b>===</b> belgisi bilan ajrating.\nMasalan:\n#kulgili #rek\n===\n#uzb #trend\n\n👇 <i>Yangi doimiy matnni yuboring (Diqqat: yangisini yuborsangiz, eskisi butunlay o'chib ketadi!):</i>";
         sendMessage($chat_id, $msg);
         
         $url_ans = "https://api.telegram.org/bot" . $TELEGRAM_TOKEN . "/answerCallbackQuery";
@@ -816,21 +863,24 @@ function get_platforms_keyboard($chat_id) {
     $state_file = "platforms_" . $chat_id . ".json";
     if (!file_exists($state_file)) {
         // Default: all enabled (No TikTok)
-        $platforms = ["ig" => true, "yt" => true, "tg" => true, "fb" => true];
+        $platforms = ["ig" => true, "yt" => true, "tg" => true, "fb" => true, "trial" => false];
         file_put_contents($state_file, json_encode($platforms));
     } else {
         $platforms = json_decode(file_get_contents($state_file), true);
+        if (!isset($platforms['trial'])) $platforms['trial'] = false;
     }
     
     $btn_ig = ($platforms['ig'] ? "✅" : "❌") . " Instagram";
     $btn_yt = ($platforms['yt'] ? "✅" : "❌") . " YouTube";
     $btn_tg = ($platforms['tg'] ? "✅" : "❌") . " Telegram";
     $btn_fb = ($platforms['fb'] ? "✅" : "❌") . " Facebook";
+    $btn_trial = ($platforms['trial'] ? "🧪 Trial Reel (Faqat IG): ✅ YONIQ" : "🧪 Trial Reel (Faqat IG): ❌ O'CHIQ");
     
     $keyboard = json_encode([
         "inline_keyboard" => [
             [["text" => $btn_ig, "callback_data" => "toggle_ig"], ["text" => $btn_yt, "callback_data" => "toggle_yt"]],
             [["text" => $btn_tg, "callback_data" => "toggle_tg"], ["text" => $btn_fb, "callback_data" => "toggle_fb"]],
+            [["text" => $btn_trial, "callback_data" => "toggle_trial"]],
             [["text" => "▶️ TASDIQLASH (Davom etish)", "callback_data" => "platform_confirm"]]
         ]
     ]);
