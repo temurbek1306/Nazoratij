@@ -79,7 +79,9 @@ def handle_list():
             estimated_ts = next_post_ts + (i * interval_seconds)
             estimated_time = datetime.datetime.utcfromtimestamp(estimated_ts) + datetime.timedelta(hours=5)
             time_str = estimated_time.strftime("%d.%m.%Y %H:%M")
-            msg += f"{idx}. {f} <i>(~{time_str} da)</i>\n"
+            import html
+            safe_f = html.escape(f)
+            msg += f"{idx}. {safe_f} <i>(~{time_str} da)</i>\n"
             
             cb_data = f"del_{f[:50]}"
             row.append({"text": f"🗑 {idx}", "callback_data": cb_data})
@@ -89,6 +91,8 @@ def handle_list():
             idx += 1
             
         msg += "\n"
+    else:
+        msg += f"📋 <b>Oddiy navbatdagi videolar (0 ta):</b>\n📭 Hozircha bo'sh.\n\n"
         
     if trial_files:
         msg += f"🧪 <b>Trial navbatdagi videolar ({len(trial_files)} ta):</b>\n\n"
@@ -104,7 +108,9 @@ def handle_list():
                 keyboard_buttons.append(row)
                 row = []
             idx += 1
-            
+    else:
+        msg += f"🧪 <b>Trial navbatdagi videolar (0 ta):</b>\n📭 Hozircha bo'sh.\n\n"
+        
     if row:
         keyboard_buttons.append(row)
         
