@@ -74,6 +74,19 @@ jobs:
             echo "$PLATFORM" > "videos/pending/$BASE_NAME.platform.txt"
           fi
 
+      - name: Save Trial Choice 🧪
+        run: |
+          CUSTOM_NAME="${{ github.event.client_payload.custom_name }}"
+          if [ -n "$CUSTOM_NAME" ]; then
+            BASE_NAME="${CUSTOM_NAME}_${{ github.run_id }}"
+          else
+            BASE_NAME="zz_tg_video_${{ github.run_id }}"
+          fi
+          IS_TRIAL="${{ github.event.client_payload.is_trial }}"
+          if [ "$IS_TRIAL" = "true" ]; then
+            echo "true" > "videos/pending/$BASE_NAME.trial.txt"
+          fi
+
       - name: Commit and Push changes 💾
         run: |
           git config --local user.email "bot@temurbek.dev"
@@ -160,6 +173,20 @@ jobs:
             echo "$PLATFORM" > "videos/pending/$BASE_NAME.platform.txt"
           fi
 
+      - name: Save Trial Choice 🧪
+        if: github.event_name == 'repository_dispatch'
+        run: |
+          CUSTOM_NAME="${{ github.event.client_payload.custom_name }}"
+          if [ -n "$CUSTOM_NAME" ]; then
+            BASE_NAME="${CUSTOM_NAME}_${{ github.run_id }}"
+          else
+            BASE_NAME="zz_tg_video_${{ github.run_id }}"
+          fi
+          IS_TRIAL="${{ github.event.client_payload.is_trial }}"
+          if [ "$IS_TRIAL" = "true" ]; then
+            echo "true" > "videos/pending/$BASE_NAME.trial.txt"
+          fi
+
       - name: Setup Python 🐍
         uses: actions/setup-python@v5
         with:
@@ -208,7 +235,6 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       contents: write
-      actions: read
 
     steps:
       - name: Checkout repository 📥
