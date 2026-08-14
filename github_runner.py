@@ -23,7 +23,7 @@ def send_alert(msg):
         except Exception as e:
             print(f"⚠️ Telegramga yuborishda xatolik: {e}")
 
-def post_to_platforms(platforms_str, local_video_path, url, caption, first_comment, video_name, base_caption="", clean_caption=""):
+def post_to_platforms(platforms_str, local_video_path, url, caption, first_comment, video_name, base_caption="", clean_caption="", is_trial=False):
     platforms = platforms_str.split(',') if platforms_str else ["ig", "yt", "fb", "tg"]
     if "both" in platforms:
         platforms = ["ig", "yt", "fb", "tg"]
@@ -31,11 +31,11 @@ def post_to_platforms(platforms_str, local_video_path, url, caption, first_comme
     
     # --- INSTAGRAM ---
     if "ig" in platforms or "both" in platforms:
-        print(f"📝 Instagramga joylanmoqda...")
+        print(f"📝 Instagramga joylanmoqda... (Trial: {is_trial})")
         from agent_tools import post_to_instagram, post_ig_comment
-        ig_media_id = post_to_instagram(url, caption, video_name)
+        ig_media_id = post_to_instagram(url, caption, video_name, is_trial=is_trial)
         if ig_media_id:
-            status_messages.append("✅ Instagram")
+            status_messages.append("✅ Instagram (🧪 Trial Reel)" if is_trial else "✅ Instagram")
             try:
                 post_ig_comment(ig_media_id, first_comment)
             except: pass
@@ -151,6 +151,13 @@ def run():
         with open(platform_file, "r", encoding="utf-8") as f:
             platform = f.read().strip()
             
+    # 🧪 Trial Reel tekshiruvi (Faqat Instagram uchun)
+    trial_file = f"videos/pending/{base_name}.trial.txt"
+    is_trial = False
+    if os.path.exists(trial_file):
+        with open(trial_file, "r", encoding="utf-8") as f:
+            is_trial = f.read().strip().lower() in ["true", "1", "yes"]
+            
     # ✍️ QO'LDA YOZILGAN IZOH TEKSHIRUVI
     txt_file = f"videos/pending/{base_name}.txt"
     if os.path.exists(txt_file):
@@ -178,7 +185,7 @@ def run():
         except:
             first_comment = "👇 Fikringizni izohlarda yozib qoldiring!"
             
-        status_str = post_to_platforms(platform, local_video_path, url, manual_caption, first_comment, video_name, base_caption=manual_caption, clean_caption=clean_manual_caption)
+        status_str = post_to_platforms(platform, local_video_path, url, manual_caption, first_comment, video_name, base_caption=manual_caption, clean_caption=clean_manual_caption, is_trial=is_trial)
         send_alert(f"""✅ Boss, video holati (Qo'lda yozilgan izoh bilan):
 
 Video: {video_name}
@@ -296,7 +303,8 @@ CAPTION_A: (videoga to'liq mos yozilgan caption)"""
                     "caption_c": caption_c,
                     "clean_a": clean_a,
                     "clean_b": clean_b,
-                    "clean_c": clean_c
+                    "clean_c": clean_c,
+                    "is_trial": is_trial
                 }
                 with open(f"videos/pending/{video_name}.json", "w") as f:
                     json.dump(data, f)
@@ -306,7 +314,8 @@ CAPTION_A: (videoga to'liq mos yozilgan caption)"""
                 tg_admin = "5701828462"
                 if tg_token and tg_admin:
                     import requests
-                    msg = f"🎬 <b>Video tayyor: {video_name}</b>\n\nAI'lar jangi boshlandi! Qaysi matnni post qilamiz?\n\n"
+                    trial_badge = " [🧪 TRIAL REEL]" if is_trial else ""
+                    msg = f"🎬 <b>Video tayyor: {video_name}</b>{trial_badge}\n\nAI'lar jangi boshlandi! Qaysi matnni post qilamiz?\n\n"
                     msg += f"<b>🅰️ Gemini (Kreativ):</b>\n{caption_a}\n\n"
                     msg += f"<b>🅱️ Groq (SMM Ekspert):</b>\n{caption_b}\n\n"
                     msg += f"<b>©️ OpenRouter (Faylasuf):</b>\n{caption_c}"
@@ -355,7 +364,7 @@ CAPTION_A: (videoga to'liq mos yozilgan caption)"""
     except:
         first_comment = "👇 Fikringizni izohlarda yozib qoldiring!"
 
-    status_str = post_to_platforms(platform, local_video_path, url, final_fallback_caption, first_comment, video_name, base_caption=caption)
+    status_str = post_to_platforms(platform, local_video_path, url, final_fallback_caption, first_comment, video_name, base_caption=caption, is_trial=is_trial)
     send_alert(f"""📋 <b>Yangi video yakuniy hisoboti!</b>
 
 Nomi: <code>{video_name}</code>
