@@ -516,6 +516,82 @@ if (isset($update['message'])) {
             sendMessage($chat_id, "✅ Vaqt sozlandi! Endi videolar har <b>$hours soatda</b> post qilinadi.", $main_keyboard);
         }
     }
+    elseif ($text == "/debug") {
+        // 🔍 SERVER DIAGNOSTIKASI
+        $debug_msg = "🔍 <b>Server Diagnostikasi</b>\n\n";
+        
+        // scheduled.json
+        $debug_msg .= "📋 <b>scheduled.json:</b>\n";
+        if (file_exists("scheduled.json")) {
+            $sched = json_decode(file_get_contents("scheduled.json"), true);
+            if (is_array($sched) && count($sched) > 0) {
+                foreach ($sched as $i => $sv) {
+                    $t = isset($sv['post_time']) ? date("d.m.Y H:i", $sv['post_time']) : "?";
+                    $url_short = isset($sv['video_url']) ? substr($sv['video_url'], 0, 40) . "..." : "YO'Q";
+                    $trial = !empty($sv['is_trial']) ? "🧪" : "📹";
+                    $debug_msg .= "  " . ($i+1) . ". $trial $t\n     URL: $url_short\n";
+                }
+            } else {
+                $debug_msg .= "  ⚠️ BO'SH (0 ta video)\n";
+            }
+        } else {
+            $debug_msg .= "  ❌ FAYL MAVJUD EMAS!\n";
+        }
+        
+        // config.json
+        $debug_msg .= "\n⚙️ <b>config.json:</b>\n";
+        if (file_exists("config.json")) {
+            $cfg = json_decode(file_get_contents("config.json"), true);
+            $interval = isset($cfg['interval_hours']) ? $cfg['interval_hours'] : "?";
+            $last_run = isset($cfg['last_run']) ? date("d.m.Y H:i:s", $cfg['last_run']) : "hech qachon";
+            $debug_msg .= "  Interval: har $interval soatda\n  Oxirgi run: $last_run\n";
+        } else {
+            $debug_msg .= "  ❌ FAYL MAVJUD EMAS!\n";
+        }
+        
+        // state fayllar
+        $debug_msg .= "\n📂 <b>State fayllar:</b>\n";
+        $state_files = ["state.txt", "last_video.txt", "last_trial.txt", "last_platform.txt", "last_custom_name.txt", "schedule_mode.txt"];
+        foreach ($state_files as $sf) {
+            if (file_exists($sf)) {
+                $val = trim(file_get_contents($sf));
+                $val = substr($val, 0, 60);
+                $debug_msg .= "  $sf: <code>$val</code>\n";
+            }
+        }
+        
+        // uploads papkasi
+        $debug_msg .= "\n📁 <b>uploads/ papka:</b>\n";
+        $upload_dir = __DIR__ . '/uploads';
+        if (is_dir($upload_dir)) {
+            $ufiles = glob($upload_dir . '/*');
+            $ufiles = array_filter($ufiles, function($f) { return is_file($f) && basename($f) != '.htaccess'; });
+            $debug_msg .= "  " . count($ufiles) . " ta fayl\n";
+            foreach (array_slice($ufiles, 0, 5) as $uf) {
+                $size = round(filesize($uf) / 1048576, 1);
+                $age = round((time() - filemtime($uf)) / 3600, 1);
+                $debug_msg .= "  - " . basename($uf) . " ({$size}MB, {$age}h oldin)\n";
+            }
+        } else {
+            $debug_msg .= "  ❌ uploads/ papka mavjud emas\n";
+        }
+        
+        // cron_log.txt (oxirgi 5 qator)
+        $debug_msg .= "\n📝 <b>Oxirgi cron loglari:</b>\n";
+        if (file_exists("cron_log.txt")) {
+            $lines = file("cron_log.txt");
+            $last5 = array_slice($lines, -5);
+            foreach ($last5 as $l) {
+                $debug_msg .= "  " . trim($l) . "\n";
+            }
+        } else {
+            $debug_msg .= "  (cron_log.txt mavjud emas)\n";
+        }
+        
+        $debug_msg .= "\n🕐 Server vaqti: " . date("d.m.Y H:i:s");
+        
+        sendMessage($chat_id, $debug_msg);
+    }
     elseif ($text != "") {
         // Brainstorming or invalid
         sendMessage($chat_id, "🧠 AI o'ylamoqda... / Link tekshirilmoqda...");
