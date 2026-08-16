@@ -232,7 +232,7 @@ if (isset($update['message'])) {
                 }
             }
             
-            $scheduled_file = "scheduled.json";
+            $scheduled_file = __DIR__ . "/scheduled.json";
             $scheduled_list = [];
             if (file_exists($scheduled_file)) {
                 $scheduled_list = json_decode(file_get_contents($scheduled_file), true) ?: [];
@@ -449,8 +449,8 @@ if (isset($update['message'])) {
     elseif ($text == "📋 Navbat (Queue)" || $text == "/list") {
         
         $scheduled_msg = "";
-        if (file_exists("scheduled.json")) {
-            $scheduled_videos = json_decode(file_get_contents("scheduled.json"), true) ?: [];
+        if (file_exists(__DIR__ . "/scheduled.json")) {
+            $scheduled_videos = json_decode(file_get_contents(__DIR__ . "/scheduled.json"), true) ?: [];
             if (count($scheduled_videos) > 0) {
                 $scheduled_msg = "⏱ <b>Aniq vaqtga belgilangan videolar:</b>\n\n";
                 $keyboard_buttons = [];
@@ -522,8 +522,8 @@ if (isset($update['message'])) {
         
         // scheduled.json
         $debug_msg .= "📋 <b>scheduled.json:</b>\n";
-        if (file_exists("scheduled.json")) {
-            $sched = json_decode(file_get_contents("scheduled.json"), true);
+        if (file_exists(__DIR__ . "/scheduled.json")) {
+            $sched = json_decode(file_get_contents(__DIR__ . "/scheduled.json"), true);
             if (is_array($sched) && count($sched) > 0) {
                 foreach ($sched as $i => $sv) {
                     $t = isset($sv['post_time']) ? date("d.m.Y H:i", $sv['post_time']) : "?";
@@ -931,7 +931,7 @@ Masalan:
     }
     elseif (strpos($data, "delsched_") === 0) {
         $index = (int) str_replace("delsched_", "", $data);
-        $scheduled_file = "scheduled.json";
+        $scheduled_file = __DIR__ . "/scheduled.json";
         if (file_exists($scheduled_file)) {
             $scheduled_videos = json_decode(file_get_contents($scheduled_file), true) ?: [];
             if (isset($scheduled_videos[$index])) {

@@ -6,7 +6,7 @@
 // Har bir cron ishlaganda nima bo'layotganini ko'rish mumkin
 
 date_default_timezone_set('Asia/Tashkent');
-$CONFIG_FILE = 'config.json';
+$CONFIG_FILE = __DIR__ . '/config.json';
 $GITHUB_PAT = "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";
 $GITHUB_REPO = "temurbek1306/InstagaramAvtoReels";
 
@@ -34,7 +34,7 @@ function sendTelegramLog($token, $chat_id, $text) {
 }
 
 // 1️⃣ ANIQ VAQTGA BELGILANGAN VIDEOLARNI O'QISH VA HIMOYA QILISH
-$SCHEDULED_FILE = 'scheduled.json';
+$SCHEDULED_FILE = __DIR__ . '/scheduled.json';
 $scheduled_videos = [];
 $protected_urls = [];
 
@@ -264,17 +264,17 @@ if (!$scheduled_triggered) {
 
 // 4️⃣ DIAGNOSTIK LOGNI FAYLGA YOZISH (har doim)
 $log_line = date("Y-m-d H:i:s") . " | scheduled=" . count($scheduled_videos) . " | " . implode(" | ", $cron_log);
-file_put_contents('cron_log.txt', $log_line . "\n", FILE_APPEND);
+file_put_contents(__DIR__ . '/cron_log.txt', $log_line . "\n", FILE_APPEND);
 
 // Agar scheduled videolar bor bo'lsa va muammo bo'lsa, Telegramga yuborish
 if (count($cron_log) > 0 && count($scheduled_videos) > 0 && !$scheduled_triggered) {
     // Faqat 10 daqiqada bir marta diagnostik log yuborish (spam oldini olish)
     $last_diag = 0;
-    if (file_exists('last_diag_time.txt')) {
-        $last_diag = intval(file_get_contents('last_diag_time.txt'));
+    if (file_exists(__DIR__ . '/last_diag_time.txt')) {
+        $last_diag = intval(file_get_contents(__DIR__ . '/last_diag_time.txt'));
     }
     if ($current_time - $last_diag >= 600) {
-        file_put_contents('last_diag_time.txt', $current_time);
+        file_put_contents(__DIR__ . '/last_diag_time.txt', $current_time);
         sendTelegramLog($TELEGRAM_TOKEN, $ADMIN_ID,
             "🔍 <b>CRON Diagnostika</b> (" . date("H:i") . ")\n\n" . implode("\n", $cron_log)
         );
