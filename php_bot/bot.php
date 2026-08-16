@@ -3,6 +3,7 @@
 // TELEGRAM "PULT" BOTI - PHP WEBHOOK V3.0
 // ==========================================
 
+date_default_timezone_set('Asia/Tashkent');
 $TELEGRAM_TOKEN = "8674470670:AAER3Y3EfZ44eFUhxKTpsGX_X_Vg6LvKYOQ";
 $ADMIN_ID = 5701828462;
 $GITHUB_PAT = "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";
@@ -49,7 +50,7 @@ if (isset($update['message'])) {
                 exit;
             }
             
-            $is_trial_mode = (file_exists("state.txt") && file_get_contents("state.txt") == "waiting_for_trial_video") || (file_exists("last_trial.txt") && file_get_contents("last_trial.txt") == "true");
+            $is_trial_mode = (file_exists("state.txt") && file_get_contents("state.txt") == "waiting_for_trial_video");
             if ($is_trial_mode) {
                 file_put_contents("last_trial.txt", "true");
                 file_put_contents("last_platform.txt", "ig");
@@ -192,6 +193,25 @@ if (isset($update['message'])) {
                 $custom_name = file_get_contents("last_custom_name.txt");
             }
             
+            // 🛡️ TELEGRAM URL HIMOYASI: Agar video Telegram'dan kelgan bo'lsa,
+            // darhol serverga yuklab olamiz (chunki Telegram URL 1 soatda eskiradi)
+            if (strpos($video_url, "api.telegram.org") !== false) {
+                $upload_dir = __DIR__ . '/uploads';
+                if (!is_dir($upload_dir)) {
+                    mkdir($upload_dir, 0755, true);
+                }
+                $safe_name = 'scheduled_' . time() . '_' . rand(1000, 9999) . '.mp4';
+                $dest_path = $upload_dir . '/' . $safe_name;
+                $video_data = file_get_contents($video_url);
+                if ($video_data && strlen($video_data) > 1000) {
+                    file_put_contents($dest_path, $video_data);
+                    $protocol = isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? "https" : "http";
+                    $host = $_SERVER['HTTP_HOST'];
+                    $path = rtrim(dirname($_SERVER['REQUEST_URI']), '/');
+                    $video_url = $protocol . "://" . $host . $path . "/uploads/" . $safe_name;
+                }
+            }
+            
             $scheduled_file = "scheduled.json";
             $scheduled_list = [];
             if (file_exists($scheduled_file)) {
@@ -293,6 +313,8 @@ if (isset($update['message'])) {
     ]);
 
     if ($text == "/start" || $text == "/menu" || $text == "🔙 Ortga") {
+        file_put_contents("state.txt", "none");
+        file_put_contents("last_trial.txt", "false");
         setupBotCommands();
         sendMessage($chat_id, "👋 Salom, Boss! Ultra God Mode (v3.0) aktiv.\n\nPastdagi menyudan kerakli tugmani tanlang:", $main_keyboard);
     } 
@@ -301,7 +323,8 @@ if (isset($update['message'])) {
         file_put_contents("last_trial.txt", "true");
         file_put_contents("last_platform.txt", "ig");
         
-        $webapp_url = "https://temurbek.dev/php_bot/upload.html?type=trial";
+        $bot_url = "https://" . $_SERVER['HTTP_HOST'] . dirname($_SERVER['REQUEST_URI']);
+        $webapp_url = rtrim($bot_url, '/') . "/upload.html?type=trial";
         $webapp_keyboard = json_encode([
             "inline_keyboard" => [
                 [

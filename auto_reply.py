@@ -47,31 +47,35 @@ def check_and_reply_instagram(replied_data):
         for comment in comments:
             comment_id = comment["id"]
             
-            # 1. Agar oldin javob berilgan deb saqlangan bo'lsa, o'tkazib yuboramiz
-            if comment_id in replied_data["instagram"]:
-                continue
-                
-            # 2. O'zimizning izohimiz bo'lsa
+            # O'zimizning izohimiz bo'lsa (top-level)
             username = comment.get("username", "Foydalanuvchi")
             if comment.get("from") and str(comment["from"].get("id")) == str(ig_account_id):
-                replied_data["instagram"].append(comment_id)
                 continue
                 
-            # 3. Agar ushbu izohga O'ZIMIZ ALLAQACHON javob yozgan bo'lsak (Instagram API replies tekshiruvi)
             replies = comment.get("replies", {}).get("data", [])
-            already_replied_by_us = False
-            for r in replies:
-                reply_author_id = str(r.get("from", {}).get("id", ""))
-                if reply_author_id == str(ig_account_id):
-                    already_replied_by_us = True
-                    break
             
-            if already_replied_by_us:
-                print(f"[IG] Izohga o'zimiz allaqachon javob yozganmiz ({comment_id}), qayta yozilmaydi.")
-                replied_data["instagram"].append(comment_id)
+            # Suhbatdagi eng oxirgi xabarni topamiz (yoki top-levelni o'zini)
+            if replies:
+                last_msg = replies[-1]
+            else:
+                last_msg = comment
+                
+            last_msg_id = last_msg.get("id")
+            last_msg_author_id = str(last_msg.get("from", {}).get("id", ""))
+            
+            # 1. Agar oxirgi xabarga allaqachon javob bergan deb saqlangan bo'lsa
+            if last_msg_id in replied_data["instagram"]:
                 continue
                 
-            text = comment.get("text", "")
+            # 2. Agar oxirgi xabarni o'zimiz yozgan bo'lsak, demak javob kutish shart emas
+            if last_msg_author_id == str(ig_account_id):
+                print(f"[IG] Izoh zanjirida eng oxirgi so'zni o'zimiz aytganmiz ({last_msg_id}), qayta yozilmaydi.")
+                replied_data["instagram"].append(last_msg_id)
+                continue
+                
+            text = last_msg.get("text", "")
+            username = last_msg.get("username", username)
+            
             if not text:
                 continue
                 
@@ -84,10 +88,10 @@ def check_and_reply_instagram(replied_data):
                 reply_text = ai_assistant.generate_comment_reply(text, "Instagram", username)
             print(f"[AI Javobi]: {reply_text}")
             
-            # Javobni yuborish
+            # Javobni yuborish (Doyim top-level comment_id ga javob beriladi, shunda bitta zanjirda ketadi)
             success = ig.reply_to_comment(comment_id, reply_text)
             if success:
-                replied_data["instagram"].append(comment_id)
+                replied_data["instagram"].append(last_msg_id)
                 save_replied_comments(replied_data)
                 
             time.sleep(2) # API limitlaridan qochish uchun

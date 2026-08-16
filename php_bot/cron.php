@@ -3,6 +3,7 @@
 // TELEGRAM "PULT" BOTI - CUSTOM CRON SCHEDULER
 // ==========================================
 
+date_default_timezone_set('Asia/Tashkent');
 $CONFIG_FILE = 'config.json';
 $GITHUB_PAT = "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"; // O'zgartirish shart emas (hozircha)
 $GITHUB_REPO = "temurbek1306/InstagaramAvtoReels";
