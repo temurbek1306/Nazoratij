@@ -2,6 +2,8 @@ import os
 import glob
 import requests
 import github_runner
+from dotenv import load_dotenv
+load_dotenv()
 
 def send_telegram_msg(text, reply_markup=None):
     tg_token = "8674470670:AAER3Y3EfZ44eFUhxKTpsGX_X_Vg6LvKYOQ"
