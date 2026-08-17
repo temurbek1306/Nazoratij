@@ -24,7 +24,6 @@ class InstagramAPI:
             payload["trial_params"] = _json.dumps({"graduation_strategy": graduation_strategy})
             print(f"[API] 🧪 Video TRIAL REEL (Sinov) rejimida yuklanmoqda (Faqat non-followers ko'radi)...")
         else:
-            payload["share_to_feed"] = "true"
             print(f"[API] Video yuklanmoqda... Kuting.")
         
         response = requests.post(url, data=payload)
