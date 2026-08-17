@@ -278,9 +278,11 @@ if (count($cron_log) > 0 && count($scheduled_videos) > 0 && !$scheduled_triggere
     }
     if ($current_time - $last_diag >= 600) {
         file_put_contents(__DIR__ . '/last_diag_time.txt', $current_time);
-        sendTelegramLog($TELEGRAM_TOKEN, $ADMIN_ID,
-            "🔍 <b>CRON Diagnostika</b> (" . date("H:i") . ")\n\n" . implode("\n", $cron_log)
-        );
+        
+        // Dasturchi (foydalanuvchi) iltimosiga ko'ra bu log o'chirib qo'yildi, jonga tegmasligi uchun
+        // sendTelegramLog($TELEGRAM_TOKEN, $ADMIN_ID,
+        //     "🔍 <b>CRON Diagnostika</b> (" . date("H:i") . ")\n\n" . implode("\n", $cron_log)
+        // );
     }
 }
 
