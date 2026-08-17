@@ -109,7 +109,7 @@ if (count($scheduled_videos) > 0) {
         $post_time = isset($sv['post_time']) ? $sv['post_time'] : 0;
         $formatted = date("d.m.Y H:i:s", $post_time);
         $diff = $post_time - $current_time;
-        $has_url = !empty($sv['video_url']) ? "✅ URL bor" : "❌ URL yo'q";
+        $has_url = (!empty($sv['video_url']) || !empty($sv['artifact_run_id'])) ? "✅ Manba bor" : "❌ URL yo'q";
         $is_trial = !empty($sv['is_trial']) ? "🧪 Trial" : "📹 Oddiy";
         
         if ($diff > 0) {
@@ -136,8 +136,10 @@ foreach ($scheduled_videos as $index => $sv) {
         
         // Video URL mavjudligini tekshirish
         $video_url = isset($sv['video_url']) ? $sv['video_url'] : "";
-        if (empty($video_url)) {
-            $cron_log[] = "❌ Video URL bo'sh! Bu video o'chirilmoqda.";
+        $artifact_run_id = isset($sv['artifact_run_id']) ? $sv['artifact_run_id'] : "";
+        
+        if (empty($video_url) && empty($artifact_run_id)) {
+            $cron_log[] = "❌ Video URL va Artifact bo'sh! Bu video o'chirilmoqda.";
             array_splice($scheduled_videos, $index, 1);
             file_put_contents($SCHEDULED_FILE, json_encode($scheduled_videos, JSON_PRETTY_PRINT));
             continue;
@@ -166,6 +168,7 @@ foreach ($scheduled_videos as $index => $sv) {
             "event_type" => "telegram_post",
             "client_payload" => array(
                 "video_url" => $video_url,
+                "artifact_run_id" => $artifact_run_id,
                 "caption" => isset($sv['caption']) ? $sv['caption'] : "",
                 "custom_name" => isset($sv['custom_name']) ? $sv['custom_name'] : "",
                 "platform" => isset($sv['platform']) ? $sv['platform'] : "both",
