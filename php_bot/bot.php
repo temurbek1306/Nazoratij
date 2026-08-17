@@ -62,7 +62,7 @@ if (isset($update['message'])) {
                 if (file_exists("last_video_group.txt")) {
                     $current_group = file_get_contents("last_video_group.txt");
                 }
-                $current_group .= $video_url . "\n";
+                $current_group .= $telegram_url . "\n";
                 file_put_contents("last_video_group.txt", $current_group);
                 
                 $count = count(array_filter(explode("\n", $current_group)));
