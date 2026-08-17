@@ -145,13 +145,7 @@ foreach ($scheduled_videos as $index => $sv) {
             continue;
         }
         
-        // Video URL hali ham ishlaydimi tekshirish
-        $check_headers = @get_headers($video_url, 1);
-        $url_status = "?";
-        if ($check_headers) {
-            $url_status = is_array($check_headers[0]) ? $check_headers[0][0] : $check_headers[0];
-        }
-        $cron_log[] = "🔗 URL holati: $url_status";
+        // Video URL holatini PHP orqali tekshirishni olib tashladik, chunki u cron'ni osib qo'yishi mumkin.
         $cron_log[] = "🔗 URL: " . substr($video_url, 0, 80) . "...";
         
         $url = "https://api.github.com/repos/" . $GITHUB_REPO . "/dispatches";
