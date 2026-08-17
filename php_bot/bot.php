@@ -37,24 +37,30 @@ if (isset($update['message'])) {
         if ($file_path) {
             $telegram_url = "https://api.telegram.org/file/bot" . $TELEGRAM_TOKEN . "/" . $file_path;
             
-            // 🛡️ TELEGRAM URL HIMOYASI: Videoni darhol serverga yuklab olamiz
-            $upload_dir = __DIR__ . '/uploads';
-            if (!is_dir($upload_dir)) {
-                mkdir($upload_dir, 0755, true);
-                file_put_contents($upload_dir . '/.htaccess', "Options -Indexes\nAllow from all");
-            }
-            $safe_name = 'tg_' . time() . '_' . rand(1000, 9999) . '.mp4';
-            $dest_path = $upload_dir . '/' . $safe_name;
+            $is_multiple = (file_exists("state.txt") && file_get_contents("state.txt") == "waiting_for_multiple_videos");
             
-            $video_data = file_get_contents($telegram_url);
-            if ($video_data && strlen($video_data) > 1000) {
-                file_put_contents($dest_path, $video_data);
-                $protocol = isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? "https" : "http";
-                $host = $_SERVER['HTTP_HOST'];
-                $path = rtrim(dirname($_SERVER['REQUEST_URI']), '/');
-                $video_url = $protocol . "://" . $host . $path . "/uploads/" . $safe_name;
+            if (!$is_multiple) {
+                // 🛡️ TELEGRAM URL HIMOYASI: Videoni darhol serverga yuklab olamiz
+                $upload_dir = __DIR__ . '/uploads';
+                if (!is_dir($upload_dir)) {
+                    mkdir($upload_dir, 0755, true);
+                    file_put_contents($upload_dir . '/.htaccess', "Options -Indexes\nAllow from all");
+                }
+                $safe_name = 'tg_' . time() . '_' . rand(1000, 9999) . '.mp4';
+                $dest_path = $upload_dir . '/' . $safe_name;
+                
+                $video_data = file_get_contents($telegram_url);
+                if ($video_data && strlen($video_data) > 1000) {
+                    file_put_contents($dest_path, $video_data);
+                    $protocol = isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? "https" : "http";
+                    $host = $_SERVER['HTTP_HOST'];
+                    $path = rtrim(dirname($_SERVER['REQUEST_URI']), '/');
+                    $video_url = $protocol . "://" . $host . $path . "/uploads/" . $safe_name;
+                } else {
+                    $video_url = $telegram_url; // agar yuklash o'xshamasa o'zini qoldiramiz
+                }
             } else {
-                $video_url = $telegram_url; // agar yuklash o'xshamasa o'zini qoldiramiz
+                $video_url = $telegram_url; // Birlashtirish uchun to'g'ridan-to'g'ri Telegram link qoladi
             }
             
             if (file_exists("state.txt") && file_get_contents("state.txt") == "waiting_for_multiple_videos") {
