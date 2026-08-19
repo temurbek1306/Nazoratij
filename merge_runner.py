@@ -65,7 +65,7 @@ def main():
                 cmd = [
                     "ffmpeg", "-y", "-i", f,
                     "-vf", "scale=1080:1920:force_original_aspect_ratio=decrease,pad=1080:1920:(ow-iw)/2:(oh-ih)/2,setsar=1,fps=30",
-                    "-c:v", "libx264", "-preset", "veryfast", "-crf", "23", "-pix_fmt", "yuv420p",
+                    "-c:v", "libx264", "-preset", "ultrafast", "-crf", "23", "-pix_fmt", "yuv420p",
                     "-c:a", "aac", "-ar", "44100", "-ac", "2",
                     std_f
                 ]
@@ -74,7 +74,7 @@ def main():
                     "ffmpeg", "-y", "-i", f,
                     "-f", "lavfi", "-i", "anullsrc=channel_layout=stereo:sample_rate=44100",
                     "-vf", "scale=1080:1920:force_original_aspect_ratio=decrease,pad=1080:1920:(ow-iw)/2:(oh-ih)/2,setsar=1,fps=30",
-                    "-c:v", "libx264", "-preset", "veryfast", "-crf", "23", "-pix_fmt", "yuv420p",
+                    "-c:v", "libx264", "-preset", "ultrafast", "-crf", "23", "-pix_fmt", "yuv420p",
                     "-c:a", "aac", "-ar", "44100", "-ac", "2",
                     "-shortest",
                     "-map", "0:v:0", "-map", "1:a:0",
@@ -106,7 +106,7 @@ def main():
                 "-i", std_files[1],
                 "-filter_complex", filter_str,
                 "-map", "[v]", "-map", "[a]",
-                "-c:v", "libx264", "-preset", "veryfast", "-pix_fmt", "yuv420p", "-c:a", "aac",
+                "-c:v", "libx264", "-preset", "ultrafast", "-pix_fmt", "yuv420p", "-c:a", "aac",
                 output_video
             ]
             print(f"Running ffmpeg (2 videos): {' '.join(cmd)}")
@@ -129,7 +129,7 @@ def main():
         preview_video = "merged_preview.mp4"
         cmd = [
             "ffmpeg", "-y", "-i", output_video,
-            "-vf", "scale=480:-2,format=yuv420p", "-c:v", "libx264", "-preset", "veryfast", "-crf", "28", "-pix_fmt", "yuv420p",
+            "-vf", "scale=480:-2,format=yuv420p", "-c:v", "libx264", "-preset", "ultrafast", "-crf", "28", "-pix_fmt", "yuv420p",
             "-c:a", "aac", "-b:a", "64k",
             preview_video
         ]
