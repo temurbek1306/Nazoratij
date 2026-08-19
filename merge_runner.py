@@ -10,13 +10,13 @@ def send_telegram_video(bot_token, chat_id, video_path, caption, reply_markup=No
         data = {'chat_id': chat_id, 'caption': caption, 'parse_mode': 'HTML'}
         if reply_markup:
             data['reply_markup'] = json.dumps(reply_markup)
-        response = requests.post(url, data=data, files=files)
+        response = requests.post(url, data=data, files=files, timeout=300)
         return response.json()
 
 def send_telegram_text(bot_token, chat_id, text):
     url = f"https://api.telegram.org/bot{bot_token}/sendMessage"
     data = {'chat_id': chat_id, 'text': text, 'parse_mode': 'HTML'}
-    requests.post(url, data=data)
+    requests.post(url, data=data, timeout=60)
 
 def main():
     bot_token = os.getenv("TELEGRAM_BOT_TOKEN")
@@ -30,6 +30,7 @@ def main():
 
     try:
         print(f"Downloading {len(video_urls)} videos...")
+        send_telegram_text(bot_token, admin_id, f"⏳ {len(video_urls)} ta video serverga yuklab olinmoqda...")
         
         input_files = []
         for i, url in enumerate(video_urls):
@@ -37,7 +38,7 @@ def main():
             if not url:
                 continue
             filepath = f"temp_input_{i}.mp4"
-            r = requests.get(url, stream=True)
+            r = requests.get(url, stream=True, timeout=60)
             if r.status_code == 200:
                 with open(filepath, 'wb') as f:
                     for chunk in r.iter_content(chunk_size=1024*1024):
@@ -51,6 +52,7 @@ def main():
             raise Exception("Birlashtirish uchun yetarli videolar yuklanmadi (Kamida 2 ta bo'lishi kerak).")
 
         print("Normalizing videos...")
+        send_telegram_text(bot_token, admin_id, "⚙️ Videolar bir xil formatga keltirilmoqda (Bu jarayon eng ko'p vaqt oladi, iltimos kuting)...")
         std_files = []
         for i, f in enumerate(input_files):
             std_f = f"std_{i}.mp4"
@@ -63,7 +65,7 @@ def main():
                 cmd = [
                     "ffmpeg", "-y", "-i", f,
                     "-vf", "scale=1080:1920:force_original_aspect_ratio=decrease,pad=1080:1920:(ow-iw)/2:(oh-ih)/2,setsar=1,fps=30",
-                    "-c:v", "libx264", "-preset", "fast", "-crf", "23",
+                    "-c:v", "libx264", "-preset", "veryfast", "-crf", "23",
                     "-c:a", "aac", "-ar", "44100", "-ac", "2",
                     std_f
                 ]
@@ -72,7 +74,7 @@ def main():
                     "ffmpeg", "-y", "-i", f,
                     "-f", "lavfi", "-i", "anullsrc=channel_layout=stereo:sample_rate=44100",
                     "-vf", "scale=1080:1920:force_original_aspect_ratio=decrease,pad=1080:1920:(ow-iw)/2:(oh-ih)/2,setsar=1,fps=30",
-                    "-c:v", "libx264", "-preset", "fast", "-crf", "23",
+                    "-c:v", "libx264", "-preset", "veryfast", "-crf", "23",
                     "-c:a", "aac", "-ar", "44100", "-ac", "2",
                     "-shortest",
                     "-map", "0:v:0", "-map", "1:a:0",
@@ -90,6 +92,8 @@ def main():
         crossfade_duration = 0.3
         output_video = "merged_high_res.mp4"
         
+        send_telegram_text(bot_token, admin_id, "🔗 Videolar yagona faylga birlashtirilmoqda...")
+
         if len(std_files) == 2:
             offset = durations[0] - crossfade_duration
             if offset < 0: offset = 0
@@ -102,7 +106,7 @@ def main():
                 "-i", std_files[1],
                 "-filter_complex", filter_str,
                 "-map", "[v]", "-map", "[a]",
-                "-c:v", "libx264", "-pix_fmt", "yuv420p", "-c:a", "aac",
+                "-c:v", "libx264", "-preset", "veryfast", "-pix_fmt", "yuv420p", "-c:a", "aac",
                 output_video
             ]
             print(f"Running ffmpeg (2 videos): {' '.join(cmd)}")
@@ -116,15 +120,16 @@ def main():
             cmd = [
                 "ffmpeg", "-y", "-f", "concat", "-safe", "0",
                 "-i", "concat_list.txt", 
-                "-c:v", "libx264", "-pix_fmt", "yuv420p", "-c:a", "aac",
+                "-c:v", "libx264", "-preset", "veryfast", "-pix_fmt", "yuv420p", "-c:a", "aac",
                 output_video
             ]
             subprocess.run(cmd, check=True)
 
+        send_telegram_text(bot_token, admin_id, "📱 Prevyu (kichraytirilgan nusxa) tayyorlanmoqda va Telegramga yuklanmoqda...")
         preview_video = "merged_preview.mp4"
         cmd = [
             "ffmpeg", "-y", "-i", output_video,
-            "-vf", "scale=480:-2,format=yuv420p", "-c:v", "libx264", "-crf", "28", "-pix_fmt", "yuv420p",
+            "-vf", "scale=480:-2,format=yuv420p", "-c:v", "libx264", "-preset", "veryfast", "-crf", "28", "-pix_fmt", "yuv420p",
             "-c:a", "aac", "-b:a", "64k",
             preview_video
         ]
