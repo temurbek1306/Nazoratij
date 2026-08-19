@@ -65,7 +65,7 @@ def main():
                 cmd = [
                     "ffmpeg", "-y", "-i", f,
                     "-vf", "scale=1080:1920:force_original_aspect_ratio=decrease,pad=1080:1920:(ow-iw)/2:(oh-ih)/2,setsar=1,fps=30",
-                    "-c:v", "libx264", "-preset", "veryfast", "-crf", "23",
+                    "-c:v", "libx264", "-preset", "veryfast", "-crf", "23", "-pix_fmt", "yuv420p",
                     "-c:a", "aac", "-ar", "44100", "-ac", "2",
                     std_f
                 ]
@@ -74,7 +74,7 @@ def main():
                     "ffmpeg", "-y", "-i", f,
                     "-f", "lavfi", "-i", "anullsrc=channel_layout=stereo:sample_rate=44100",
                     "-vf", "scale=1080:1920:force_original_aspect_ratio=decrease,pad=1080:1920:(ow-iw)/2:(oh-ih)/2,setsar=1,fps=30",
-                    "-c:v", "libx264", "-preset", "veryfast", "-crf", "23",
+                    "-c:v", "libx264", "-preset", "veryfast", "-crf", "23", "-pix_fmt", "yuv420p",
                     "-c:a", "aac", "-ar", "44100", "-ac", "2",
                     "-shortest",
                     "-map", "0:v:0", "-map", "1:a:0",
@@ -120,7 +120,7 @@ def main():
             cmd = [
                 "ffmpeg", "-y", "-f", "concat", "-safe", "0",
                 "-i", "concat_list.txt", 
-                "-c:v", "libx264", "-preset", "veryfast", "-pix_fmt", "yuv420p", "-c:a", "aac",
+                "-c", "copy",
                 output_video
             ]
             subprocess.run(cmd, check=True)
