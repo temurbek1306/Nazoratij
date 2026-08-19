@@ -21,9 +21,7 @@ jobs:
           python-version: '3.10'
           
       - name: Setup FFmpeg
-        uses: FedericoCarboni/setup-ffmpeg@v3
-        with:
-          ffmpeg-version: release
+        uses: federicocarboni/setup-ffmpeg@v3
 
       - name: Install dependencies 📦
         run: |
