@@ -6,7 +6,7 @@ from dotenv import load_dotenv
 load_dotenv()
 
 def send_telegram_msg(text, reply_markup=None):
-    tg_token = "8674470670:AAER3Y3EfZ44eFUhxKTpsGX_X_Vg6LvKYOQ"
+    tg_token = "8674470670:AAFEf9kKctzOgv6up5ghRD-eEw3NLrn8pD8"
     tg_admin = "5701828462"
     
     # Global matn tozalash: AI ko'p hollarda ** (qalin) belgilarini qo'shadi, Telegram buni to'g'ri tushunmasligi mumkin.

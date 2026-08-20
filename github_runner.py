@@ -185,30 +185,35 @@ Video: {video_name}
             break
 
         try:
-            import google.generativeai as genai
+            from google import genai
+            from google.genai import types
             print(f"🧠 Gemini AI ishga tushmoqda (Urinish {attempt+1})...")
+            
             if gemini_key == "SERVICE_ACCOUNT_AUTH":
-                os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = os.path.join(os.path.dirname(__file__), "service_account.json")
-                genai.configure()
+                sa_path = os.path.join(os.path.dirname(__file__), "service_account.json")
+                os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = sa_path
+                import json as _json
+                with open(sa_path, "r") as _f:
+                    _sa = _json.load(_f)
+                client = genai.Client(vertexai=True, project=_sa.get("project_id", ""), location="us-central1")
             else:
                 if "GOOGLE_APPLICATION_CREDENTIALS" in os.environ:
                     del os.environ["GOOGLE_APPLICATION_CREDENTIALS"]
-                genai.configure(api_key=gemini_key)
+                client = genai.Client(api_key=gemini_key)
 
             print(f"📤 Video Gemini serveriga yuklanmoqda: {local_video_path}")
-            video_file = genai.upload_file(path=local_video_path)
+            video_file = client.files.upload(file=local_video_path)
 
             print("⏳ Gemini videoni qayta ishlashini kutyapmiz (bu 10-30 soniya olishi mumkin)...")
             while video_file.state.name == "PROCESSING":
                 print(".", end="", flush=True)
                 time.sleep(5)
-                video_file = genai.get_file(video_file.name)
+                video_file = client.files.get(name=video_file.name)
 
             if video_file.state.name == "FAILED":
                 print("\n❌ Gemini videoni qayta ishlashda xatoga yo'l qo'ydi.")
             else:
                 print("\n✨ Video tayyor. Ssenariy yozilmoqda...")
-                model = genai.GenerativeModel("gemini-3.5-flash")
                 prompt = """Sen O'zbekistondagi eng mashhur SMM va Video tahlilchisan! Shu videoni IPI-IDAN IGASIGACHA, har bir detalini (yuz harakatlari, emotsiyalar, ekrandagi yozuvlar, kiyimlar, ovoz) diqqat bilan ko'r va tahlil qil.
 1. Kadrda nima bo'lyapti o'zi? (To'liq voqea)
 2. Ekranda qanday so'zlar/yozuvlar bor?
@@ -224,7 +229,18 @@ QOIDALAR:
 Formati:
 SUMMARY: (videoni chuqur tahlili)
 CAPTION_A: (videoga to'liq mos yozilgan caption)"""
-                response = model.generate_content([prompt, video_file])
+                response = client.models.generate_content(
+                    model="gemini-2.5-flash",
+                    contents=[
+                        types.Content(
+                            role="user",
+                            parts=[
+                                types.Part.from_text(text=prompt),
+                                types.Part.from_uri(file_uri=video_file.uri, mime_type=video_file.mime_type),
+                            ],
+                        ),
+                    ],
+                )
 
                 caption_a = caption
                 summary = "Video haqida umumiy ma'lumot yo'q."
@@ -240,7 +256,7 @@ CAPTION_A: (videoga to'liq mos yozilgan caption)"""
                     print("✅ Gemini Matni tayyor!")
 
                 # Faylni tozalash
-                genai.delete_file(video_file.name)
+                client.files.delete(name=video_file.name)
                 print("🧹 Video Gemini serveridan o'chirib tashlandi.")
 
                 print("🧠 Groq va OpenRouter ga ulanilmoqda (A/B Testing)...")
@@ -284,7 +300,7 @@ CAPTION_A: (videoga to'liq mos yozilgan caption)"""
                     json.dump(data, f)
 
                 # Telegramga yuborish
-                tg_token = "8674470670:AAER3Y3EfZ44eFUhxKTpsGX_X_Vg6LvKYOQ"
+                tg_token = "8674470670:AAFEf9kKctzOgv6up5ghRD-eEw3NLrn8pD8"
                 tg_admin = "5701828462"
                 if tg_token and tg_admin:
                     import requests
