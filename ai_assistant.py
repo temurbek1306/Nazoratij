@@ -3,6 +3,91 @@ import json
 import random
 import requests
 
+def _call_gemini(api_key, prompt, model_name="gemini-2.5-flash"):
+    """
+    Yangi google.genai SDK orqali Gemini API ga so'rov yuborish.
+    Eski google.generativeai deprecated bo'lgani uchun, AQ. formatdagi
+    yangi API kalitlarni qo'llab-quvvatlaydigan google.genai ishlatamiz.
+    """
+    try:
+        from google import genai
+        
+        if api_key == "SERVICE_ACCOUNT_AUTH":
+            # Service Account orqali Vertex AI backend
+            sa_file = os.path.join(os.path.dirname(os.path.abspath(__file__)), "service_account.json")
+            if os.path.exists(sa_file):
+                os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = sa_file
+                # Service Account bilan project_id kerak
+                with open(sa_file, "r") as f:
+                    sa_data = json.load(f)
+                project_id = sa_data.get("project_id", "")
+                client = genai.Client(vertexai=True, project=project_id, location="us-central1")
+            else:
+                return None
+        else:
+            client = genai.Client(api_key=api_key)
+        
+        response = client.models.generate_content(
+            model=model_name,
+            contents=prompt
+        )
+        if response and response.text:
+            return response.text
+    except Exception as e:
+        print(f"[Gemini Error ({model_name})]: {e}")
+    return None
+
+def _call_openrouter(api_key, prompt, model_name="openrouter/free"):
+    """
+    OpenRouter API orqali so'rov yuborish.
+    Asosiy prioritet qilib qo'yildi.
+    """
+    try:
+        url = "https://openrouter.ai/api/v1/chat/completions"
+        headers = {
+            "Authorization": f"Bearer {api_key}",
+            "Content-Type": "application/json"
+        }
+        payload = {
+            "model": model_name,
+            "messages": [{"role": "user", "content": prompt}]
+        }
+        response = requests.post(url, headers=headers, json=payload, timeout=20)
+        if response.status_code == 200:
+            data = response.json()
+            if "choices" in data and len(data["choices"]) > 0:
+                return data["choices"][0]["message"]["content"]
+        else:
+            print(f"[OpenRouter Status Error]: {response.status_code} - {response.text}")
+    except Exception as e:
+        print(f"[OpenRouter Exception]: {e}")
+    return None
+
+def _call_groq(api_key, prompt, model_name="llama-3.3-70b-versatile"):
+    """
+    Groq API orqali so'rov yuborish.
+    """
+    try:
+        url = "https://api.groq.com/openai/v1/chat/completions"
+        headers = {
+            "Authorization": f"Bearer {api_key}",
+            "Content-Type": "application/json"
+        }
+        payload = {
+            "model": model_name,
+            "messages": [{"role": "user", "content": prompt}]
+        }
+        response = requests.post(url, headers=headers, json=payload, timeout=20)
+        if response.status_code == 200:
+            data = response.json()
+            if "choices" in data and len(data["choices"]) > 0:
+                return data["choices"][0]["message"]["content"]
+        else:
+            print(f"[Groq Status Error]: {response.status_code} - {response.text}")
+    except Exception as e:
+        print(f"[Groq Exception]: {e}")
+    return None
+
 class KeyManager:
     def __init__(self):
         keys_str = os.getenv("AI_KEYS_JSON")
@@ -74,69 +159,31 @@ def brainstorm_idea(prompt):
     system_prompt = "Siz O'zbek tilida gaplashadigan professional SMM va Reels ekspertisiz. Javoblaringiz qisqa, aniq, kreativ va zamonaviy slanglar bilan yozilishi kerak."
     full_prompt = f"{system_prompt}\n\nMijoz savoli: {prompt}"
     
-    # 1-Urinish: Gemini (Birinchi o'rinda)
-    for _ in range(3):
-        gemini_key = km.get_gemini_key()
-        if not gemini_key:
-            break
-            
-        try:
-            import google.generativeai as genai
-            if "GOOGLE_APPLICATION_CREDENTIALS" in os.environ:
-                del os.environ["GOOGLE_APPLICATION_CREDENTIALS"]
-            genai.configure(api_key=gemini_key)
-            model = genai.GenerativeModel("gemini-3.6-flash")
-            response = model.generate_content(full_prompt)
-            if response.text:
-                return "✨ [Gemini AI]:\n\n" + response.text
-        except Exception as e:
-            continue
-
-    # 2-Urinish: Groq (Llama-3) - Agar Gemini limitga tushsa
+    # 1-Urinish: Groq (Asosiy)
     for _ in range(3):
         groq_key = km.get_groq_key()
-        if not groq_key:
-            break
-            
-        try:
-            url = "https://api.groq.com/openai/v1/chat/completions"
-            headers = {
-                "Authorization": f"Bearer {groq_key}",
-                "Content-Type": "application/json"
-            }
-            payload = {
-                "model": "llama-3.3-70b-versatile", 
-                "messages": [{"role": "user", "content": full_prompt}]
-            }
-            response = requests.post(url, headers=headers, json=payload, timeout=10)
-            if response.status_code == 200:
-                return "⚡️ [Groq AI]:\n\n" + response.json()["choices"][0]["message"]["content"]
-        except Exception as e:
-            continue
-            
-    # 3-Urinish: OpenRouter (Zaxira) - Agar Gemini va Groq ishlamasa
+        if not groq_key: break
+        result = _call_groq(groq_key, full_prompt)
+        if result:
+            return "⚡️ [Groq AI]:\n\n" + result
+
+    # 2-Urinish: OpenRouter
     for _ in range(3):
         or_key = km.get_openrouter_key()
-        if not or_key:
-            break
+        if not or_key: break
+        result = _call_openrouter(or_key, full_prompt)
+        if result:
+            return "🌐 [OpenRouter AI]:\n\n" + result
+
+    # 3-Urinish: Gemini
+    for _ in range(3):
+        gemini_key = km.get_gemini_key()
+        if not gemini_key: break
+        result = _call_gemini(gemini_key, full_prompt)
+        if result:
+            return "✨ [Gemini AI]:\n\n" + result
             
-        try:
-            url = "https://openrouter.ai/api/v1/chat/completions"
-            headers = {
-                "Authorization": f"Bearer {or_key}",
-                "Content-Type": "application/json"
-            }
-            payload = {
-                "model": "google/gemma-4-31b-it:free", 
-                "messages": [{"role": "user", "content": full_prompt}]
-            }
-            response = requests.post(url, headers=headers, json=payload, timeout=10)
-            if response.status_code == 200:
-                return "🌐 [OpenRouter AI]:\n\n" + response.json()["choices"][0]["message"]["content"]
-        except Exception as e:
-            continue
-            
-    return "⚠️ Kechirasiz, barcha AI serverlari (Gemini, Groq, OpenRouter) hozircha band yoki API limitga tushdi."
+    return "⚠️ Kechirasiz, barcha AI serverlari (Groq, OpenRouter, Gemini) hozircha band yoki API limitga tushdi."
 
 def generate_caption_groq(summary):
     km = KeyManager()
@@ -145,15 +192,9 @@ def generate_caption_groq(summary):
     for _ in range(3):
         groq_key = km.get_groq_key()
         if not groq_key: break
-        try:
-            url = "https://api.groq.com/openai/v1/chat/completions"
-            headers = {"Authorization": f"Bearer {groq_key}", "Content-Type": "application/json"}
-            payload = {"model": "llama-3.3-70b-versatile", "messages": [{"role": "user", "content": prompt}]}
-            response = requests.post(url, headers=headers, json=payload, timeout=10)
-            if response.status_code == 200:
-                return response.json()["choices"][0]["message"]["content"].strip()
-        except Exception:
-            continue
+        result = _call_groq(groq_key, prompt)
+        if result:
+            return result.strip()
     return None
 
 def generate_caption_openrouter(summary):
@@ -202,64 +243,32 @@ DIQQAT - QAT'IY QOIDALAR (BU QOIDALARNI O'QIB, UNGA AMAL QIL, LEKIN ULARDAN IQTI
 5. Qalin shrift qilish uchun ** ISHLATMA, uning o'rniga faqat HTML <b> va </b> taglaridan foydalan!
 """
     
-    for _ in range(3):
-        gemini_key = km.get_gemini_key()
-        if not gemini_key: break
-        try:
-            import google.generativeai as genai
-            if "GOOGLE_APPLICATION_CREDENTIALS" in os.environ:
-                del os.environ["GOOGLE_APPLICATION_CREDENTIALS"]
-            genai.configure(api_key=gemini_key)
-            model = genai.GenerativeModel("gemini-3.6-flash")
-            response = model.generate_content(prompt)
-            if response.text:
-                import re
-                return re.sub(r'\*\*(.*?)\*\*', r'<b>\1</b>', response.text)
-        except Exception as e:
-            print(f"[AI Stats Error Gemini]: {e}")
-            continue
-            
-    # Zaxira: Groq orqali
+    # 1-Urinish: Groq
     for _ in range(3):
         groq_key = km.get_groq_key()
         if not groq_key: break
-        try:
-            import requests
-            url = "https://api.groq.com/openai/v1/chat/completions"
-            headers = {"Authorization": f"Bearer {groq_key}", "Content-Type": "application/json"}
-            payload = {"model": "llama-3.3-70b-versatile", "messages": [{"role": "user", "content": prompt}]}
-            response = requests.post(url, headers=headers, json=payload, timeout=20)
-            if response.status_code == 200:
-                data = response.json()
-                if "choices" in data and len(data["choices"]) > 0:
-                    import re
-                    return re.sub(r'\*\*(.*?)\*\*', r'<b>\1</b>', data["choices"][0]["message"]["content"].strip())
-            else:
-                print(f"[AI Stats Groq non-200]: {response.status_code} - {response.text}")
-        except Exception as e:
-            print(f"[AI Stats Error Groq]: {e}")
-            continue
-            
-    # Zaxira 2: OpenRouter orqali
+        result = _call_groq(groq_key, prompt)
+        if result:
+            import re
+            return re.sub(r'\*\*(.*?)\*\*', r'<b>\1</b>', result.strip())
+
+    # 2-Urinish: OpenRouter
     for _ in range(3):
         or_key = km.get_openrouter_key()
         if not or_key: break
-        try:
-            import requests
-            url = "https://openrouter.ai/api/v1/chat/completions"
-            headers = {"Authorization": f"Bearer {or_key}", "Content-Type": "application/json"}
-            payload = {"model": "google/gemini-2.0-flash-lite-preview-02-05:free", "messages": [{"role": "user", "content": prompt}]}
-            response = requests.post(url, headers=headers, json=payload, timeout=20)
-            if response.status_code == 200:
-                data = response.json()
-                if "choices" in data and len(data["choices"]) > 0:
-                    import re
-                    return re.sub(r'\*\*(.*?)\*\*', r'<b>\1</b>', data["choices"][0]["message"]["content"].strip())
-            else:
-                print(f"[AI Stats OR non-200]: {response.status_code} - {response.text}")
-        except Exception as e:
-            print(f"[AI Stats Error OR]: {e}")
-            continue
+        result = _call_openrouter(or_key, prompt)
+        if result:
+            import re
+            return re.sub(r'\*\*(.*?)\*\*', r'<b>\1</b>', result.strip())
+
+    # 3-Urinish: Gemini
+    for _ in range(3):
+        gemini_key = km.get_gemini_key()
+        if not gemini_key: break
+        result = _call_gemini(gemini_key, prompt)
+        if result:
+            import re
+            return re.sub(r'\*\*(.*?)\*\*', r'<b>\1</b>', result)
             
     return "⚠️ AI tahlilini olishda xatolik yuz berdi. (Server band yoki limit tugagan)"
 
@@ -277,37 +286,34 @@ def generate_first_comment(caption):
     prompt = f"Sen kreativ SMM yozuvchisan. Quyidagi Reels/TikTok post matni (caption):\n\n{caption}\n\nVAZIFA: Odamlarni fikr bildirishga chorlaydigan 1 ta qisqacha 'Birinchi Komment' yoz (O'zbek tilida). Juda qisqa, qiziqarli yoki baxsli savol bo'lsin. Faqat komment matnini yoz, qo'shtirnoqlarsiz:"
     
     first_comment = ""
+    # 1. Groq
     for _ in range(3):
-        gemini_key = km.get_gemini_key()
-        if not gemini_key: break
-        try:
-            import google.generativeai as genai
-            if "GOOGLE_APPLICATION_CREDENTIALS" in os.environ:
-                del os.environ["GOOGLE_APPLICATION_CREDENTIALS"]
-            genai.configure(api_key=gemini_key)
-            model = genai.GenerativeModel("gemini-3.6-flash")
-            response = model.generate_content(prompt)
-            if response.text:
-                first_comment = response.text.strip().replace('"', '')
+        groq_key = km.get_groq_key()
+        if not groq_key: break
+        result = _call_groq(groq_key, prompt)
+        if result:
+            first_comment = result.strip().replace('"', '')
+            break
+
+    if not first_comment:
+        # 2. OpenRouter
+        for _ in range(3):
+            or_key = km.get_openrouter_key()
+            if not or_key: break
+            result = _call_openrouter(or_key, prompt)
+            if result:
+                first_comment = result.strip().replace('"', '')
                 break
-        except Exception:
-            pass
             
     if not first_comment:
+        # 3. Gemini
         for _ in range(3):
-            groq_key = km.get_groq_key()
-            if not groq_key: break
-            try:
-                import requests
-                url = "https://api.groq.com/openai/v1/chat/completions"
-                headers = {"Authorization": f"Bearer {groq_key}", "Content-Type": "application/json"}
-                payload = {"model": "llama-3.3-70b-versatile", "messages": [{"role": "user", "content": prompt}]}
-                response = requests.post(url, headers=headers, json=payload, timeout=10)
-                if response.status_code == 200:
-                    first_comment = response.json()["choices"][0]["message"]["content"].strip().replace('"', '')
-                    break
-            except Exception:
-                pass
+            gemini_key = km.get_gemini_key()
+            if not gemini_key: break
+            result = _call_gemini(gemini_key, prompt)
+            if result:
+                first_comment = result.strip().replace('"', '')
+                break
                 
     if not first_comment:
         first_comment = "Videodagi holat kimga tanish? 😂 Fikringizni yozib qoldiring 👇"
@@ -413,55 +419,29 @@ INSHO YOZISHNI EMAS, HAYOTIY KOMEDIYA/FOJIA YOZISHNI BUYURYAPMAN!
 # ENDI SENING NAVBATING:
 Yuqoridagi 3 ta NAMUNANI diqqat bilan o'rgandingmi? AYNAN shu stilda, shu sifatda va shu toza tilda 5 KUNLIK mutlaqo har xil ssenariylar yoz! Agar yana "asabiyati kesildi" yoki "kinoga borganlar" degan ahmoqlik yozsang — nol baho olasan!"""
     
-    # 2a. Gemini orqali urinish
-    for _ in range(2):
-        gemini_key = km.get_gemini_key()
-        if not gemini_key: break
-        try:
-            import google.generativeai as genai
-            if "GOOGLE_APPLICATION_CREDENTIALS" in os.environ:
-                del os.environ["GOOGLE_APPLICATION_CREDENTIALS"]
-            genai.configure(api_key=gemini_key)
-            model = genai.GenerativeModel("gemini-2.5-flash")
-            response = model.generate_content(prompt)
-            if response.text:
-                return response.text.strip()
-        except Exception:
-            continue
-            
-    # 2b. Zaxira sifatida Groq
+    # 2a. Groq orqali
     for _ in range(3):
         groq_key = km.get_groq_key()
         if not groq_key: break
-        try:
-            import requests
-            url = "https://api.groq.com/openai/v1/chat/completions"
-            headers = {"Authorization": f"Bearer {groq_key}", "Content-Type": "application/json"}
-            payload = {"model": "llama-3.3-70b-versatile", "messages": [{"role": "user", "content": prompt}]}
-            response = requests.post(url, headers=headers, json=payload, timeout=15)
-            if response.status_code == 200:
-                data = response.json()
-                if "choices" in data and len(data["choices"]) > 0:
-                    return data["choices"][0]["message"]["content"].strip()
-        except Exception:
-            continue
-            
-    # 2c. Zaxira sifatida OpenRouter
+        result = _call_groq(groq_key, prompt)
+        if result:
+            return result.strip()
+
+    # 2b. OpenRouter orqali
     for _ in range(3):
         or_key = km.get_openrouter_key()
         if not or_key: break
-        try:
-            import requests
-            url = "https://openrouter.ai/api/v1/chat/completions"
-            headers = {"Authorization": f"Bearer {or_key}", "Content-Type": "application/json"}
-            payload = {"model": "google/gemini-2.0-flash-lite-preview-02-05:free", "messages": [{"role": "user", "content": prompt}]}
-            response = requests.post(url, headers=headers, json=payload, timeout=20)
-            if response.status_code == 200:
-                data = response.json()
-                if "choices" in data and len(data["choices"]) > 0:
-                    return data["choices"][0]["message"]["content"].strip()
-        except Exception:
-            continue
+        result = _call_openrouter(or_key, prompt)
+        if result:
+            return result.strip()
+            
+    # 2c. Zaxira sifatida Gemini
+    for _ in range(2):
+        gemini_key = km.get_gemini_key()
+        if not gemini_key: break
+        result = _call_gemini(gemini_key, prompt, model_name="gemini-2.5-flash")
+        if result:
+            return result.strip()
             
     return None
 
@@ -521,36 +501,29 @@ Qismlar soni: [Masalan, 4 ta]
 
 Qoidalar aniq. Ortiqcha gaplarsiz, to'g'ridan-to'g'ri ssenariyni yozishni boshla."""
 
-    # 1. Gemini orqali urinish
-    for _ in range(2):
-        gemini_key = km.get_gemini_key()
-        if not gemini_key: break
-        try:
-            import google.generativeai as genai
-            if "GOOGLE_APPLICATION_CREDENTIALS" in os.environ:
-                del os.environ["GOOGLE_APPLICATION_CREDENTIALS"]
-            genai.configure(api_key=gemini_key)
-            model = genai.GenerativeModel("gemini-2.5-flash") # Ssenariy uchun ishonchli model
-            response = model.generate_content(prompt)
-            if response.text:
-                return response.text.strip()
-        except Exception:
-            pass
-
-    # 2. Zaxira Groq
+    # 1. Groq
     for _ in range(3):
         groq_key = km.get_groq_key()
         if not groq_key: break
-        try:
-            import requests
-            url = "https://api.groq.com/openai/v1/chat/completions"
-            headers = {"Authorization": f"Bearer {groq_key}", "Content-Type": "application/json"}
-            payload = {"model": "llama-3.3-70b-versatile", "messages": [{"role": "user", "content": prompt}]}
-            response = requests.post(url, headers=headers, json=payload, timeout=15)
-            if response.status_code == 200:
-                return response.json()["choices"][0]["message"]["content"].strip()
-        except Exception:
-            pass
+        result = _call_groq(groq_key, prompt)
+        if result:
+            return result.strip()
+
+    # 2. OpenRouter
+    for _ in range(3):
+        or_key = km.get_openrouter_key()
+        if not or_key: break
+        result = _call_openrouter(or_key, prompt)
+        if result:
+            return result.strip()
+
+    # 3. Zaxira Gemini
+    for _ in range(2):
+        gemini_key = km.get_gemini_key()
+        if not gemini_key: break
+        result = _call_gemini(gemini_key, prompt, model_name="gemini-2.5-flash")
+        if result:
+            return result.strip()
 
     return "⚠️ Ssenariy yaratishda xatolik yuz berdi. AI serverlari band bo'lishi mumkin."
 
@@ -569,19 +542,28 @@ QAT'IY QOIDALAR:
 5. Faqat izohning o'zini qaytar, ortiqcha so'zlarsiz.
 """
     
+    # 1. Groq
+    for _ in range(3):
+        groq_key = km.get_groq_key()
+        if not groq_key: break
+        result = _call_groq(groq_key, prompt)
+        if result:
+            return result.strip().replace('"', '')
+
+    # 2. OpenRouter
+    for _ in range(3):
+        or_key = km.get_openrouter_key()
+        if not or_key: break
+        result = _call_openrouter(or_key, prompt)
+        if result:
+            return result.strip().replace('"', '')
+
+    # 3. Gemini
     for _ in range(3):
         gemini_key = km.get_gemini_key()
         if not gemini_key: break
-        try:
-            import google.generativeai as genai
-            if "GOOGLE_APPLICATION_CREDENTIALS" in os.environ:
-                del os.environ["GOOGLE_APPLICATION_CREDENTIALS"]
-            genai.configure(api_key=gemini_key)
-            model = genai.GenerativeModel("gemini-3.6-flash")
-            response = model.generate_content(prompt)
-            if response.text:
-                return response.text.strip().replace('"', '')
-        except Exception:
-            pass
+        result = _call_gemini(gemini_key, prompt)
+        if result:
+            return result.strip().replace('"', '')
             
     return "Ajoyib fikr! Rahmat! 😊"
