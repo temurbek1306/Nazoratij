@@ -159,21 +159,21 @@ def brainstorm_idea(prompt):
     system_prompt = "Siz O'zbek tilida gaplashadigan professional SMM va Reels ekspertisiz. Javoblaringiz qisqa, aniq, kreativ va zamonaviy slanglar bilan yozilishi kerak."
     full_prompt = f"{system_prompt}\n\nMijoz savoli: {prompt}"
     
-    # 1-Urinish: Groq (Asosiy)
-    for _ in range(3):
-        groq_key = km.get_groq_key()
-        if not groq_key: break
-        result = _call_groq(groq_key, full_prompt)
-        if result:
-            return "⚡️ [Groq AI]:\n\n" + result
-
-    # 2-Urinish: OpenRouter
+    # 1-Urinish: OpenRouter (Asosiy)
     for _ in range(3):
         or_key = km.get_openrouter_key()
         if not or_key: break
         result = _call_openrouter(or_key, full_prompt)
         if result:
             return "🌐 [OpenRouter AI]:\n\n" + result
+
+    # 2-Urinish: Groq
+    for _ in range(3):
+        groq_key = km.get_groq_key()
+        if not groq_key: break
+        result = _call_groq(groq_key, full_prompt)
+        if result:
+            return "⚡️ [Groq AI]:\n\n" + result
 
     # 3-Urinish: Gemini
     for _ in range(3):
@@ -207,7 +207,7 @@ def generate_caption_openrouter(summary):
         try:
             url = "https://openrouter.ai/api/v1/chat/completions"
             headers = {"Authorization": f"Bearer {or_key}", "Content-Type": "application/json"}
-            payload = {"model": "google/gemma-4-31b-it:free", "messages": [{"role": "user", "content": prompt}]}
+            payload = {"model": "openrouter/free", "messages": [{"role": "user", "content": prompt}]}
             response = requests.post(url, headers=headers, json=payload, timeout=10)
             if response.status_code == 200:
                 data = response.json()
@@ -243,20 +243,20 @@ DIQQAT - QAT'IY QOIDALAR (BU QOIDALARNI O'QIB, UNGA AMAL QIL, LEKIN ULARDAN IQTI
 5. Qalin shrift qilish uchun ** ISHLATMA, uning o'rniga faqat HTML <b> va </b> taglaridan foydalan!
 """
     
-    # 1-Urinish: Groq
-    for _ in range(3):
-        groq_key = km.get_groq_key()
-        if not groq_key: break
-        result = _call_groq(groq_key, prompt)
-        if result:
-            import re
-            return re.sub(r'\*\*(.*?)\*\*', r'<b>\1</b>', result.strip())
-
-    # 2-Urinish: OpenRouter
+    # 1-Urinish: OpenRouter
     for _ in range(3):
         or_key = km.get_openrouter_key()
         if not or_key: break
         result = _call_openrouter(or_key, prompt)
+        if result:
+            import re
+            return re.sub(r'\*\*(.*?)\*\*', r'<b>\1</b>', result.strip())
+
+    # 2-Urinish: Groq
+    for _ in range(3):
+        groq_key = km.get_groq_key()
+        if not groq_key: break
+        result = _call_groq(groq_key, prompt)
         if result:
             import re
             return re.sub(r'\*\*(.*?)\*\*', r'<b>\1</b>', result.strip())
@@ -286,21 +286,21 @@ def generate_first_comment(caption):
     prompt = f"Sen kreativ SMM yozuvchisan. Quyidagi Reels/TikTok post matni (caption):\n\n{caption}\n\nVAZIFA: Odamlarni fikr bildirishga chorlaydigan 1 ta qisqacha 'Birinchi Komment' yoz (O'zbek tilida). Juda qisqa, qiziqarli yoki baxsli savol bo'lsin. Faqat komment matnini yoz, qo'shtirnoqlarsiz:"
     
     first_comment = ""
-    # 1. Groq
+    # 1. OpenRouter
     for _ in range(3):
-        groq_key = km.get_groq_key()
-        if not groq_key: break
-        result = _call_groq(groq_key, prompt)
+        or_key = km.get_openrouter_key()
+        if not or_key: break
+        result = _call_openrouter(or_key, prompt)
         if result:
             first_comment = result.strip().replace('"', '')
             break
 
     if not first_comment:
-        # 2. OpenRouter
+        # 2. Groq
         for _ in range(3):
-            or_key = km.get_openrouter_key()
-            if not or_key: break
-            result = _call_openrouter(or_key, prompt)
+            groq_key = km.get_groq_key()
+            if not groq_key: break
+            result = _call_groq(groq_key, prompt)
             if result:
                 first_comment = result.strip().replace('"', '')
                 break
@@ -419,19 +419,19 @@ INSHO YOZISHNI EMAS, HAYOTIY KOMEDIYA/FOJIA YOZISHNI BUYURYAPMAN!
 # ENDI SENING NAVBATING:
 Yuqoridagi 3 ta NAMUNANI diqqat bilan o'rgandingmi? AYNAN shu stilda, shu sifatda va shu toza tilda 5 KUNLIK mutlaqo har xil ssenariylar yoz! Agar yana "asabiyati kesildi" yoki "kinoga borganlar" degan ahmoqlik yozsang — nol baho olasan!"""
     
-    # 2a. Groq orqali
-    for _ in range(3):
-        groq_key = km.get_groq_key()
-        if not groq_key: break
-        result = _call_groq(groq_key, prompt)
-        if result:
-            return result.strip()
-
-    # 2b. OpenRouter orqali
+    # 2a. OpenRouter orqali
     for _ in range(3):
         or_key = km.get_openrouter_key()
         if not or_key: break
         result = _call_openrouter(or_key, prompt)
+        if result:
+            return result.strip()
+            
+    # 2b. Groq orqali
+    for _ in range(3):
+        groq_key = km.get_groq_key()
+        if not groq_key: break
+        result = _call_groq(groq_key, prompt)
         if result:
             return result.strip()
             
@@ -501,19 +501,19 @@ Qismlar soni: [Masalan, 4 ta]
 
 Qoidalar aniq. Ortiqcha gaplarsiz, to'g'ridan-to'g'ri ssenariyni yozishni boshla."""
 
-    # 1. Groq
-    for _ in range(3):
-        groq_key = km.get_groq_key()
-        if not groq_key: break
-        result = _call_groq(groq_key, prompt)
-        if result:
-            return result.strip()
-
-    # 2. OpenRouter
+    # 1. OpenRouter
     for _ in range(3):
         or_key = km.get_openrouter_key()
         if not or_key: break
         result = _call_openrouter(or_key, prompt)
+        if result:
+            return result.strip()
+
+    # 2. Groq
+    for _ in range(3):
+        groq_key = km.get_groq_key()
+        if not groq_key: break
+        result = _call_groq(groq_key, prompt)
         if result:
             return result.strip()
 
@@ -528,42 +528,4 @@ Qoidalar aniq. Ortiqcha gaplarsiz, to'g'ridan-to'g'ri ssenariyni yozishni boshla
     return "⚠️ Ssenariy yaratishda xatolik yuz berdi. AI serverlari band bo'lishi mumkin."
 
 def generate_comment_reply(comment_text, platform, username):
-    km = KeyManager()
-    prompt = f"""Sen samimiy, tajribali va do'stona Dasturchi (Temurbek) san. 
-Sening {platform} sahifangdagi videoga quyidagi izoh (komment) yozildi.
-Foydalanuvchi: {username}
-Izoh: "{comment_text}"
-
-QAT'IY QOIDALAR:
-1. Izohga o'ta samimiy va xuddi odamdek javob ber. O'zbek tilida yoz.
-2. Qisqa va lo'nda bo'lsin (1-2 ta gap).
-3. Emojilardan me'yorida foydalan.
-4. Hech qanday "Salom, men Temurbekman" deb o'zingni tanishtirma, shunchaki suhbatni davom ettir.
-5. Faqat izohning o'zini qaytar, ortiqcha so'zlarsiz.
-"""
-    
-    # 1. Groq
-    for _ in range(3):
-        groq_key = km.get_groq_key()
-        if not groq_key: break
-        result = _call_groq(groq_key, prompt)
-        if result:
-            return result.strip().replace('"', '')
-
-    # 2. OpenRouter
-    for _ in range(3):
-        or_key = km.get_openrouter_key()
-        if not or_key: break
-        result = _call_openrouter(or_key, prompt)
-        if result:
-            return result.strip().replace('"', '')
-
-    # 3. Gemini
-    for _ in range(3):
-        gemini_key = km.get_gemini_key()
-        if not gemini_key: break
-        result = _call_gemini(gemini_key, prompt)
-        if result:
-            return result.strip().replace('"', '')
-            
-    return "Ajoyib fikr! Rahmat! 😊"
+    return "Ajoyib fikr, bizga obuna bo'ling!"
