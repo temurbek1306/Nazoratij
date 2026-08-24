@@ -7,7 +7,7 @@ load_dotenv()
 
 def send_telegram_msg(text, reply_markup=None):
     import os
-        tg_token = os.getenv("TELEGRAM_BOT_TOKEN")
+    tg_token = os.getenv("TELEGRAM_BOT_TOKEN")
     tg_admin = "5701828462"
     
     # Global matn tozalash: AI ko'p hollarda ** (qalin) belgilarini qo'shadi, Telegram buni to'g'ri tushunmasligi mumkin.

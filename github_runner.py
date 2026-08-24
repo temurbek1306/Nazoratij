@@ -301,7 +301,7 @@ CAPTION_A: (videoga to'liq mos yozilgan caption)"""
 
                 # Telegramga yuborish
                 import os
-        tg_token = os.getenv("TELEGRAM_BOT_TOKEN")
+                tg_token = os.getenv("TELEGRAM_BOT_TOKEN")
                 tg_admin = "5701828462"
                 if tg_token and tg_admin:
                     import requests
