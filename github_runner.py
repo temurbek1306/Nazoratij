@@ -1,11 +1,11 @@
 import time
 import os
+import json
 from agent_tools import get_pending_video, expose_video_url, post_to_instagram
 from instagram_api import InstagramAPI
 import requests
 
 def send_alert(msg):
-    import requests
     import html
     token = os.getenv("TELEGRAM_BOT_TOKEN")
     chat_id = os.getenv("TELEGRAM_ADMIN_ID")
@@ -285,7 +285,6 @@ CAPTION_A: (videoga to'liq mos yozilgan caption)"""
                         caption_b += "\n\n" + global_tags
                         caption_c += "\n\n" + global_tags
 
-                import json
                 # Saqlash
                 data = {
                     "video_name": video_name,
@@ -300,11 +299,10 @@ CAPTION_A: (videoga to'liq mos yozilgan caption)"""
                     json.dump(data, f)
 
                 # Telegramga yuborish
-                import os
+
                 tg_token = os.getenv("TELEGRAM_BOT_TOKEN")
                 tg_admin = "5701828462"
                 if tg_token and tg_admin:
-                    import requests
                     msg = f"🎬 <b>Video tayyor: {video_name}</b>\n\nAI'lar jangi boshlandi! Qaysi matnni post qilamiz?\n\n"
                     msg += f"<b>🅰️ Gemini (Kreativ):</b>\n{caption_a}\n\n"
                     msg += f"<b>🅱️ Groq (SMM Ekspert):</b>\n{caption_b}\n\n"
@@ -404,7 +402,6 @@ def run():
         process_video(regular_video, hashtag_mode, global_tags)
         
     if trial_video:
-        import time
         print("\n⏳ Trial navbatiga o'tishdan oldin 15 soniya kutilmoqda...")
         time.sleep(15)
         print(f"\n===========================\n🧪 Trial navbatdan video joylanmoqda: {trial_video}\n===========================")
