@@ -129,7 +129,8 @@ def run():
                 status_messages.append("⚠️ Facebook (API kalitlar yo'q)")
 
         # # --- TELEGRAM HISOBOT ---
-        tg_token = "8674470670:AAFEf9kKctzOgv6up5ghRD-eEw3NLrn8pD8"
+        import os
+        tg_token = os.getenv("TELEGRAM_BOT_TOKEN")
         tg_admin = "5701828462"
         if tg_token and tg_admin:
             import requests
@@ -161,7 +162,8 @@ def run():
         if os.path.exists(json_path):
             os.remove(json_path)
             
-        tg_token = "8674470670:AAFEf9kKctzOgv6up5ghRD-eEw3NLrn8pD8"
+        import os
+        tg_token = os.getenv("TELEGRAM_BOT_TOKEN")
         tg_admin = "5701828462"
         if tg_token and tg_admin:
             import requests

@@ -134,3 +134,14 @@ __pycache__/
 *.mp4
 !videos/**/*.mp4
 php_bot/
+
+
+# Secrets and Keys
+*.json
+!package.json
+!package-lock.json
+!replied_comments.json
+!stats_history.json
+*.pem
+*.key
+scratch/

@@ -5,7 +5,7 @@
 
 header('Content-Type: application/json');
 
-$TELEGRAM_TOKEN = "8674470670:AAFEf9kKctzOgv6up5ghRD-eEw3NLrn8pD8";
+$TELEGRAM_TOKEN = getenv("TELEGRAM_BOT_TOKEN");
 $ADMIN_ID = 5701828462;
 
 // Ruxsat etilgan fayl formatlari
