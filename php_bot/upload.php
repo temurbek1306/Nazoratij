@@ -4,6 +4,7 @@
 // ==========================================
 
 header('Content-Type: application/json');
+if (file_exists(__DIR__ . '/config.php')) { require_once __DIR__ . '/config.php'; }
 
 $TELEGRAM_TOKEN = getenv("TELEGRAM_BOT_TOKEN");
 $ADMIN_ID = 5701828462;
