@@ -33,23 +33,35 @@ def main():
         send_telegram_text(bot_token, admin_id, f"⏳ {len(video_urls)} ta video serverga yuklab olinmoqda...")
         
         input_files = []
+        thumbnail_image = None
         for i, url in enumerate(video_urls):
             url = url.strip()
             if not url:
                 continue
-            filepath = f"temp_input_{i}.mp4"
+                
+            is_photo = False
+            if url.startswith("PHOTO:"):
+                is_photo = True
+                url = url.replace("PHOTO:", "")
+                
+            filepath = f"temp_input_{i}.{'jpg' if is_photo else 'mp4'}"
             r = requests.get(url, stream=True, timeout=60)
             if r.status_code == 200:
                 with open(filepath, 'wb') as f:
                     for chunk in r.iter_content(chunk_size=1024*1024):
                         f.write(chunk)
-                input_files.append(filepath)
-                print(f"Downloaded video {i+1}")
+                
+                if is_photo:
+                    thumbnail_image = filepath
+                    print(f"Downloaded thumbnail: {filepath}")
+                else:
+                    input_files.append(filepath)
+                    print(f"Downloaded video {i+1}")
             else:
-                raise Exception(f"Failed to download video from URL: {url}")
+                raise Exception(f"Failed to download file from URL: {url}")
 
-        if len(input_files) < 2:
-            raise Exception("Birlashtirish uchun yetarli videolar yuklanmadi (Kamida 2 ta bo'lishi kerak).")
+        if len(input_files) < 1:
+            raise Exception("Birlashtirish uchun yetarli videolar yuklanmadi.")
 
         print("Normalizing videos...")
         send_telegram_text(bot_token, admin_id, "⚙️ Videolar bir xil formatga keltirilmoqda (Bu jarayon eng ko'p vaqt oladi, iltimos kuting)...")
@@ -124,6 +136,36 @@ def main():
                 output_video
             ]
             subprocess.run(cmd, check=True)
+
+        if thumbnail_image:
+            print("Prepending thumbnail to the final video...")
+            send_telegram_text(bot_token, admin_id, "🖼 Thumbnail (0.1s rasm) videoga biriktirilmoqda...")
+            thumb_vid = "thumb_video.mp4"
+            
+            cmd_thumb = [
+                "ffmpeg", "-y", "-loop", "1", "-t", "0.1", "-i", thumbnail_image,
+                "-f", "lavfi", "-t", "0.1", "-i", "anullsrc=channel_layout=stereo:sample_rate=44100",
+                "-vf", "scale=1080:1920:force_original_aspect_ratio=decrease,pad=1080:1920:(ow-iw)/2:(oh-ih)/2,setsar=1,fps=30",
+                "-c:v", "libx264", "-preset", "ultrafast", "-crf", "23", "-pix_fmt", "yuv420p",
+                "-c:a", "aac", "-ar", "44100", "-ac", "2",
+                "-shortest",
+                thumb_vid
+            ]
+            subprocess.run(cmd_thumb, check=True)
+            
+            with open("final_concat.txt", "w") as f:
+                f.write(f"file '{thumb_vid}'\n")
+                f.write(f"file '{output_video}'\n")
+            
+            final_video = "merged_final_with_thumb.mp4"
+            cmd_concat = [
+                "ffmpeg", "-y", "-f", "concat", "-safe", "0",
+                "-i", "final_concat.txt",
+                "-c", "copy",
+                final_video
+            ]
+            subprocess.run(cmd_concat, check=True)
+            os.replace(final_video, output_video)
 
         send_telegram_text(bot_token, admin_id, "📱 Prevyu (kichraytirilgan nusxa) tayyorlanmoqda va Telegramga yuklanmoqda...")
         preview_video = "merged_preview.mp4"
