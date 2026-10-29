@@ -8,8 +8,8 @@ class InstagramAPI:
         self.account_id = account_id
         self.base_url = "https://graph.facebook.com/v19.0"
 
-    def upload_reel(self, video_url: str, caption: str = "", is_trial: bool = False, graduation_strategy: str = "MANUAL") -> str:
-        """Videoni Instagram serveriga yuklaydi (Container yaratadi). is_trial=True bo'lsa Trial Reel rejimida yuklanadi."""
+    def upload_reel(self, video_url: str, caption: str = "", is_trial: bool = False, graduation_strategy: str = "MANUAL", cover_url: str = "") -> str:
+        """Videoni Instagram serveriga yuklaydi (Container yaratadi). is_trial=True bo'lsa Trial Reel rejimida yuklanadi. cover_url - muqova rasmi (thumbnail) URL manzili."""
         import json as _json
         url = f"{self.base_url}/{self.account_id}/media"
         payload = {
@@ -18,6 +18,10 @@ class InstagramAPI:
             "caption": caption,
             "access_token": self.access_token
         }
+        
+        if cover_url:
+            payload["cover_url"] = cover_url
+            print(f"[API] 🖼 Custom cover (thumbnail) biriktirilmoqda: {cover_url[:60]}...")
         
         if is_trial:
             # Trial Reel: faqat non-followers ko'radi, lentaga tushmaydi
@@ -94,7 +98,16 @@ class InstagramAPI:
         data = response.json()
         
         if "id" in data:
-            print(f"[API] Izoh Muvaffaqiyatli qoldirildi!")
+            comment_id = data["id"]
+            print(f"[API] Izoh Muvaffaqiyatli qoldirildi! (Comment ID: {comment_id})")
+            # Instagram Graph API orqali pin (qadash) qilishga urinish
+            try:
+                pin_url = f"{self.base_url}/{comment_id}"
+                pin_res = requests.post(pin_url, data={"pinned": "true", "access_token": self.access_token}, timeout=5)
+                if pin_res.status_code == 200:
+                    print(f"[API] 📌 Izoh muvaffaqiyatli qadaldi (pinned)!")
+            except Exception:
+                pass
             return True
         else:
             print(f"[API] Izoh yozishda xatolik: {data}")

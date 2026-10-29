@@ -27,9 +27,10 @@ if (isset($update['message'])) {
         $is_photo = isset($update['message']['photo']);
         
         $is_multiple = (file_exists("state.txt") && file_get_contents("state.txt") == "waiting_for_multiple_videos");
+        $is_waiting_thumb = (file_exists("state.txt") && file_get_contents("state.txt") == "waiting_for_thumbnail");
         
-        if ($is_photo && !$is_multiple) {
-            sendMessage($chat_id, "⚠️ Rasm faqat 'Videolarni Birlashtirish' rejimida (Thumbnail sifatida) qabul qilinadi.");
+        if ($is_photo && !$is_multiple && !$is_waiting_thumb) {
+            sendMessage($chat_id, "⚠️ Rasm faqat muqova (Thumbnail) yoki 'Videolarni Birlashtirish' rejimida qabul qilinadi.");
             exit;
         }
         
@@ -54,6 +55,50 @@ if (isset($update['message'])) {
         
         if ($file_path) {
             $telegram_url = "https://api.telegram.org/file/bot" . $TELEGRAM_TOKEN . "/" . $file_path;
+            
+            if ($is_waiting_thumb) {
+                $upload_dir = __DIR__ . '/uploads';
+                if (!is_dir($upload_dir)) {
+                    mkdir($upload_dir, 0755, true);
+                    file_put_contents($upload_dir . '/.htaccess', "Options -Indexes\nAllow from all");
+                }
+                $safe_thumb_name = 'thumb_' . time() . '_' . rand(1000, 9999) . '.jpg';
+                $dest_path = $upload_dir . '/' . $safe_thumb_name;
+                $file_data = file_get_contents($telegram_url);
+                if ($file_data && strlen($file_data) > 500) {
+                    file_put_contents($dest_path, $file_data);
+                    $protocol = ((isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on') || ($_SERVER['HTTP_X_FORWARDED_PROTO'] ?? '') === 'https') ? "https" : "http";
+                    $host = $_SERVER['HTTP_HOST'];
+                    $path = rtrim(dirname($_SERVER['REQUEST_URI']), '/');
+                    $thumb_url = $protocol . "://" . $host . $path . "/uploads/" . $safe_thumb_name;
+                } else {
+                    $thumb_url = $telegram_url;
+                }
+                
+                file_put_contents("last_thumbnail.txt", $thumb_url);
+                file_put_contents("state.txt", "none");
+                
+                $is_trial_mode = (file_exists("last_trial.txt") && file_get_contents("last_trial.txt") == "true");
+                $custom_name = file_exists("last_custom_name.txt") ? file_get_contents("last_custom_name.txt") : "";
+                $name_str = $custom_name ? "Nomi: <b>$custom_name</b>\n\n" : "";
+                
+                if ($is_trial_mode) {
+                    $caption_keyboard = json_encode([
+                        "inline_keyboard" => [
+                            [
+                                ["text" => "🤖 AI O'zi yozsin", "callback_data" => "video_ai"],
+                                ["text" => "✍️ O'zim yozaman", "callback_data" => "video_manual"]
+                            ]
+                        ]
+                    ]);
+                    sendMessage($chat_id, "✅ <b>Muqova rasmi (Thumbnail) saqlandi!</b>\n\n{$name_str}🧪 Rejim: <b>Faqat Instagram (Trial Reel)</b>\n\nEndi post matnini (caption) kim yozadi?", $caption_keyboard);
+                } else {
+                    if (file_exists("platforms_" . $chat_id . ".json")) unlink("platforms_" . $chat_id . ".json");
+                    $keyboard = get_platforms_keyboard($chat_id);
+                    sendMessage($chat_id, "✅ <b>Muqova rasmi (Thumbnail) saqlandi!</b>\n\n{$name_str}Qaysi tarmoqqa joylaymiz?", $keyboard);
+                }
+                exit;
+            }
             
             if (!$is_multiple) {
                 // 🛡️ TELEGRAM URL HIMOYASI: Videoni darhol serverga yuklab olamiz
@@ -117,6 +162,9 @@ if (isset($update['message'])) {
             
             // Fayl manzilini vaqtincha saqlab qo'yamiz (Tugma bosilganda o'qish uchun)
             file_put_contents("last_video.txt", $video_url);
+            if (file_exists("last_caption.txt")) @unlink("last_caption.txt");
+            if (file_exists("last_first_comment.txt")) @unlink("last_first_comment.txt");
+            if (file_exists("last_thumbnail.txt")) @unlink("last_thumbnail.txt");
             
             if ($video_name_custom == "") {
                 file_put_contents("state.txt", "waiting_for_video_name");
@@ -128,21 +176,16 @@ if (isset($update['message'])) {
                 $msg_title = $is_trial_mode ? "🧪 Instagram Trial Video qabul qilindi!" : "🎬 Video qabul qilindi!";
                 sendMessage($chat_id, "$msg_title\n\n✏️ Iltimos, bu videoga ixtiyoriy qisqa nom bering (keyingi yuborgan matningiz nom sifatida qabul qilinadi).", $keyboard);
             } else {
-                if ($is_trial_mode) {
-                    file_put_contents("state.txt", "none");
-                    $caption_keyboard = json_encode([
-                        "inline_keyboard" => [
-                            [
-                                ["text" => "🤖 AI O'zi yozsin", "callback_data" => "video_ai"],
-                                ["text" => "✍️ O'zim yozaman", "callback_data" => "video_manual"]
-                            ]
+                $thumb_keyboard = json_encode([
+                    "inline_keyboard" => [
+                        [
+                            ["text" => "📸 Ha, rasm yuboraman", "callback_data" => "thumb_manual"],
+                            ["text" => "⏭ Kerak emas (O'tkazish)", "callback_data" => "thumb_skip"]
                         ]
-                    ]);
-                    sendMessage($chat_id, "🧪 <b>Instagram Trial Video qabul qilindi!</b>\nNomi: <b>$video_name_custom</b>\n\nBu video <b>faqat Instagram</b>ga sinov (Trial Reel) sifatida yuklanadi.\n\nEndi izohni kim yozadi?", $caption_keyboard);
-                } else {
-                    $keyboard = get_platforms_keyboard($chat_id);
-                    sendMessage($chat_id, "🎬 Video qabul qilindi! Nomi: <b>$video_name_custom</b>\n\nQaysi tarmoqqa joylaymiz?", $keyboard);
-                }
+                    ]
+                ]);
+                $msg_title = $is_trial_mode ? "🧪 Instagram Trial Video qabul qilindi!" : "🎬 Video qabul qilindi!";
+                sendMessage($chat_id, "$msg_title\nNomi: <b>$video_name_custom</b>\n\n🖼 <b>Reels uchun muqova (Thumbnail) rasm qo'ymoqchimisiz?</b>\n<i>(Video ustiga alohida rasm qo'yish uchun 'Ha, rasm yuboraman' tugmasini bosing)</i>", $thumb_keyboard);
             }
         } else {
             sendMessage($chat_id, "❌ Videoni qabul qilishda xatolik yuz berdi (Fayl hajmi juda katta bo'lishi mumkin).");
@@ -163,40 +206,57 @@ if (isset($update['message'])) {
             file_put_contents("last_custom_name.txt", $video_name_custom);
             file_put_contents("state.txt", "none");
             
-            $is_trial_mode = (file_exists("last_trial.txt") && file_get_contents("last_trial.txt") == "true");
-            if ($is_trial_mode) {
-                $caption_keyboard = json_encode([
-                    "inline_keyboard" => [
-                        [
-                            ["text" => "🤖 AI O'zi yozsin", "callback_data" => "video_ai"],
-                            ["text" => "✍️ O'zim yozaman", "callback_data" => "video_manual"]
-                        ]
+            $thumb_keyboard = json_encode([
+                "inline_keyboard" => [
+                    [
+                        ["text" => "📸 Ha, rasm yuboraman", "callback_data" => "thumb_manual"],
+                        ["text" => "⏭ Kerak emas (O'tkazish)", "callback_data" => "thumb_skip"]
                     ]
-                ]);
-                sendMessage($chat_id, "✅ Videoga <b>$video_name_custom</b> deb nom berildi!\n\n🧪 Rejim: <b>Faqat Instagram (Trial Reel)</b>\n\nEndi izohni kim yozadi?", $caption_keyboard);
-            } else {
-                if (file_exists("platforms_" . $chat_id . ".json")) unlink("platforms_" . $chat_id . ".json");
-                $keyboard = get_platforms_keyboard($chat_id);
-                sendMessage($chat_id, "✅ Videoga <b>$video_name_custom</b> deb nom berildi!\n\nQaysi tarmoqqa joylaymiz?", $keyboard);
-            }
+                ]
+            ]);
+            sendMessage($chat_id, "✅ Videoga <b>$video_name_custom</b> deb nom berildi!\n\n🖼 <b>Reels uchun muqova (Thumbnail) rasm qo'ymoqchimisiz?</b>\n<i>(Video yuzi uchun alohida rasm joylamoqchi bo'lsangiz tanlang)</i>", $thumb_keyboard);
             exit;
         }
     }
     
-    // Qo'lda yozilgan izohni qabul qilish qismi
+    // Qo'lda yozilgan asosiy post matnini (caption) qabul qilish qismi
     if (file_exists("state.txt") && file_get_contents("state.txt") == "waiting_for_caption" && $text != "") {
         file_put_contents("last_caption.txt", $text);
         file_put_contents("state.txt", "none");
         
-        $keyboard = json_encode([
+        $fc_keyboard = json_encode([
             "inline_keyboard" => [
-                [["text" => "📥 Navbat", "callback_data" => "act_queue_manual"]],
-                [["text" => "🚀 Hozir", "callback_data" => "act_postnow_manual"]],
-                [["text" => "⏱ Aniq vaqtga", "callback_data" => "act_schedule_manual"]]
+                [
+                    ["text" => "✍️ O'zim yozaman", "callback_data" => "fc_manual_manual"],
+                    ["text" => "🤖 AI o'zi yozsin", "callback_data" => "fc_ai_manual"]
+                ],
+                [
+                    ["text" => "⏭ O'tkazib yuborish (Izohsiz)", "callback_data" => "fc_skip_manual"]
+                ]
             ]
         ]);
-        sendMessage($chat_id, "✅ Ajoyib izoh qabul qilindi!\n\nVideoni nima qilamiz?", $keyboard);
+        sendMessage($chat_id, "✅ <b>Post matni (caption) saqlandi!</b>\n\n💬 <b>Instagram Reels uchun birinchi yoziladigan izoh (first comment):</b>\nReels e'lon qilingandan so'ng, uning ostiga birinchi bo'lib qanday izoh yozilsin?", $fc_keyboard);
         exit;
+    }
+    
+    // Qo'lda yozilgan birinchi izohni (first comment) qabul qilish qismi
+    if (file_exists("state.txt") && (file_get_contents("state.txt") == "waiting_for_first_comment_manual" || file_get_contents("state.txt") == "waiting_for_first_comment_ai") && $text != "") {
+        if (strpos($text, "/") !== 0 && !in_array($text, ["☁️ Web-App orqali yuklash", "➕ Yangi Video Qo'shish", "🧪 Trial Video Joylash", "🔖 Doimiy Hashteglar", "🚀 Hozir Joylash", "📊 Statistika", "📋 Navbat (Queue)", "🗑 Eski videolarni o'chirish", "⚙️ Vaqt Sozlamalari", "🔙 Ortga"])) {
+            $st = file_get_contents("state.txt");
+            $cap_mode = ($st == "waiting_for_first_comment_manual") ? "manual" : "ai";
+            file_put_contents("last_first_comment.txt", $text);
+            file_put_contents("state.txt", "none");
+            
+            $keyboard = json_encode([
+                "inline_keyboard" => [
+                    [["text" => "📥 Navbat", "callback_data" => "act_queue_" . $cap_mode]],
+                    [["text" => "🚀 Hozir", "callback_data" => "act_postnow_" . $cap_mode]],
+                    [["text" => "⏱ Aniq vaqtga", "callback_data" => "act_schedule_" . $cap_mode]]
+                ]
+            ]);
+            sendMessage($chat_id, "✅ <b>Birinchi izoh saqlandi:</b>\n<i>\"" . htmlspecialchars($text) . "\"</i>\n\nVideoni nima qilamiz?", $keyboard);
+            exit;
+        }
     }
     
     // Aniq vaqtni qabul qilish qismi
@@ -281,10 +341,22 @@ if (isset($update['message'])) {
             
             $is_trial = (file_exists("last_trial.txt") && file_get_contents("last_trial.txt") == "true");
             
+            $first_comment = "";
+            if (file_exists("last_first_comment.txt")) {
+                $first_comment = file_get_contents("last_first_comment.txt");
+            }
+            
+            $cover_url = "";
+            if (file_exists("last_thumbnail.txt")) {
+                $cover_url = file_get_contents("last_thumbnail.txt");
+            }
+            
             $scheduled_list[] = [
                 "video_url" => $video_url,
                 "artifact_run_id" => $artifact_id,
                 "caption" => $caption,
+                "first_comment" => $first_comment,
+                "cover_url" => $cover_url,
                 "custom_name" => $custom_name,
                 "post_time" => $timestamp,
                 "platform" => $platform,
@@ -292,6 +364,9 @@ if (isset($update['message'])) {
             ];
             
             file_put_contents($scheduled_file, json_encode($scheduled_list, JSON_PRETTY_PRINT));
+            if (file_exists("last_first_comment.txt")) @unlink("last_first_comment.txt");
+            if (file_exists("last_caption.txt")) @unlink("last_caption.txt");
+            if (file_exists("last_thumbnail.txt")) @unlink("last_thumbnail.txt");
             
             $formatted_time = date("d.m.Y H:i", $timestamp);
             sendMessage($chat_id, "✅ Video ro'yxatga olindi!\n\nVideo aynan <b>$formatted_time</b> da avtomatik tarzda joylanadi.");
@@ -372,7 +447,7 @@ if (isset($update['message'])) {
         file_put_contents("last_platform.txt", "ig");
         
         $bot_url = "https://" . $_SERVER['HTTP_HOST'] . dirname($_SERVER['REQUEST_URI']);
-        $webapp_url = rtrim($bot_url, '/') . "/upload.html?type=trial";
+        $webapp_url = rtrim($bot_url, '/') . "/upload.html?type=trial&v=" . time();
         $webapp_keyboard = json_encode([
             "inline_keyboard" => [
                 [
@@ -385,7 +460,7 @@ if (isset($update['message'])) {
     }
     elseif ($text == "☁️ Web-App orqali yuklash" || $text == "/upload") {
         $bot_url = "https://" . $_SERVER['HTTP_HOST'] . dirname($_SERVER['REQUEST_URI']);
-        $webapp_url = rtrim($bot_url, '/') . "/upload.html";
+        $webapp_url = rtrim($bot_url, '/') . "/upload.html?v=" . time();
         
         $webapp_keyboard = json_encode([
             "inline_keyboard" => [
@@ -579,7 +654,7 @@ if (isset($update['message'])) {
         
         // state fayllar
         $debug_msg .= "\n📂 <b>State fayllar:</b>\n";
-        $state_files = ["state.txt", "last_video.txt", "last_trial.txt", "last_platform.txt", "last_custom_name.txt", "schedule_mode.txt"];
+        $state_files = ["state.txt", "last_video.txt", "last_trial.txt", "last_platform.txt", "last_custom_name.txt", "last_caption.txt", "last_first_comment.txt", "last_thumbnail.txt", "schedule_mode.txt"];
         foreach ($state_files as $sf) {
             if (file_exists($sf)) {
                 $val = trim(file_get_contents($sf));
@@ -696,22 +771,15 @@ if (isset($update['callback_query'])) {
     
     if ($data == "skip_naming") {
         file_put_contents("state.txt", "none");
-        $is_trial_mode = (file_exists("last_trial.txt") && file_get_contents("last_trial.txt") == "true");
-        if ($is_trial_mode) {
-            $caption_keyboard = json_encode([
-                "inline_keyboard" => [
-                    [
-                        ["text" => "🤖 AI O'zi yozsin", "callback_data" => "video_ai"],
-                        ["text" => "✍️ O'zim yozaman", "callback_data" => "video_manual"]
-                    ]
+        $thumb_keyboard = json_encode([
+            "inline_keyboard" => [
+                [
+                    ["text" => "📸 Ha, rasm yuboraman", "callback_data" => "thumb_manual"],
+                    ["text" => "⏭ Kerak emas (O'tkazish)", "callback_data" => "thumb_skip"]
                 ]
-            ]);
-            sendMessage($chat_id, "✅ Faylga avtomatik nom beriladi.\n\n🧪 Rejim: <b>Faqat Instagram (Trial Reel)</b>\n\nEndi izohni kim yozadi?", $caption_keyboard);
-        } else {
-            if (file_exists("platforms_" . $chat_id . ".json")) unlink("platforms_" . $chat_id . ".json");
-            $keyboard = get_platforms_keyboard($chat_id);
-            sendMessage($chat_id, "✅ Faylga avtomatik nom beriladi.\n\nQaysi tarmoqqa joylaymiz?", $keyboard);
-        }
+            ]
+        ]);
+        sendMessage($chat_id, "✅ Faylga avtomatik nom beriladi.\n\n🖼 <b>Reels uchun muqova (Thumbnail) rasm qo'ymoqchimisiz?</b>\n<i>(Video ustiga alohida rasm qo'yish uchun 'Ha, rasm yuboraman' tugmasini bosing)</i>", $thumb_keyboard);
         $url = "https://api.telegram.org/bot" . $TELEGRAM_TOKEN . "/editMessageReplyMarkup";
         file_get_contents($url . "?chat_id=$chat_id&message_id=$message_id&reply_markup=" . urlencode(json_encode(["inline_keyboard" => []])));
         exit;
@@ -762,22 +830,67 @@ if (isset($update['callback_query'])) {
                 ]
             ]
         ]);
-        sendMessage($chat_id, "✅ Tarmoqlar tasdiqlandi!\n\nEndi izohni kim yozadi?", $keyboard);
+        sendMessage($chat_id, "✅ Tarmoqlar tasdiqlandi!\n\nEndi post matnini (caption) kim yozadi?", $keyboard);
         $url = "https://api.telegram.org/bot" . $TELEGRAM_TOKEN . "/editMessageReplyMarkup";
         file_get_contents($url . "?chat_id=$chat_id&message_id=$message_id&reply_markup=" . urlencode(json_encode(["inline_keyboard" => []])));
         exit;
     }
     
-    if ($data == "video_ai") {
-        file_put_contents("state.txt", "none");
-        $keyboard = json_encode([
+    if ($data == "thumb_manual") {
+        file_put_contents("state.txt", "waiting_for_thumbnail");
+        $skip_kb = json_encode([
             "inline_keyboard" => [
-                [["text" => "📥 Navbat", "callback_data" => "act_queue_ai"]],
-                [["text" => "🚀 Hozir", "callback_data" => "act_postnow_ai"]],
-                [["text" => "⏱ Aniq vaqtga", "callback_data" => "act_schedule_ai"]]
+                [["text" => "⏭ Bekor qilish / O'tkazib yuborish", "callback_data" => "thumb_skip"]]
             ]
         ]);
-        sendMessage($chat_id, "🤖 AI yozishga tayyor!\n\nVideoni nima qilamiz?", $keyboard);
+        sendMessage($chat_id, "📸 <b>Iltimos, video yuzi (Thumbnail) uchun rasmni jo'nating:</b>\n\n<i>(Telegramga fotosurat yoki rasm yuboring)</i>", $skip_kb);
+        $url = "https://api.telegram.org/bot" . $TELEGRAM_TOKEN . "/editMessageReplyMarkup";
+        file_get_contents($url . "?chat_id=$chat_id&message_id=$message_id&reply_markup=" . urlencode(json_encode(["inline_keyboard" => []])));
+        exit;
+    }
+    
+    if ($data == "thumb_skip") {
+        file_put_contents("state.txt", "none");
+        if (file_exists("last_thumbnail.txt")) @unlink("last_thumbnail.txt");
+        
+        $is_trial_mode = (file_exists("last_trial.txt") && file_get_contents("last_trial.txt") == "true");
+        $custom_name = file_exists("last_custom_name.txt") ? file_get_contents("last_custom_name.txt") : "";
+        $name_str = $custom_name ? "Nomi: <b>$custom_name</b>\n\n" : "";
+        
+        if ($is_trial_mode) {
+            $caption_keyboard = json_encode([
+                "inline_keyboard" => [
+                    [
+                        ["text" => "🤖 AI O'zi yozsin", "callback_data" => "video_ai"],
+                        ["text" => "✍️ O'zim yozaman", "callback_data" => "video_manual"]
+                    ]
+                ]
+            ]);
+            sendMessage($chat_id, "⏭ <b>Muqova rasmsiz davom etamiz.</b>\n\n{$name_str}🧪 Rejim: <b>Faqat Instagram (Trial Reel)</b>\n\nEndi post matnini (caption) kim yozadi?", $caption_keyboard);
+        } else {
+            if (file_exists("platforms_" . $chat_id . ".json")) unlink("platforms_" . $chat_id . ".json");
+            $keyboard = get_platforms_keyboard($chat_id);
+            sendMessage($chat_id, "⏭ <b>Muqova rasmsiz davom etamiz.</b>\n\n{$name_str}Qaysi tarmoqqa joylaymiz?", $keyboard);
+        }
+        $url = "https://api.telegram.org/bot" . $TELEGRAM_TOKEN . "/editMessageReplyMarkup";
+        file_get_contents($url . "?chat_id=$chat_id&message_id=$message_id&reply_markup=" . urlencode(json_encode(["inline_keyboard" => []])));
+        exit;
+    }
+
+    if ($data == "video_ai") {
+        file_put_contents("state.txt", "none");
+        $fc_keyboard = json_encode([
+            "inline_keyboard" => [
+                [
+                    ["text" => "✍️ O'zim yozaman", "callback_data" => "fc_manual_ai"],
+                    ["text" => "🤖 AI o'zi yozsin", "callback_data" => "fc_ai_ai"]
+                ],
+                [
+                    ["text" => "⏭ O'tkazib yuborish (Izohsiz)", "callback_data" => "fc_skip_ai"]
+                ]
+            ]
+        ]);
+        sendMessage($chat_id, "🤖 <b>Post matnini (caption) AI o'zi yozadi!</b>\n\n💬 <b>Instagram Reels uchun birinchi yoziladigan izoh (first comment):</b>\nReels e'lon qilingandan so'ng, uning ostiga birinchi bo'lib qanday izoh yozilsin?", $fc_keyboard);
         $url = "https://api.telegram.org/bot" . $TELEGRAM_TOKEN . "/editMessageReplyMarkup";
         file_get_contents($url . "?chat_id=$chat_id&message_id=$message_id&reply_markup=" . urlencode(json_encode(["inline_keyboard" => []])));
         exit;
@@ -785,7 +898,61 @@ if (isset($update['callback_query'])) {
     
     if ($data == "video_manual") {
         file_put_contents("state.txt", "waiting_for_caption");
-        sendMessage($chat_id, "✍️ Iltimos, video uchun izohni (caption) jo'nating.\n\n*(Keyingi xabaringiz to'g'ridan-to'g'ri izoh sifatida qabul qilinadi)*");
+        sendMessage($chat_id, "✍️ Iltimos, video uchun asosiy post matnini (caption) jo'nating.\n\n*(Keyingi xabaringiz to'g'ridan-to'g'ri post matni sifatida qabul qilinadi)*");
+        $url = "https://api.telegram.org/bot" . $TELEGRAM_TOKEN . "/editMessageReplyMarkup";
+        file_get_contents($url . "?chat_id=$chat_id&message_id=$message_id&reply_markup=" . urlencode(json_encode(["inline_keyboard" => []])));
+        exit;
+    }
+    
+    // Birinchi izoh (first comment) bo'yicha callbacklar
+    if ($data == "fc_manual_manual" || $data == "fc_manual_ai") {
+        $cap_mode = ($data == "fc_manual_manual") ? "manual" : "ai";
+        file_put_contents("state.txt", "waiting_for_first_comment_" . $cap_mode);
+        $skip_kb = json_encode([
+            "inline_keyboard" => [
+                [
+                    ["text" => "🤖 AI o'zi yozsin", "callback_data" => "fc_ai_" . $cap_mode],
+                    ["text" => "⏭ O'tkazib yuborish", "callback_data" => "fc_skip_" . $cap_mode]
+                ]
+            ]
+        ]);
+        sendMessage($chat_id, "✍️ <b>Instagram Reels ostiga birinchi bo'lib yoziladigan izohni jo'nating:</b>\n\n<i>(Masalan: Tomoshabinlarga savol, botga havola yoki qiziqarli chaqiriq)</i>\n\nKeyingi xabaringiz birinchi izoh sifatida qabul qilinadi:", $skip_kb);
+        $url = "https://api.telegram.org/bot" . $TELEGRAM_TOKEN . "/editMessageReplyMarkup";
+        file_get_contents($url . "?chat_id=$chat_id&message_id=$message_id&reply_markup=" . urlencode(json_encode(["inline_keyboard" => []])));
+        exit;
+    }
+    
+    if ($data == "fc_ai_manual" || $data == "fc_ai_ai") {
+        $cap_mode = ($data == "fc_ai_manual") ? "manual" : "ai";
+        file_put_contents("last_first_comment.txt", "__AI__");
+        file_put_contents("state.txt", "none");
+        
+        $keyboard = json_encode([
+            "inline_keyboard" => [
+                [["text" => "📥 Navbat", "callback_data" => "act_queue_" . $cap_mode]],
+                [["text" => "🚀 Hozir", "callback_data" => "act_postnow_" . $cap_mode]],
+                [["text" => "⏱ Aniq vaqtga", "callback_data" => "act_schedule_" . $cap_mode]]
+            ]
+        ]);
+        sendMessage($chat_id, "🤖 <b>Birinchi izohni AI videoga moslab o'zi yozadi!</b>\n\nVideoni nima qilamiz?", $keyboard);
+        $url = "https://api.telegram.org/bot" . $TELEGRAM_TOKEN . "/editMessageReplyMarkup";
+        file_get_contents($url . "?chat_id=$chat_id&message_id=$message_id&reply_markup=" . urlencode(json_encode(["inline_keyboard" => []])));
+        exit;
+    }
+    
+    if ($data == "fc_skip_manual" || $data == "fc_skip_ai") {
+        $cap_mode = ($data == "fc_skip_manual") ? "manual" : "ai";
+        file_put_contents("last_first_comment.txt", "__NONE__");
+        file_put_contents("state.txt", "none");
+        
+        $keyboard = json_encode([
+            "inline_keyboard" => [
+                [["text" => "📥 Navbat", "callback_data" => "act_queue_" . $cap_mode]],
+                [["text" => "🚀 Hozir", "callback_data" => "act_postnow_" . $cap_mode]],
+                [["text" => "⏱ Aniq vaqtga", "callback_data" => "act_schedule_" . $cap_mode]]
+            ]
+        ]);
+        sendMessage($chat_id, "⏭ <b>Birinchi izohsiz davom etamiz.</b>\n\nVideoni nima qilamiz?", $keyboard);
         $url = "https://api.telegram.org/bot" . $TELEGRAM_TOKEN . "/editMessageReplyMarkup";
         file_get_contents($url . "?chat_id=$chat_id&message_id=$message_id&reply_markup=" . urlencode(json_encode(["inline_keyboard" => []])));
         exit;
@@ -816,6 +983,11 @@ if (isset($update['callback_query'])) {
                 $caption = file_get_contents("last_caption.txt");
             }
             
+            $first_comment = "";
+            if (file_exists("last_first_comment.txt")) {
+                $first_comment = file_get_contents("last_first_comment.txt");
+            }
+            
             $custom_name = "";
             if (file_exists("last_custom_name.txt")) {
                 $custom_name = file_get_contents("last_custom_name.txt");
@@ -836,12 +1008,19 @@ if (isset($update['callback_query'])) {
                 $video_url = ""; // Don't send as url
             }
             
+            $cover_url = "";
+            if (file_exists("last_thumbnail.txt")) {
+                $cover_url = file_get_contents("last_thumbnail.txt");
+            }
+
             if (strpos($data, "act_queue") === 0) {
                 sendMessage($chat_id, "✅ Video navbatga qo'shilmoqda... (Background processing)");
                 triggerGitHubAction("telegram_queue", array(
                     "video_url" => $video_url,
                     "artifact_run_id" => $artifact_id,
                     "caption" => $caption,
+                    "first_comment" => $first_comment,
+                    "cover_url" => $cover_url,
                     "custom_name" => $custom_name,
                     "platform" => $platform,
                     "is_trial" => $is_trial ? "true" : "false"
@@ -852,11 +1031,17 @@ if (isset($update['callback_query'])) {
                     "video_url" => $video_url,
                     "artifact_run_id" => $artifact_id,
                     "caption" => $caption,
+                    "first_comment" => $first_comment,
+                    "cover_url" => $cover_url,
                     "custom_name" => $custom_name,
                     "platform" => $platform,
                     "is_trial" => $is_trial ? "true" : "false"
                 ));
             }
+            
+            if (file_exists("last_first_comment.txt")) @unlink("last_first_comment.txt");
+            if (file_exists("last_caption.txt")) @unlink("last_caption.txt");
+            if (file_exists("last_thumbnail.txt")) @unlink("last_thumbnail.txt");
             
             // Takror bosilmasligi uchun tugmalarni o'chirib tashlash
             $url = "https://api.telegram.org/bot" . $TELEGRAM_TOKEN . "/editMessageReplyMarkup";

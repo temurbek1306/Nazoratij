@@ -298,6 +298,15 @@ def run():
             txt_file = f"videos/pending/{os.path.splitext(video_to_delete)[0]}.txt"
             if os.path.exists(txt_file):
                 os.remove(txt_file)
+            comment_file = f"videos/pending/{os.path.splitext(video_to_delete)[0]}.comment.txt"
+            if os.path.exists(comment_file):
+                os.remove(comment_file)
+            cover_file = f"videos/pending/{os.path.splitext(video_to_delete)[0]}.cover.txt"
+            if os.path.exists(cover_file):
+                os.remove(cover_file)
+            jpg_file = f"videos/pending/{os.path.splitext(video_to_delete)[0]}.jpg"
+            if os.path.exists(jpg_file):
+                os.remove(jpg_file)
                 
             send_telegram_msg(f"🗑 <b>{video_to_delete}</b> muvaffaqiyatli navbatdan o'chirildi!")
             handle_list()

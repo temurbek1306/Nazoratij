@@ -61,6 +61,31 @@ jobs:
           ${{ github.event.client_payload.caption }}
           EOF
 
+      - name: Save First Comment 💬
+        if: github.event.client_payload.first_comment != ''
+        run: |
+          CUSTOM_NAME="${{ github.event.client_payload.custom_name }}"
+          if [ -n "$CUSTOM_NAME" ]; then
+            COMMENT_FILE="${CUSTOM_NAME}_${{ github.run_id }}.comment.txt"
+          else
+            COMMENT_FILE="zz_tg_video_${{ github.run_id }}.comment.txt"
+          fi
+          cat << 'EOF' > "videos/pending/$COMMENT_FILE"
+          ${{ github.event.client_payload.first_comment }}
+          EOF
+
+      - name: Save Cover Thumbnail 🖼
+        if: github.event.client_payload.cover_url != ''
+        run: |
+          CUSTOM_NAME="${{ github.event.client_payload.custom_name }}"
+          if [ -n "$CUSTOM_NAME" ]; then
+            BASE_NAME="${CUSTOM_NAME}_${{ github.run_id }}"
+          else
+            BASE_NAME="zz_tg_video_${{ github.run_id }}"
+          fi
+          echo "${{ github.event.client_payload.cover_url }}" > "videos/pending/$BASE_NAME.cover.txt"
+          curl -s -L -o "videos/pending/$BASE_NAME.jpg" "${{ github.event.client_payload.cover_url }}" || true
+
       - name: Save Platform Choice 💾
         run: |
           CUSTOM_NAME="${{ github.event.client_payload.custom_name }}"
@@ -159,6 +184,31 @@ jobs:
           cat << 'EOF' > "videos/pending/$FILE_NAME"
           ${{ github.event.client_payload.caption }}
           EOF
+
+      - name: Save First Comment 💬
+        if: github.event_name == 'repository_dispatch' && github.event.client_payload.first_comment != ''
+        run: |
+          CUSTOM_NAME="${{ github.event.client_payload.custom_name }}"
+          if [ -n "$CUSTOM_NAME" ]; then
+            COMMENT_FILE="${CUSTOM_NAME}_${{ github.run_id }}.comment.txt"
+          else
+            COMMENT_FILE="zz_tg_video_${{ github.run_id }}.comment.txt"
+          fi
+          cat << 'EOF' > "videos/pending/$COMMENT_FILE"
+          ${{ github.event.client_payload.first_comment }}
+          EOF
+
+      - name: Save Cover Thumbnail 🖼
+        if: github.event_name == 'repository_dispatch' && github.event.client_payload.cover_url != ''
+        run: |
+          CUSTOM_NAME="${{ github.event.client_payload.custom_name }}"
+          if [ -n "$CUSTOM_NAME" ]; then
+            BASE_NAME="${CUSTOM_NAME}_${{ github.run_id }}"
+          else
+            BASE_NAME="zz_tg_video_${{ github.run_id }}"
+          fi
+          echo "${{ github.event.client_payload.cover_url }}" > "videos/pending/$BASE_NAME.cover.txt"
+          curl -s -L -o "videos/pending/$BASE_NAME.jpg" "${{ github.event.client_payload.cover_url }}" || true
 
       - name: Save Platform Choice 💾
         if: github.event_name == 'repository_dispatch'

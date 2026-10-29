@@ -50,12 +50,49 @@ def run():
         # A/B testing json da is_trial bormi?
         if not is_trial and data.get("is_trial"):
             is_trial = True
+
+        # Cover (Thumbnail) tekshiruvi
+        cover_url = ""
+        cover_file = f"videos/pending/{base_name}.cover.txt"
+        if os.path.exists(cover_file):
+            try:
+                with open(cover_file, "r", encoding="utf-8") as cf:
+                    cover_url = cf.read().strip()
+                os.remove(cover_file)
+            except Exception as e:
+                print(f"⚠️ Cover faylini o'qishda xatolik: {e}")
+        elif data.get("cover_url"):
+            cover_url = data.get("cover_url")
                 
         import ai_assistant
-        try:
-            first_comment = ai_assistant.get_standard_comment(caption)
-        except:
-            first_comment = "👇 Fikringizni izohlarda yozib qoldiring!"
+        first_comment = ""
+        comment_file = f"videos/pending/{base_name}.comment.txt"
+        if os.path.exists(comment_file):
+            try:
+                with open(comment_file, "r", encoding="utf-8") as cf:
+                    c_val = cf.read().strip()
+                if c_val == "__NONE__":
+                    first_comment = ""
+                elif c_val == "__AI__":
+                    first_comment = ai_assistant.generate_first_comment(caption)
+                else:
+                    first_comment = c_val
+                os.remove(comment_file)
+            except Exception as e:
+                print(f"⚠️ Comment file o'qishda xatolik: {e}")
+        elif data.get("first_comment"):
+            c_val = data.get("first_comment")
+            if c_val == "__NONE__":
+                first_comment = ""
+            elif c_val == "__AI__":
+                first_comment = ai_assistant.generate_first_comment(caption)
+            else:
+                first_comment = c_val
+        else:
+            try:
+                first_comment = ai_assistant.generate_first_comment(caption)
+            except Exception:
+                first_comment = "👇 Fikringizni izohlarda yozib qoldiring!"
 
         status_messages = []
         local_video_path = f"videos/pending/{video_name}"
@@ -65,12 +102,15 @@ def run():
             trial_label = " (🧪 Trial Reel)" if is_trial else ""
             print(f"📝 Instagramga joylanmoqda...{trial_label}")
             from agent_tools import post_ig_comment
-            ig_media_id = post_to_instagram(url, caption, video_name, is_trial=is_trial)
+            ig_media_id = post_to_instagram(url, caption, video_name, is_trial=is_trial, cover_url=cover_url)
             if ig_media_id:
                 status_messages.append(f"✅ Instagram{trial_label}")
-                try:
-                    post_ig_comment(ig_media_id, first_comment)
-                except: pass
+                if first_comment:
+                    try:
+                        post_ig_comment(ig_media_id, first_comment)
+                        print(f"💬 Instagram Reels birinchi izoh qoldirildi: {first_comment[:50]}...")
+                    except Exception as ce:
+                        print(f"⚠️ Instagram birinchi izoh xatoligi: {ce}")
             else:
                 status_messages.append("❌ Instagram")
                 
@@ -89,10 +129,11 @@ def run():
                         yt_video_id = yt_api.upload_shorts(video_path=local_video_path, title=title, description=caption)
                         if yt_video_id:
                             status_messages.append("✅ YouTube")
-                            try:
-                                yt_api.post_comment(yt_video_id, first_comment)
-                            except:
-                                pass
+                            if first_comment:
+                                try:
+                                    yt_api.post_comment(yt_video_id, first_comment)
+                                except:
+                                    pass
                     else:
                         status_messages.append("❌ YouTube (Fayl topilmadi)")
                 except Exception as e:

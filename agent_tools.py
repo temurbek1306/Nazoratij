@@ -44,8 +44,8 @@ def expose_video_url(filename: str) -> str:
     
     return f"{server.public_url}/{filename}"
 
-def post_to_instagram(video_url: str, caption: str, filename: str, is_trial: bool = False) -> bool:
-    """Uploads the video from video_url to Instagram Reels with the given caption. Marks the video as posted and stops the local server."""
+def post_to_instagram(video_url: str, caption: str, filename: str, is_trial: bool = False, cover_url: str = "") -> bool:
+    """Uploads the video from video_url to Instagram Reels with the given caption and optional cover_url."""
     global server
     
     if not IG_ACCESS_TOKEN or not IG_ACCOUNT_ID:
@@ -53,7 +53,7 @@ def post_to_instagram(video_url: str, caption: str, filename: str, is_trial: boo
         
     try:
         api = InstagramAPI(access_token=IG_ACCESS_TOKEN, account_id=IG_ACCOUNT_ID)
-        container_id = api.upload_reel(video_url=video_url, caption=caption, is_trial=is_trial)
+        container_id = api.upload_reel(video_url=video_url, caption=caption, is_trial=is_trial, cover_url=cover_url)
         
         is_ready = api.check_status(container_id)
         if is_ready:

@@ -49,6 +49,9 @@ class VideoManager:
         files_to_remove = [
             filename,
             f"{base_name}.txt",
+            f"{base_name}.comment.txt",
+            f"{base_name}.cover.txt",
+            f"{base_name}.jpg",
             f"{base_name}.json",
             f"{base_name}.platform.txt",
             f"{base_name}.trial.txt"

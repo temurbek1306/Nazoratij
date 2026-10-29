@@ -23,7 +23,7 @@ def send_alert(msg):
         except Exception as e:
             print(f"⚠️ Telegramga yuborishda xatolik: {e}")
 
-def post_to_platforms(platforms_str, local_video_path, url, caption, first_comment, video_name, base_caption="", clean_caption="", is_trial=False):
+def post_to_platforms(platforms_str, local_video_path, url, caption, first_comment, video_name, base_caption="", clean_caption="", is_trial=False, cover_url=""): 
     platforms = platforms_str.split(',') if platforms_str else ["ig", "yt", "fb", "tg"]
     if "both" in platforms:
         platforms = ["ig", "yt", "fb", "tg"]
@@ -33,13 +33,16 @@ def post_to_platforms(platforms_str, local_video_path, url, caption, first_comme
     if "ig" in platforms or "both" in platforms:
         print(f"📝 Instagramga joylanmoqda... (Trial: {is_trial})")
         from agent_tools import post_to_instagram, post_ig_comment
-        ig_media_id = post_to_instagram(url, caption, video_name, is_trial=is_trial)
+        ig_media_id = post_to_instagram(url, caption, video_name, is_trial=is_trial, cover_url=cover_url)
         if ig_media_id:
             trial_badge = " (🧪 Trial Reel)" if is_trial else ""
             status_messages.append(f"✅ Instagram{trial_badge}")
-            try:
-                post_ig_comment(ig_media_id, first_comment)
-            except: pass
+            if first_comment:
+                try:
+                    post_ig_comment(ig_media_id, first_comment)
+                    print(f"💬 Instagram Reels birinchi izoh qoldirildi: {first_comment[:50]}...")
+                except Exception as ce:
+                    print(f"⚠️ Instagram birinchi izoh qoldirishda xatolik: {ce}")
         else:
             status_messages.append("❌ Instagram")
     else:
@@ -60,9 +63,10 @@ def post_to_platforms(platforms_str, local_video_path, url, caption, first_comme
                     yt_video_id = yt_api.upload_shorts(local_video_path, title, caption)
                     if yt_video_id:
                         status_messages.append("✅ YouTube")
-                        try:
-                            yt_api.post_comment(yt_video_id, first_comment)
-                        except: pass
+                        if first_comment:
+                            try:
+                                yt_api.post_comment(yt_video_id, first_comment)
+                            except: pass
                     else:
                         status_messages.append("❌ YouTube (Fayl topilmadi)")
             except Exception as e:
@@ -128,6 +132,16 @@ def process_video(video_name, hashtag_mode, global_tags):
     # Trial rejimini tekshirish
     is_trial = False
     trial_file = f"videos/pending/{base_name}.trial.txt"
+
+    # Cover (Thumbnail) tekshiruvi
+    cover_url = ""
+    cover_file = f"videos/pending/{base_name}.cover.txt"
+    if os.path.exists(cover_file):
+        try:
+            with open(cover_file, "r", encoding="utf-8") as cf:
+                cover_url = cf.read().strip()
+        except Exception as e:
+            print(f"⚠️ Cover faylini o'qishda xatolik: {e}")
     if os.path.exists(trial_file):
         with open(trial_file, "r", encoding="utf-8") as f:
             is_trial = f.read().strip().lower() == "true"
@@ -155,12 +169,28 @@ def process_video(video_name, hashtag_mode, global_tags):
             else:
                 manual_caption += "\n\n" + global_tags
 
-        try:
-            first_comment = ai_assistant.get_standard_comment(manual_caption)
-        except:
-            first_comment = "👇 Fikringizni izohlarda yozib qoldiring!"
+        comment_file = f"videos/pending/{base_name}.comment.txt"
+        first_comment = ""
+        if os.path.exists(comment_file):
+            try:
+                with open(comment_file, "r", encoding="utf-8") as cf:
+                    c_val = cf.read().strip()
+                if c_val == "__NONE__":
+                    first_comment = ""
+                elif c_val == "__AI__":
+                    first_comment = ai_assistant.generate_first_comment(manual_caption)
+                else:
+                    first_comment = c_val
+                os.remove(comment_file)
+            except Exception as e:
+                print(f"⚠️ Comment file o'qishda xatolik: {e}")
+        else:
+            try:
+                first_comment = ai_assistant.generate_first_comment(manual_caption)
+            except Exception:
+                first_comment = "👇 Fikringizni izohlarda yozib qoldiring!"
 
-        status_str = post_to_platforms(platform, local_video_path, url, manual_caption, first_comment, video_name, base_caption=manual_caption, clean_caption=clean_manual_caption, is_trial=is_trial)
+        status_str = post_to_platforms(platform, local_video_path, url, manual_caption, first_comment, video_name, base_caption=manual_caption, clean_caption=clean_manual_caption, is_trial=is_trial, cover_url=cover_url)
         send_alert(f"""✅ Boss, video holati (Qo'lda yozilgan izoh bilan):
 
 Video: {video_name}
@@ -285,6 +315,15 @@ CAPTION_A: (videoga to'liq mos yozilgan caption)"""
                         caption_b += "\n\n" + global_tags
                         caption_c += "\n\n" + global_tags
 
+                comment_file = f"videos/pending/{base_name}.comment.txt"
+                first_comment_setting = ""
+                if os.path.exists(comment_file):
+                    try:
+                        with open(comment_file, "r", encoding="utf-8") as cf:
+                            first_comment_setting = cf.read().strip()
+                    except Exception as e:
+                        print(f"⚠️ Comment file o'qishda xatolik: {e}")
+
                 # Saqlash
                 data = {
                     "video_name": video_name,
@@ -293,7 +332,10 @@ CAPTION_A: (videoga to'liq mos yozilgan caption)"""
                     "caption_c": caption_c,
                     "clean_a": clean_a,
                     "clean_b": clean_b,
-                    "clean_c": clean_c
+                    "clean_c": clean_c,
+                    "first_comment": first_comment_setting,
+                    "cover_url": cover_url,
+                    "is_trial": is_trial
                 }
                 with open(f"videos/pending/{video_name}.json", "w") as f:
                     json.dump(data, f)
@@ -347,12 +389,28 @@ CAPTION_A: (videoga to'liq mos yozilgan caption)"""
         else:
             final_fallback_caption += "\n\n" + global_tags
 
-    try:
-        first_comment = ai_assistant.get_standard_comment(final_fallback_caption)
-    except:
-        first_comment = "👇 Fikringizni izohlarda yozib qoldiring!"
+    comment_file = f"videos/pending/{base_name}.comment.txt"
+    first_comment = ""
+    if os.path.exists(comment_file):
+        try:
+            with open(comment_file, "r", encoding="utf-8") as cf:
+                c_val = cf.read().strip()
+            if c_val == "__NONE__":
+                first_comment = ""
+            elif c_val == "__AI__":
+                first_comment = ai_assistant.generate_first_comment(final_fallback_caption)
+            else:
+                first_comment = c_val
+            os.remove(comment_file)
+        except Exception as e:
+            print(f"⚠️ Comment file o'qishda xatolik: {e}")
+    else:
+        try:
+            first_comment = ai_assistant.generate_first_comment(final_fallback_caption)
+        except Exception:
+            first_comment = "👇 Fikringizni izohlarda yozib qoldiring!"
 
-    status_str = post_to_platforms(platform, local_video_path, url, final_fallback_caption, first_comment, video_name, base_caption=caption, is_trial=is_trial)
+    status_str = post_to_platforms(platform, local_video_path, url, final_fallback_caption, first_comment, video_name, base_caption=caption, is_trial=is_trial, cover_url=cover_url)
     send_alert(f"""📋 <b>Yangi video yakuniy hisoboti!</b>
 
 Nomi: <code>{video_name}</code>
