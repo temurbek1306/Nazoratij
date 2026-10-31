@@ -104,8 +104,6 @@ def handle(command, prompt):
             send_telegram_msg("✅ Javob yuborildi." if ok else "❌ Javob yuborilmadi.")
         elif action == "tags":
             show_links("🏷 <b>Sizni belgilagan postlar</b>", api.get_tagged_media())
-        elif action == "hashtag":
-            show_links(f"#️⃣ <b>{_short(prompt, 50)}</b>", api.search_hashtag(prompt))
         elif action == "story":
             media = json.loads(prompt)
             api.publish_story(media["url"], media["is_video"])

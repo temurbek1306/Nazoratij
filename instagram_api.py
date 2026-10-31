@@ -255,9 +255,3 @@ class InstagramAPI:
     def get_tagged_media(self, limit: int = 5) -> list:
         return self._get(f"{self.account_id}/tags", fields="id,username,caption,permalink,timestamp", limit=limit).get("data", [])
 
-    def search_hashtag(self, tag: str, limit: int = 5) -> list:
-        found = self._get("ig_hashtag_search", user_id=self.account_id, q=tag.lstrip("#")).get("data", [])
-        if not found:
-            return []
-        return self._get(f"{found[0]['id']}/recent_media", user_id=self.account_id, fields="caption,permalink,like_count,comments_count", limit=limit).get("data", [])
-
