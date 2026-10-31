@@ -49,7 +49,11 @@ jobs:
           if [[ -n "$(git status --porcelain replied_comments.json)" ]]; then
             git commit -m "🤖 AutoReply: Update replied comments tracking [skip ci]"
             for i in {1..5}; do
-              git pull origin main --rebase --autostash || (git rebase --abort && sleep 5 && continue)
+              if ! git pull origin main --rebase --autostash; then
+                git rebase --abort || true
+                sleep 5
+                continue
+              fi
               if git push; then
                 break
               fi

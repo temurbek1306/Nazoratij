@@ -68,7 +68,9 @@ def post_to_platforms(platforms_str, local_video_path, url, caption, first_comme
                                 yt_api.post_comment(yt_video_id, first_comment)
                             except: pass
                     else:
-                        status_messages.append("❌ YouTube (Fayl topilmadi)")
+                        status_messages.append("❌ YouTube (Yuklanmadi)")
+                else:
+                    status_messages.append("❌ YouTube (Fayl topilmadi)")
             except Exception as e:
                 status_messages.append(f"❌ YouTube Xatolik: {str(e)[:50]}")
         else:
@@ -101,6 +103,8 @@ def post_to_platforms(platforms_str, local_video_path, url, caption, first_comme
                         status_messages.append("✅ Facebook")
                     else:
                         status_messages.append("❌ Facebook")
+                else:
+                    status_messages.append("❌ Facebook (Fayl topilmadi)")
             except Exception as e:
                 status_messages.append(f"❌ Facebook Xatolik: {str(e)[:50]}")
         else:
