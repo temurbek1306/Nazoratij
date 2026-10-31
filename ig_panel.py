@@ -6,6 +6,24 @@ from instagram_api import InstagramAPI
 from bot_controller import send_telegram_msg
 
 
+METRIC_NAMES = {
+    "reach": "Qamrov",
+    "follower_count": "Yangi obunachilar",
+    "profile_views": "Profil ko'rishlar",
+    "accounts_engaged": "Faol akkauntlar",
+    "total_interactions": "Jami reaksiyalar",
+    "views": "Ko'rishlar",
+    "likes": "Layklar",
+    "comments": "Izohlar",
+    "shares": "Ulashishlar",
+    "saved": "Saqlashlar",
+}
+
+
+def _metric_lines(stats):
+    return "\n".join(f"• {METRIC_NAMES.get(k, html.escape(k))}: {v}" for k, v in stats.items())
+
+
 def _api():
     return InstagramAPI(os.getenv("IG_ACCESS_TOKEN"), os.getenv("IG_ACCOUNT_ID"))
 
@@ -26,7 +44,7 @@ def show_stats(api):
     profile = api.get_profile_stats() or {}
     stats = api.get_account_insights()
     msg = f"📊 <b>Instagram statistikasi</b>\n\n👥 Obunachilar: {profile.get('followers', '?')}\n🎬 Postlar: {profile.get('media', '?')}\n\n<b>Oxirgi kun:</b>\n"
-    msg += "\n".join(f"• {html.escape(k)}: {v}" for k, v in stats.items()) or "Ma'lumot yo'q."
+    msg += _metric_lines(stats) or "Ma'lumot yo'q."
     send_telegram_msg(msg)
 
 
@@ -65,7 +83,7 @@ def show_comments(api, media_id):
 
 def show_insights(api, media_id):
     stats = api.get_media_insights(media_id)
-    body = "\n".join(f"• {html.escape(k)}: {v}" for k, v in stats.items()) or "Ma'lumot yo'q."
+    body = _metric_lines(stats) or "Ma'lumot yo'q."
     send_telegram_msg(f"📈 <b>Post statistikasi</b>\n\n{body}")
 
 

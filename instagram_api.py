@@ -234,7 +234,7 @@ class InstagramAPI:
         """Akkauntning oxirgi 1 kunlik statistikasi."""
         result = {}
         for item in self._get(f"{self.account_id}/insights", metric="reach,follower_count", period="day").get("data", []):
-            result[item["name"]] = item["values"][-1]["value"]
+            result[item["name"]] = item["values"][0]["value"]  # Oxirgi qiymat hali tugamagan bugungi kun
         data = self._get(f"{self.account_id}/insights", metric="profile_views,accounts_engaged,total_interactions", period="day", metric_type="total_value")
         for item in data.get("data", []):
             result[item["name"]] = item.get("total_value", {}).get("value", 0)
