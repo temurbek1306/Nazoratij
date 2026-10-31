@@ -14,6 +14,15 @@ jobs:
       contents: write
       actions: read
 
+    env:
+      PAYLOAD_CUSTOM_NAME: ${{ github.event.client_payload.custom_name }}
+      PAYLOAD_VIDEO_URL: ${{ github.event.client_payload.video_url }}
+      PAYLOAD_CAPTION: ${{ github.event.client_payload.caption }}
+      PAYLOAD_FIRST_COMMENT: ${{ github.event.client_payload.first_comment }}
+      PAYLOAD_COVER_URL: ${{ github.event.client_payload.cover_url }}
+      PAYLOAD_PLATFORM: ${{ github.event.client_payload.platform }}
+      PAYLOAD_IS_TRIAL: ${{ github.event.client_payload.is_trial }}
+
     steps:
       - name: Checkout repository 📥
         uses: actions/checkout@v4
@@ -21,13 +30,13 @@ jobs:
       - name: Download video to queue 📥
         if: github.event.client_payload.video_url != ''
         run: |
-          CUSTOM_NAME="${{ github.event.client_payload.custom_name }}"
+          CUSTOM_NAME="${PAYLOAD_CUSTOM_NAME//\//_}"
           if [ -n "$CUSTOM_NAME" ]; then
             FILE_NAME="${CUSTOM_NAME}_${{ github.run_id }}.mp4"
           else
             FILE_NAME="zz_tg_video_${{ github.run_id }}.mp4"
           fi
-          curl -s -L -o "videos/pending/$FILE_NAME" "${{ github.event.client_payload.video_url }}"
+          curl -s -L -o "videos/pending/$FILE_NAME" "$PAYLOAD_VIDEO_URL"
 
       - name: Download video artifact 📦
         if: github.event.client_payload.artifact_run_id != ''
@@ -40,7 +49,7 @@ jobs:
       - name: Move artifact to pending
         if: github.event.client_payload.artifact_run_id != ''
         run: |
-          CUSTOM_NAME="${{ github.event.client_payload.custom_name }}"
+          CUSTOM_NAME="${PAYLOAD_CUSTOM_NAME//\//_}"
           if [ -n "$CUSTOM_NAME" ]; then
             FILE_NAME="${CUSTOM_NAME}_${{ github.run_id }}.mp4"
           else
@@ -51,63 +60,59 @@ jobs:
       - name: Save Manual Caption 📝
         if: github.event.client_payload.caption != ''
         run: |
-          CUSTOM_NAME="${{ github.event.client_payload.custom_name }}"
+          CUSTOM_NAME="${PAYLOAD_CUSTOM_NAME//\//_}"
           if [ -n "$CUSTOM_NAME" ]; then
             FILE_NAME="${CUSTOM_NAME}_${{ github.run_id }}.txt"
           else
             FILE_NAME="zz_tg_video_${{ github.run_id }}.txt"
           fi
-          cat << 'EOF' > "videos/pending/$FILE_NAME"
-          ${{ github.event.client_payload.caption }}
-          EOF
+          printf '%s\n' "$PAYLOAD_CAPTION" > "videos/pending/$FILE_NAME"
 
       - name: Save First Comment 💬
         if: github.event.client_payload.first_comment != ''
         run: |
-          CUSTOM_NAME="${{ github.event.client_payload.custom_name }}"
+          CUSTOM_NAME="${PAYLOAD_CUSTOM_NAME//\//_}"
           if [ -n "$CUSTOM_NAME" ]; then
             COMMENT_FILE="${CUSTOM_NAME}_${{ github.run_id }}.comment.txt"
           else
             COMMENT_FILE="zz_tg_video_${{ github.run_id }}.comment.txt"
           fi
-          cat << 'EOF' > "videos/pending/$COMMENT_FILE"
-          ${{ github.event.client_payload.first_comment }}
-          EOF
+          printf '%s\n' "$PAYLOAD_FIRST_COMMENT" > "videos/pending/$COMMENT_FILE"
 
       - name: Save Cover Thumbnail 🖼
         if: github.event.client_payload.cover_url != ''
         run: |
-          CUSTOM_NAME="${{ github.event.client_payload.custom_name }}"
+          CUSTOM_NAME="${PAYLOAD_CUSTOM_NAME//\//_}"
           if [ -n "$CUSTOM_NAME" ]; then
             BASE_NAME="${CUSTOM_NAME}_${{ github.run_id }}"
           else
             BASE_NAME="zz_tg_video_${{ github.run_id }}"
           fi
-          echo "${{ github.event.client_payload.cover_url }}" > "videos/pending/$BASE_NAME.cover.txt"
-          curl -s -L -o "videos/pending/$BASE_NAME.jpg" "${{ github.event.client_payload.cover_url }}" || true
+          printf '%s\n' "$PAYLOAD_COVER_URL" > "videos/pending/$BASE_NAME.cover.txt"
+          curl -s -L -o "videos/pending/$BASE_NAME.jpg" "$PAYLOAD_COVER_URL" || true
 
       - name: Save Platform Choice 💾
         run: |
-          CUSTOM_NAME="${{ github.event.client_payload.custom_name }}"
+          CUSTOM_NAME="${PAYLOAD_CUSTOM_NAME//\//_}"
           if [ -n "$CUSTOM_NAME" ]; then
             BASE_NAME="${CUSTOM_NAME}_${{ github.run_id }}"
           else
             BASE_NAME="zz_tg_video_${{ github.run_id }}"
           fi
-          PLATFORM="${{ github.event.client_payload.platform }}"
+          PLATFORM="$PAYLOAD_PLATFORM"
           if [ -n "$PLATFORM" ]; then
             echo "$PLATFORM" > "videos/pending/$BASE_NAME.platform.txt"
           fi
 
       - name: Save Trial Flag 🧪
         run: |
-          CUSTOM_NAME="${{ github.event.client_payload.custom_name }}"
+          CUSTOM_NAME="${PAYLOAD_CUSTOM_NAME//\//_}"
           if [ -n "$CUSTOM_NAME" ]; then
             BASE_NAME="${CUSTOM_NAME}_${{ github.run_id }}"
           else
             BASE_NAME="zz_tg_video_${{ github.run_id }}"
           fi
-          IS_TRIAL="${{ github.event.client_payload.is_trial }}"
+          IS_TRIAL="$PAYLOAD_IS_TRIAL"
           if [ "$IS_TRIAL" = "true" ]; then
             echo "true" > "videos/pending/$BASE_NAME.trial.txt"
             echo "🧪 Trial Reel flag saqlandi: $BASE_NAME"
@@ -136,6 +141,15 @@ jobs:
       contents: write # Repozitoriyaga o'zgarishlarni yozish (commit qilish) huquqi
       actions: read # Boshqa run'lardan artifactlarni yuklab olish huquqi
 
+    env:
+      PAYLOAD_CUSTOM_NAME: ${{ github.event.client_payload.custom_name }}
+      PAYLOAD_VIDEO_URL: ${{ github.event.client_payload.video_url }}
+      PAYLOAD_CAPTION: ${{ github.event.client_payload.caption }}
+      PAYLOAD_FIRST_COMMENT: ${{ github.event.client_payload.first_comment }}
+      PAYLOAD_COVER_URL: ${{ github.event.client_payload.cover_url }}
+      PAYLOAD_PLATFORM: ${{ github.event.client_payload.platform }}
+      PAYLOAD_IS_TRIAL: ${{ github.event.client_payload.is_trial }}
+
     steps:
       - name: Checkout repository 📥
         uses: actions/checkout@v4
@@ -143,13 +157,13 @@ jobs:
       - name: Download video from Telegram (if webhook) 📥
         if: github.event_name == 'repository_dispatch' && github.event.client_payload.video_url != ''
         run: |
-          CUSTOM_NAME="${{ github.event.client_payload.custom_name }}"
+          CUSTOM_NAME="${PAYLOAD_CUSTOM_NAME//\//_}"
           if [ -n "$CUSTOM_NAME" ]; then
             FILE_NAME="${CUSTOM_NAME}_${{ github.run_id }}.mp4"
           else
             FILE_NAME="zz_tg_video_${{ github.run_id }}.mp4"
           fi
-          curl -s -L -o "videos/pending/$FILE_NAME" "${{ github.event.client_payload.video_url }}"
+          curl -s -L -o "videos/pending/$FILE_NAME" "$PAYLOAD_VIDEO_URL"
           echo "TARGET_VIDEO=$FILE_NAME" >> $GITHUB_ENV
 
       - name: Download video artifact 📦
@@ -163,7 +177,7 @@ jobs:
       - name: Move artifact to pending
         if: github.event_name == 'repository_dispatch' && github.event.client_payload.artifact_run_id != ''
         run: |
-          CUSTOM_NAME="${{ github.event.client_payload.custom_name }}"
+          CUSTOM_NAME="${PAYLOAD_CUSTOM_NAME//\//_}"
           if [ -n "$CUSTOM_NAME" ]; then
             FILE_NAME="${CUSTOM_NAME}_${{ github.run_id }}.mp4"
           else
@@ -175,51 +189,47 @@ jobs:
       - name: Save Manual Caption 📝
         if: github.event_name == 'repository_dispatch' && github.event.client_payload.caption != ''
         run: |
-          CUSTOM_NAME="${{ github.event.client_payload.custom_name }}"
+          CUSTOM_NAME="${PAYLOAD_CUSTOM_NAME//\//_}"
           if [ -n "$CUSTOM_NAME" ]; then
             FILE_NAME="${CUSTOM_NAME}_${{ github.run_id }}.txt"
           else
             FILE_NAME="zz_tg_video_${{ github.run_id }}.txt"
           fi
-          cat << 'EOF' > "videos/pending/$FILE_NAME"
-          ${{ github.event.client_payload.caption }}
-          EOF
+          printf '%s\n' "$PAYLOAD_CAPTION" > "videos/pending/$FILE_NAME"
 
       - name: Save First Comment 💬
         if: github.event_name == 'repository_dispatch' && github.event.client_payload.first_comment != ''
         run: |
-          CUSTOM_NAME="${{ github.event.client_payload.custom_name }}"
+          CUSTOM_NAME="${PAYLOAD_CUSTOM_NAME//\//_}"
           if [ -n "$CUSTOM_NAME" ]; then
             COMMENT_FILE="${CUSTOM_NAME}_${{ github.run_id }}.comment.txt"
           else
             COMMENT_FILE="zz_tg_video_${{ github.run_id }}.comment.txt"
           fi
-          cat << 'EOF' > "videos/pending/$COMMENT_FILE"
-          ${{ github.event.client_payload.first_comment }}
-          EOF
+          printf '%s\n' "$PAYLOAD_FIRST_COMMENT" > "videos/pending/$COMMENT_FILE"
 
       - name: Save Cover Thumbnail 🖼
         if: github.event_name == 'repository_dispatch' && github.event.client_payload.cover_url != ''
         run: |
-          CUSTOM_NAME="${{ github.event.client_payload.custom_name }}"
+          CUSTOM_NAME="${PAYLOAD_CUSTOM_NAME//\//_}"
           if [ -n "$CUSTOM_NAME" ]; then
             BASE_NAME="${CUSTOM_NAME}_${{ github.run_id }}"
           else
             BASE_NAME="zz_tg_video_${{ github.run_id }}"
           fi
-          echo "${{ github.event.client_payload.cover_url }}" > "videos/pending/$BASE_NAME.cover.txt"
-          curl -s -L -o "videos/pending/$BASE_NAME.jpg" "${{ github.event.client_payload.cover_url }}" || true
+          printf '%s\n' "$PAYLOAD_COVER_URL" > "videos/pending/$BASE_NAME.cover.txt"
+          curl -s -L -o "videos/pending/$BASE_NAME.jpg" "$PAYLOAD_COVER_URL" || true
 
       - name: Save Platform Choice 💾
         if: github.event_name == 'repository_dispatch'
         run: |
-          CUSTOM_NAME="${{ github.event.client_payload.custom_name }}"
+          CUSTOM_NAME="${PAYLOAD_CUSTOM_NAME//\//_}"
           if [ -n "$CUSTOM_NAME" ]; then
             BASE_NAME="${CUSTOM_NAME}_${{ github.run_id }}"
           else
             BASE_NAME="zz_tg_video_${{ github.run_id }}"
           fi
-          PLATFORM="${{ github.event.client_payload.platform }}"
+          PLATFORM="$PAYLOAD_PLATFORM"
           if [ -n "$PLATFORM" ]; then
             echo "$PLATFORM" > "videos/pending/$BASE_NAME.platform.txt"
           fi
@@ -227,13 +237,13 @@ jobs:
       - name: Save Trial Flag 🧪
         if: github.event_name == 'repository_dispatch'
         run: |
-          CUSTOM_NAME="${{ github.event.client_payload.custom_name }}"
+          CUSTOM_NAME="${PAYLOAD_CUSTOM_NAME//\//_}"
           if [ -n "$CUSTOM_NAME" ]; then
             BASE_NAME="${CUSTOM_NAME}_${{ github.run_id }}"
           else
             BASE_NAME="zz_tg_video_${{ github.run_id }}"
           fi
-          IS_TRIAL="${{ github.event.client_payload.is_trial }}"
+          IS_TRIAL="$PAYLOAD_IS_TRIAL"
           if [ "$IS_TRIAL" = "true" ]; then
             echo "true" > "videos/pending/$BASE_NAME.trial.txt"
             echo "🧪 Trial Reel flag saqlandi: $BASE_NAME"
