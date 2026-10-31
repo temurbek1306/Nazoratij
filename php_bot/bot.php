@@ -6,6 +6,7 @@
 
 date_default_timezone_set('Asia/Tashkent');
 if (file_exists(__DIR__ . '/config.php')) { require_once __DIR__ . '/config.php'; }
+require_once __DIR__ . '/ig_panel.php';
 
 $TELEGRAM_TOKEN = getenv("TELEGRAM_BOT_TOKEN");
 $ADMIN_ID = 5701828462;
@@ -22,6 +23,10 @@ if (isset($update['message'])) {
         exit;
     }
     
+    if (igHandleMessage($update['message'], $chat_id)) {
+        exit;
+    }
+
     // Video or Photo upload
     if (isset($update['message']['video']) || isset($update['message']['document']) || isset($update['message']['photo'])) {
         $is_photo = isset($update['message']['photo']);
@@ -403,7 +408,8 @@ if (isset($update['message'])) {
                 [["text" => "🧪 Trial Video Joylash"], ["text" => "🚀 Hozir Joylash"]],
                 [["text" => "🎞 Videolarni Birlashtirish"], ["text" => "📋 Navbat (Queue)"]],
                 [["text" => "⚙️ Vaqt Sozlamalari"], ["text" => "🔖 Doimiy Hashteglar"]],
-                [["text" => "📊 Statistika"], ["text" => "🗑 Eski videolarni o'chirish"]]
+                [["text" => "📊 Statistika"], ["text" => "🗑 Eski videolarni o'chirish"]],
+                [["text" => "📱 Instagram Pult"]]
             ],
             "resize_keyboard" => true,
             "one_time_keyboard" => false
@@ -419,12 +425,13 @@ if (isset($update['message'])) {
             [["text" => "🧪 Trial Video Joylash"], ["text" => "🚀 Hozir Joylash"]],
             [["text" => "🎞 Videolarni Birlashtirish"], ["text" => "📋 Navbat (Queue)"]],
             [["text" => "⚙️ Vaqt Sozlamalari"], ["text" => "🔖 Doimiy Hashteglar"]],
-            [["text" => "📊 Statistika"], ["text" => "🗑 Eski videolarni o'chirish"]]
+            [["text" => "📊 Statistika"], ["text" => "🗑 Eski videolarni o'chirish"]],
+            [["text" => "📱 Instagram Pult"]]
         ],
         "resize_keyboard" => true,
         "one_time_keyboard" => false
     ]);
-    
+
     $settings_keyboard = json_encode([
         "keyboard" => [
             [["text" => "Har 1 soatda"], ["text" => "Har 2 soatda"]],
@@ -716,6 +723,11 @@ if (isset($update['callback_query'])) {
     $data = $update['callback_query']['data'];
     $message_id = $update['callback_query']['message']['message_id'];
     
+    if (igHandleCallback($data, $chat_id)) {
+        file_get_contents("https://api.telegram.org/bot" . $TELEGRAM_TOKEN . "/answerCallbackQuery?callback_query_id=" . $update['callback_query']['id']);
+        exit;
+    }
+
     if ($data == "start_merging") {
         if (file_exists("state.txt") && file_get_contents("state.txt") == "waiting_for_multiple_videos") {
             $group = "";

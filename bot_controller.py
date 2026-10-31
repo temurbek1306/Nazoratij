@@ -273,6 +273,9 @@ def run():
             
         import video_generator
         video_generator.generate(prompt_text, ratio)
+    elif command.startswith("ig_"):
+        import ig_panel
+        ig_panel.handle(command_raw, prompt)
     elif command == "merge_videos":
         pass
     elif command == "brainstorm":
